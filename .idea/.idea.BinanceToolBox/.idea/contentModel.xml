@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_BinanceToolBox.-1175608433.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="Scripts" t="Include">
+          <e p="Editor" t="Include">
+            <e p="SDKTest" t="Include">
+              <e p="HttpApiTest.cs" t="Include" />
+              <e p="NodeRpcTest.cs" t="Include" />
+              <e p="SignTest.cs" t="Include" />
+              <e p="TransactionTest.cs" t="Include" />
+              <e p="WalletTest.cs" t="Include" />
+              <e p="WebSocketTest.cs" t="Include" />
+            </e>
+          </e>
+          <e p="SDK" t="Include">
+            <e p="BinanceDexEnvironment.cs" t="Include" />
+            <e p="BinanceDexException.cs" t="Include" />
+            <e p="broadcast" t="Include">
+              <e p="CancelOrder.cs" t="Include" />
+              <e p="MultiTransfer.cs" t="Include" />
+              <e p="NewOrder.cs" t="Include" />
+              <e p="Output.cs" t="Include" />
+              <e p="OutputToken.cs" t="Include" />
+              <e p="TokenFreeze.cs" t="Include" />
+              <e p="TokenUnfreeze.cs" t="Include" />
+              <e p="TransactionOption.cs" t="Include" />
+              <e p="Transfer.cs" t="Include" />
+              <e p="Vote.cs" t="Include" />
+            </e>
+            <e p="crypto" t="Include">
+              <e p="Bech32Decoder.cs" t="Include" />
+              <e p="EncodeUtils.cs" t="Include" />
+              <e p="Signature.cs" t="Include" />
+              <e p="Wallet.cs" t="Include" />
+            </e>
+            <e p="httpapi" t="Include">
+              <e p="HttpApiClient.cs" t="Include" />
+              <e p="HttpApiException.cs" t="Include" />
+              <e p="IHttpApi.cs" t="Include" />
+              <e p="IHttpApiAsync.cs" t="Include" />
+            </e>
+            <e p="message" t="Include">
+              <e p="CancelOrderMessage.cs" t="Include" />
+              <e p="InputOutput.cs" t="Include" />
+              <e p="ITransactionMessage.cs" t="Include" />
+              <e p="MessageType.cs" t="Include" />
+              <e p="NewOrderMessage.cs" t="Include" />
+              <e p="SignData.cs" t="Include" />
+              <e p="Token.cs" t="Include" />
+              <e p="TokenFreezeMessage.cs" t="Include" />
+              <e p="TokenUnfreezeMessage.cs" t="Include" />
+              <e p="TransactionRequest.cs" t="Include" />
+              <e p="TransferMessage.cs" t="Include" />
+              <e p="VoteMessage.cs" t="Include" />
+            </e>
+            <e p="model" t="Include">
+              <e p="Account.cs" t="Include" />
+              <e p="AccountSequence.cs" t="Include" />
+              <e p="Balance.cs" t="Include" />
+              <e p="BlockTrade.cs" t="Include" />
+              <e p="BlockTradePage.cs" t="Include" />
+              <e p="Candlestick.cs" t="Include" />
+              <e p="DexFeeField.cs" t="Include" />
+              <e p="EOrderSide.cs" t="Include" />
+              <e p="EOrderType.cs" t="Include" />
+              <e p="Error.cs" t="Include" />
+              <e p="ETimeInForce.cs" t="Include" />
+              <e p="ExchangeRate.cs" t="Include" />
+              <e p="Fee.cs" t="Include" />
+              <e p="FixedFeeParams.cs" t="Include" />
+              <e p="Infos.cs" t="Include" />
+              <e p="Market.cs" t="Include" />
+              <e p="MarketDepth.cs" t="Include" />
+              <e p="Order.cs" t="Include" />
+              <e p="OrderList.cs" t="Include" />
+              <e p="Peer.cs" t="Include" />
+              <e p="TickerStatistics.cs" t="Include" />
+              <e p="Times.cs" t="Include" />
+              <e p="Token.cs" t="Include" />
+              <e p="Trade.cs" t="Include" />
+              <e p="TradePage.cs" t="Include" />
+              <e p="Transaction.cs" t="Include" />
+              <e p="TransactionMetadata.cs" t="Include" />
+              <e p="Tx.cs" t="Include" />
+              <e p="TxPage.cs" t="Include" />
+              <e p="Validator.cs" t="Include" />
+            </e>
+            <e p="noderpc" t="Include">
+              <e p="endpoint" t="Include">
+                <e p="AbciInfo.cs" t="Include" />
+                <e p="AbciQuery.cs" t="Include" />
+                <e p="Block.cs" t="Include" />
+                <e p="Blockchain.cs" t="Include" />
+                <e p="BlockResults.cs" t="Include" />
+                <e p="BroadcastTxAsync.cs" t="Include" />
+                <e p="BroadcastTxCommit.cs" t="Include" />
+                <e p="BroadcastTxSync.cs" t="Include" />
+                <e p="Commit.cs" t="Include" />
+                <e p="ConsensusParams.cs" t="Include" />
+                <e p="ConsensusState.cs" t="Include" />
+                <e p="DumpConsensusState.cs" t="Include" />
+                <e p="EEndpointRequest.cs" t="Include" />
+                <e p="Genesis.cs" t="Include" />
+                <e p="Health.cs" t="Include" />
+                <e p="IEndpointResponse.cs" t="Include" />
+                <e p="NetInfo.cs" t="Include" />
+                <e p="NumUnconfirmedTxs.cs" t="Include" />
+                <e p="Status.cs" t="Include" />
+                <e p="Subscribe.cs" t="Include" />
+                <e p="Tx.cs" t="Include" />
+                <e p="TxSearch.cs" t="Include" />
+                <e p="UnconfirmedTxs.cs" t="Include" />
+                <e p="Unsubscribe.cs" t="Include" />
+                <e p="UnsubscribeAll.cs" t="Include" />
+                <e p="Validators.cs" t="Include" />
+              </e>
+              <e p="INodeRpc.cs" t="Include" />
+              <e p="NodeRpcClient.cs" t="Include" />
+              <e p="NodeRpcException.cs" t="Include" />
+              <e p="RpcRequest.cs" t="Include" />
+              <e p="RpcResponse.cs" t="Include" />
+            </e>
+            <e p="proto" t="Include">
+              <e p="Dex.cs" t="Include" />
+            </e>
+            <e p="util" t="Include">
+              <e p="JsonNetSerializer.cs" t="Include" />
+            </e>
+            <e p="websocket" t="Include">
+              <e p="IWebSocket.cs" t="Include" />
+              <e p="stream" t="Include">
+                <e p="AccountsData.cs" t="Include" />
+                <e p="AllMiniTickersData.cs" t="Include" />
+                <e p="AllTickersData.cs" t="Include" />
+                <e p="Blockheight.cs" t="Include" />
+                <e p="EKLineInterval.cs" t="Include" />
+                <e p="ETopic.cs" t="Include" />
+                <e p="IStreamData.cs" t="Include" />
+                <e p="KLine.cs" t="Include" />
+                <e p="MarketDepth.cs" t="Include" />
+                <e p="MarketDiff.cs" t="Include" />
+                <e p="MiniTicker.cs" t="Include" />
+                <e p="OrdersData.cs" t="Include" />
+                <e p="Payload.cs" t="Include" />
+                <e p="Send.cs" t="Include" />
+                <e p="Ticker.cs" t="Include" />
+                <e p="TradesData.cs" t="Include" />
+                <e p="TransfersData.cs" t="Include" />
+              </e>
+              <e p="WebSocketClient.cs" t="Include" />
+              <e p="WebSocketException.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="BinanceToolBox.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp/bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
