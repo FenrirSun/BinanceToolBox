@@ -85,23 +85,8 @@
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
- <Reference Include="Unity.2D.Animation.Runtime">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.PixelPerfect.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.VSCode.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.SpriteShape.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
- </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Path.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Path.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
@@ -109,59 +94,23 @@
  <Reference Include="Unity.Timeline">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
  </Reference>
- <Reference Include="Unity.2D.Animation.Triangle.Runtime">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="PsdPlugin">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/PsdPlugin.dll</HintPath>
- </Reference>
  <Reference Include="Unity.CollabProxy.Editor">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Rider.Editor">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
  </Reference>
- <Reference Include="Unity.Mathematics">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Psdimporter.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Psdimporter.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.InternalAPIEngineBridge.001">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Sprite.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Common.Runtime">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Tilemap.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.SpriteShape.Runtime">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.PixelPerfect">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Animation.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Mathematics.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
- </Reference>
  <Reference Include="Unity.TextMeshPro">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
- <Reference Include="Unity.2D.Common.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.InternalAPIEditorBridge.001">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="CSVHelper.Sample">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CSVHelper.Sample.dll</HintPath>
+ </Reference>
+ <Reference Include="CsvHelper.Support">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CsvHelper.Support.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>/Applications/Unity/Hub/Editor/2019.4.21f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -363,6 +312,18 @@
  </Reference>
  <Reference Include="Newtonsoft.Json">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Assets/Packages/Newtonsoft.Json.dll</HintPath>
+ </Reference>
+ <Reference Include="Microsoft.Bcl.AsyncInterfaces">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+ </Reference>
+ <Reference Include="CsvHelper">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/CsvHelper.dll</HintPath>
+ </Reference>
+ <Reference Include="System.Threading.Tasks.Extensions">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/System.Threading.Tasks.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="System.Runtime.CompilerServices.Unsafe">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>

@@ -28,7 +28,7 @@ namespace M3C.Finance.BinanceSdk.Tests
 
         [Test]
         public void TestNewOrder() {
-            //var response = _client.NewOrder("NEOBTC", OrderSide.Sell, OrderType.Limit, TimeInForce.GoodUntilCanceled, 1m, 0.05m,false,"order1");
+            var response = _client.NewOrder("NEOBTC", OrderSide.Sell, OrderType.Limit, TimeInForce.GoodUntilCanceled, 1m, 0.05m,false,"order1");
         }
 
         [Test]

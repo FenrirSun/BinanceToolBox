@@ -268,6 +268,18 @@
  <Reference Include="Newtonsoft.Json">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Assets/Packages/Newtonsoft.Json.dll</HintPath>
  </Reference>
+ <Reference Include="Microsoft.Bcl.AsyncInterfaces">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+ </Reference>
+ <Reference Include="CsvHelper">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/CsvHelper.dll</HintPath>
+ </Reference>
+ <Reference Include="System.Threading.Tasks.Extensions">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/System.Threading.Tasks.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="System.Runtime.CompilerServices.Unsafe">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Hub/Editor/2019.4.21f1/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>

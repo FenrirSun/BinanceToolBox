@@ -1,0 +1,4 @@
+Id,Level,Difficulty,Coin,Desc
+int,int,int,int,string
+id,等级,难度,每关可获得金币数,备注
+1,1,1,10,第一关

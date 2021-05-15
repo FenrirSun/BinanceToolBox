@@ -1,0 +1,5 @@
+Id,Name,Desc
+int,string,string
+id,名字,描述
+1,Tips,消除提示
+2,Froze,暂停时间
