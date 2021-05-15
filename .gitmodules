@@ -1,0 +1,3 @@
+[submodule "Assets/SunFrame"]
+	path = Assets/SunFrame
+	url = ../SunFrame.git

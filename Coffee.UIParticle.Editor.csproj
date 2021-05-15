@@ -12,10 +12,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{3E368DC2-793D-834E-EB21-9D39BC8A8535}</ProjectGuid>
+    <ProjectGuid>{61A6F0D2-E8E6-3DE2-48CD-75141B694999}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
+    <AssemblyName>Coffee.UIParticle.Editor</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -58,110 +58,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\M3C\Editor\SDKTest\ApiKeyRequestTest.cs" />
-     <Compile Include="Assets\M3C\Editor\SDKTest\PublicRequestTests.cs" />
-     <Compile Include="Assets\M3C\Editor\SDKTest\SignedRequestTests.cs" />
-     <Compile Include="Assets\M3C\Editor\SDKTest\WebSocketApiTests.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\SuperScrollView\Editor\LoopListViewEditor2.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\AccordionElementEditor.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\BezierLineRendererEditor.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\BoxSliderEditor.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\CUIBezierCurveEditor.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\CUIGraphicEditor.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\CUIImageEditor.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\CUITextEditor.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\CanvasGroupActivator.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\NonDrawingGraphicEditor.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\ReadOnlyDrawer.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\TextPicEditor.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\UIExtensionsMenuOptions.cs" />
-     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\Editor\uGUITools.cs" />
+     <Compile Include="Assets\SunFrame\Plugin\UIExtensions\UIParticle\Scripts\Editor\UIParticleEditor.cs" />
+     <None Include="Assets\SunFrame\Plugin\UIExtensions\UIParticle\Scripts\Editor\Coffee.UIParticle.Editor.asmdef" />
+ <Reference Include="UnityEditor.UI">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.UI">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEditor.TestRunner">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.TestRunner">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Timeline.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Animation.Runtime">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.PixelPerfect.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.VSCode.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.SpriteShape.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Path.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Path.Editor.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.UI">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Timeline">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Animation.Triangle.Runtime">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="PsdPlugin">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/PsdPlugin.dll</HintPath>
- </Reference>
- <Reference Include="Unity.CollabProxy.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Rider.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Mathematics">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Psdimporter.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Psdimporter.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.InternalAPIEngineBridge.001">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Sprite.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Common.Runtime">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Tilemap.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.SpriteShape.Runtime">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.PixelPerfect">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Animation.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Mathematics.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.TextMeshPro">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Common.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.InternalAPIEditorBridge.001">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor.UI">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>/Applications/Unity/Hub/Editor/2019.4.21f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -729,25 +638,9 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{27224C55-1CF2-FC13-33AF-700C7A90B8C3}</Project>
-      <Name>Assembly-CSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="Coffee.SoftMaskForUGUI.csproj">
-      <Project>{266FB717-09A9-A1FE-D195-0BAC97E8366F}</Project>
-      <Name>Coffee.SoftMaskForUGUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="Coffee.SoftMaskForUGUI.Editor.csproj">
-      <Project>{F004920C-494B-F23C-34A0-CE088873A1D0}</Project>
-      <Name>Coffee.SoftMaskForUGUI.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="Coffee.UIParticle.csproj">
       <Project>{1DCD34E6-AF99-050D-12D5-26124BAF67F3}</Project>
       <Name>Coffee.UIParticle</Name>
-    </ProjectReference>
-    <ProjectReference Include="Coffee.UIParticle.Editor.csproj">
-      <Project>{61A6F0D2-E8E6-3DE2-48CD-75141B694999}</Project>
-      <Name>Coffee.UIParticle.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
