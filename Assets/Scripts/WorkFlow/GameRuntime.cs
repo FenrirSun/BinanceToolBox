@@ -26,10 +26,18 @@ public class GameRuntime : GameRuntimeBase<GameRuntime, UserData>
 #endif
         TableManager.Instance.LoadAllTables();
         AddAllLogic();
+
+        InitDialog();
     }
 
     void AddAllLogic()
     {
-        AddLogic<GameLogic>();
+        AddLogic<StreamDataLogic>();
+        //AddLogic<GameLogic>();
+    }
+
+    void InitDialog() {
+        // UIManager.Instance.PushDialog<MainPageBarDialog>(MainPageBarDialog.Prefab);
+        // UIManager.Instance.PushDialog<MainMarketDialog>(MainMarketDialog.Prefab).Init();
     }
 }

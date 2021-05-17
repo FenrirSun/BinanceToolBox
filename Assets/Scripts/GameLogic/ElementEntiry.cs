@@ -47,6 +47,6 @@ public class ElementEntity : EntityBase
     // 消除
     private void OnEliminate(ElementEntity other)
     {
-        GetEventComp().Send(OnEntityEliminate.Create(this, other));
+       
     }
 }

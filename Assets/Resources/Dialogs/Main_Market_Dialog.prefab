@@ -2868,6 +2868,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7454307052674008472}
   - component: {fileID: 7454307052674008475}
+  - component: {fileID: 4703381985316248149}
   m_Layer: 5
   m_Name: Main_Market_Dialog
   m_TagString: Untagged
@@ -2904,6 +2905,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7454307052674008473}
   m_CullTransparentMesh: 0
+--- !u!114 &4703381985316248149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7454307052674008473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5e362e3a224f43a88efb217017597c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openAnimClip: {fileID: 0}
+  closeAnimClip: {fileID: 0}
+  ExtraAnims: []
+  mainRoot: {fileID: 0}
+  symbolDropdown: {fileID: 651258167474272281}
+  timeScaleDropdown: {fileID: 3896303689268388137}
 --- !u!1 &7454307054404023431
 GameObject:
   m_ObjectHideFlags: 0

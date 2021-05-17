@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using M3C.Finance.BinanceSdk;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,7 +58,7 @@ public class DebugDialog : GameDialogBase
         Application.logMessageReceived += HandleException;
         view.showBtn.onClick.AddListener(() => { ShowPanel(!isShowing); ShowCommonButtons(); });
         view.commonBtn.onClick.AddListener(() => { SetStatusMode(false); ShowCommonButtons(); });
-        view.timeBtn.onClick.AddListener(() => { SetStatusMode(false); ShowTimeButtons(); });
+        view.testBtn.onClick.AddListener(() => { SetStatusMode(false); ShowTestButtons(); });
         view.statueBtn.onClick.AddListener(() => { SetStatusMode(true); view.parentRoot.RemoveAllChildren(); });
     }
 
@@ -203,96 +204,33 @@ public class DebugDialog : GameDialogBase
         // DebugInfo("__screenOrientation:", Screen.orientation.ToString(), false);
     }
 
-        void ShowTimeButtons() {
+        void ShowTestButtons() {
         view.parentRoot.RemoveAllChildren();
-        AddButton("重置时间", () => {
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_DAY, 0);
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
+        AddButton("WS现货测试", () => {
+            using (var client = new BinanceWebSocketClient()) {
+                client.ConnectDepthEndpoint("ethbtc", a => Debug.Log(a.EventTime));
+            }
         });
         
-        AddButton("时间加一月", () => {
-            var offsetDay = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_DAY, 0);
-            offsetDay += 31;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_DAY, offsetDay);
-            DumpTime();
+        AddButton("WS合约测试", () => {
+            using (var client = new BinanceFuturesWebSocketPublicClient()) {
+                client.ConnectDepthEndpoint("btcusdt", a => Debug.Log(a.EventTime));
+            }
         });
+        
+        // AddButton("时间加1分钟", () => {
+        //     var offsetSec = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
+        //     offsetSec += 60;
+        //     PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, offsetSec);
+        //     DumpTime();
+        // });
+        // AddButton("时间减1分钟", () => {
+        //     var offsetSec = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
+        //     offsetSec -= 60;
+        //     PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, offsetSec);
+        //     DumpTime();
+        // });
 
-        AddButton("时间加一天", () => {
-            var offsetDay = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_DAY, 0);
-            offsetDay += 1;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_DAY, offsetDay);
-            DumpTime();
-        });
-
-        AddButton("时间加一小时", () => {
-            var offsetSec = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
-            offsetSec += 3600;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, offsetSec);
-            DumpTime();
-        });
-
-        AddButton("时间加10分钟", () => {
-            var offsetSec = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
-            offsetSec += 600;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, offsetSec);
-            DumpTime();
-        });
-
-        AddButton("时间加1分钟", () => {
-            var offsetSec = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
-            offsetSec += 60;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, offsetSec);
-            DumpTime();
-        });
-
-        AddButton("时间加10秒", () => {
-            var offsetSec = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
-            offsetSec += 10;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, offsetSec);
-            DumpTime();
-        });
-
-        AddButton("时间减一月", () => {
-            var offsetDay = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_DAY, 0);
-            offsetDay -= 31;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_DAY, offsetDay);
-            DumpTime();
-        });
-
-        AddButton("时间减一天", () => {
-            var offsetDay = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_DAY, 0);
-            offsetDay -= 1;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_DAY, offsetDay);
-            DumpTime();
-        });
-
-        AddButton("时间减一小时", () => {
-            var offsetSec = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
-            offsetSec -= 3600;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, offsetSec);
-            DumpTime();
-        });
-
-        AddButton("时间减10分钟", () => {
-            var offsetSec = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
-            offsetSec -= 600;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, offsetSec);
-            DumpTime();
-        });
-
-        AddButton("时间减1分钟", () => {
-            var offsetSec = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
-            offsetSec -= 60;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, offsetSec);
-            DumpTime();
-        });
-
-        AddButton("时间减10秒", () => {
-            var offsetSec = PlayerPrefs.GetInt(TimeUtils.KEY_TIME_OFFSET_SEC, 0);
-            offsetSec -= 10;
-            PlayerPrefs.SetInt(TimeUtils.KEY_TIME_OFFSET_SEC, offsetSec);
-            DumpTime();
-        });
     }
         
 #endregion

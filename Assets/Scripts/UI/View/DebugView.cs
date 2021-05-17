@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class DebugView : DialogViewBase
@@ -8,7 +9,7 @@ public class DebugView : DialogViewBase
     public GameObject panel;
     
     public Button commonBtn;
-    public Button timeBtn;
+    public Button testBtn;
     public Button statueBtn;
     
     public Text logLabel;

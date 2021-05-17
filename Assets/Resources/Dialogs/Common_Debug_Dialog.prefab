@@ -1038,7 +1038,7 @@ MonoBehaviour:
   fpsLabel: {fileID: 1229706983592418127}
   panel: {fileID: 1190351319112253171}
   commonBtn: {fileID: 4439183164172548774}
-  timeBtn: {fileID: 6719550859132209955}
+  testBtn: {fileID: 6719550859132209955}
   statueBtn: {fileID: 8217857084966774591}
   logLabel: {fileID: 1230039978227222735}
   buttonTemplate: {fileID: 1230271938046849523}
@@ -2420,7 +2420,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u65F6\u95F4"
+  m_Text: "\u6D4B\u8BD5"
 --- !u!1 &7360743050926180627
 GameObject:
   m_ObjectHideFlags: 0
@@ -2512,7 +2512,7 @@ GameObject:
   - component: {fileID: 5314369263037718744}
   - component: {fileID: 6719550859132209955}
   m_Layer: 5
-  m_Name: Button_Time
+  m_Name: Button_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -60,12 +60,11 @@
   <ItemGroup>
      <Compile Include="Assets\M3C\SDK\BinanceRestApiException.cs" />
      <Compile Include="Assets\M3C\SDK\BinanceWebSocket.cs" />
-     <Compile Include="Assets\M3C\SDK\BinanceWebSocketClient.cs" />
      <Compile Include="Assets\M3C\SDK\CashClient\BinanceClient.cs" />
      <Compile Include="Assets\M3C\SDK\CashClient\BinanceClientApiKeyRequests.cs" />
      <Compile Include="Assets\M3C\SDK\CashClient\BinanceClientPublicEndpoints.cs" />
      <Compile Include="Assets\M3C\SDK\CashClient\BinanceClientSignedEndpoints.cs" />
-     <Compile Include="Assets\M3C\SDK\ContractClient\BinanceContractClient.cs" />
+     <Compile Include="Assets\M3C\SDK\CashClient\BinanceWebSocketClient.cs" />
      <Compile Include="Assets\M3C\SDK\CustomJsonParsers.cs" />
      <Compile Include="Assets\M3C\SDK\Enumerations\ApiVersion.cs" />
      <Compile Include="Assets\M3C\SDK\Enumerations\ExecutionType.cs" />
@@ -74,7 +73,13 @@
      <Compile Include="Assets\M3C\SDK\Enumerations\OrderSide.cs" />
      <Compile Include="Assets\M3C\SDK\Enumerations\OrderStatus.cs" />
      <Compile Include="Assets\M3C\SDK\Enumerations\OrderType.cs" />
+     <Compile Include="Assets\M3C\SDK\Enumerations\SymbolType.cs" />
      <Compile Include="Assets\M3C\SDK\Enumerations\TimeInForce.cs" />
+     <Compile Include="Assets\M3C\SDK\FuturesClient\BinanceFuturesClient.cs" />
+     <Compile Include="Assets\M3C\SDK\FuturesClient\BinanceFuturesClientPublicRequest.cs" />
+     <Compile Include="Assets\M3C\SDK\FuturesClient\BinanceFuturesClientPublicWebStream.cs" />
+     <Compile Include="Assets\M3C\SDK\FuturesClient\BinanceFuturesClientSignedRequest.cs" />
+     <Compile Include="Assets\M3C\SDK\FuturesClient\BinanceFuturesClientSignedWebStream.cs" />
      <Compile Include="Assets\M3C\SDK\ResponseObjects\AccountResponse.cs" />
      <Compile Include="Assets\M3C\SDK\ResponseObjects\AggregateTradeResponseItem.cs" />
      <Compile Include="Assets\M3C\SDK\ResponseObjects\BalanceItem.cs" />
@@ -124,7 +129,7 @@
      <Compile Include="Assets\Scripts\UI\View\MainPageBarView.cs" />
      <Compile Include="Assets\Scripts\WorkFlow\Events\GameEvents.cs" />
      <Compile Include="Assets\Scripts\WorkFlow\GameRuntime.cs" />
-     <Compile Include="Assets\Scripts\WorkFlow\Logic\GameLogic.cs" />
+     <Compile Include="Assets\Scripts\WorkFlow\Logic\StreamDataLogic.cs" />
      <Compile Include="Assets\Scripts\WorkFlow\Manager\ResourcesManager.cs" />
      <Compile Include="Assets\Scripts\WorkFlow\Manager\TableManager.cs" />
      <Compile Include="Assets\SunFrame\Core\FrameCore.cs" />
@@ -414,6 +419,9 @@
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="CSVHelper.Sample">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CSVHelper.Sample.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
@@ -432,14 +440,11 @@
  <Reference Include="Unity.TextMeshPro">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
- <Reference Include="UnityEditor.UI">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
- </Reference>
- <Reference Include="CSVHelper.Sample">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CSVHelper.Sample.dll</HintPath>
- </Reference>
  <Reference Include="CsvHelper.Support">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CsvHelper.Support.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.UI">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>/Applications/Unity/Hub/Editor/2019.4.21f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -627,9 +632,6 @@
  <Reference Include="Newtonsoft.Json">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Assets/Packages/Newtonsoft.Json.dll</HintPath>
  </Reference>
- <Reference Include="Microsoft.Bcl.AsyncInterfaces">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
- </Reference>
  <Reference Include="CsvHelper">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/CsvHelper.dll</HintPath>
  </Reference>
@@ -638,6 +640,9 @@
  </Reference>
  <Reference Include="System.Runtime.CompilerServices.Unsafe">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+ </Reference>
+ <Reference Include="Microsoft.Bcl.AsyncInterfaces">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Hub/Editor/2019.4.21f1/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

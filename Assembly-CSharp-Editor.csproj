@@ -85,6 +85,9 @@
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="CSVHelper.Sample">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CSVHelper.Sample.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
@@ -103,14 +106,11 @@
  <Reference Include="Unity.TextMeshPro">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
- <Reference Include="UnityEditor.UI">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
- </Reference>
- <Reference Include="CSVHelper.Sample">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CSVHelper.Sample.dll</HintPath>
- </Reference>
  <Reference Include="CsvHelper.Support">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CsvHelper.Support.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.UI">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>/Applications/Unity/Hub/Editor/2019.4.21f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -313,9 +313,6 @@
  <Reference Include="Newtonsoft.Json">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Assets/Packages/Newtonsoft.Json.dll</HintPath>
  </Reference>
- <Reference Include="Microsoft.Bcl.AsyncInterfaces">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
- </Reference>
  <Reference Include="CsvHelper">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/CsvHelper.dll</HintPath>
  </Reference>
@@ -324,6 +321,9 @@
  </Reference>
  <Reference Include="System.Runtime.CompilerServices.Unsafe">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+ </Reference>
+ <Reference Include="Microsoft.Bcl.AsyncInterfaces">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>

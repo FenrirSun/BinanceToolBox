@@ -19,15 +19,12 @@
           <e p="SDK" t="Include">
             <e p="BinanceRestApiException.cs" t="Include" />
             <e p="BinanceWebSocket.cs" t="Include" />
-            <e p="BinanceWebSocketClient.cs" t="Include" />
             <e p="CashClient" t="Include">
               <e p="BinanceClient.cs" t="Include" />
               <e p="BinanceClientApiKeyRequests.cs" t="Include" />
               <e p="BinanceClientPublicEndpoints.cs" t="Include" />
               <e p="BinanceClientSignedEndpoints.cs" t="Include" />
-            </e>
-            <e p="ContractClient" t="Include">
-              <e p="BinanceContractClient.cs" t="Include" />
+              <e p="BinanceWebSocketClient.cs" t="Include" />
             </e>
             <e p="CustomJsonParsers.cs" t="Include" />
             <e p="Enumerations" t="Include">
@@ -38,7 +35,15 @@
               <e p="OrderSide.cs" t="Include" />
               <e p="OrderStatus.cs" t="Include" />
               <e p="OrderType.cs" t="Include" />
+              <e p="SymbolType.cs" t="Include" />
               <e p="TimeInForce.cs" t="Include" />
+            </e>
+            <e p="FuturesClient" t="Include">
+              <e p="BinanceFuturesClient.cs" t="Include" />
+              <e p="BinanceFuturesClientPublicRequest.cs" t="Include" />
+              <e p="BinanceFuturesClientPublicWebStream.cs" t="Include" />
+              <e p="BinanceFuturesClientSignedRequest.cs" t="Include" />
+              <e p="BinanceFuturesClientSignedWebStream.cs" t="Include" />
             </e>
             <e p="ResponseObjects" t="Include">
               <e p="AccountResponse.cs" t="Include" />
@@ -112,7 +117,7 @@
             </e>
             <e p="GameRuntime.cs" t="Include" />
             <e p="Logic" t="Include">
-              <e p="GameLogic.cs" t="Include" />
+              <e p="StreamDataLogic.cs" t="Include" />
             </e>
             <e p="Manager" t="Include">
               <e p="ResourcesManager.cs" t="Include" />
