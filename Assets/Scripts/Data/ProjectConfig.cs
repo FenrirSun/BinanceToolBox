@@ -1,8 +1,8 @@
 public static class ProjectConfig
 {
-    public const string PACKAGE_ID_ANDROID  = "com.zenjoy.home.blast";
-    public const string PACKAGE_ID_IOS      = "com.zenlife.home.blast";
-    public const string Z_PROJECT_ID = "home_tap_erase";
+    public const string PACKAGE_ID_ANDROID  = "com.rainyday.home.binancetoolbox";
+    public const string PACKAGE_ID_IOS      = "com.rainyday.home.binancetoolbox";
+    public const string Z_PROJECT_ID = "binance_tool_box";
     public static string APP_VERSION = "0.1";
     public const int VERSION_CODE = 1000;
     public const string BUILD_ENV = "alpha";

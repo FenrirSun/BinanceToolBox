@@ -33,11 +33,10 @@ public class GameRuntime : GameRuntimeBase<GameRuntime, UserData>
     void AddAllLogic()
     {
         AddLogic<StreamDataLogic>();
-        //AddLogic<GameLogic>();
     }
 
     void InitDialog() {
-        // UIManager.Instance.PushDialog<MainPageBarDialog>(MainPageBarDialog.Prefab);
-        // UIManager.Instance.PushDialog<MainMarketDialog>(MainMarketDialog.Prefab).Init();
+        UIManager.Instance.PushDialog<MainPageBarDialog>(MainPageBarDialog.Prefab);
+        UIManager.Instance.PushDialog<MainMarketDialog>(MainMarketDialog.Prefab).Init();
     }
 }

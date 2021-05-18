@@ -2055,7 +2055,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u5E02   \u573A"
+  m_Text: Market
 --- !u!1 &5129078822777705818
 GameObject:
   m_ObjectHideFlags: 0
@@ -2920,7 +2920,8 @@ MonoBehaviour:
   openAnimClip: {fileID: 0}
   closeAnimClip: {fileID: 0}
   ExtraAnims: []
-  mainRoot: {fileID: 0}
+  mainRoot: {fileID: 7454307054404023431}
+  curPrice: {fileID: 7918032372907510195}
   symbolDropdown: {fileID: 651258167474272281}
   timeScaleDropdown: {fileID: 3896303689268388137}
 --- !u!1 &7454307054404023431

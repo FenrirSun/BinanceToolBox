@@ -206,16 +206,25 @@ public class DebugDialog : GameDialogBase
 
         void ShowTestButtons() {
         view.parentRoot.RemoveAllChildren();
-        AddButton("WS现货测试", () => {
-            using (var client = new BinanceWebSocketClient()) {
-                client.ConnectDepthEndpoint("ethbtc", a => Debug.Log(a.EventTime));
-            }
+        AddButton("WS测试1", () => {
+            WebSocketTest.TestWS();
+            // using (var client = new BinanceWebSocketClient()) {
+            //     client.ConnectDepthEndpoint("ethbtc", a => Debug.Log(a.EventTime));
+            // }
         });
         
-        AddButton("WS合约测试", () => {
-            using (var client = new BinanceFuturesWebSocketPublicClient()) {
-                client.ConnectDepthEndpoint("btcusdt", a => Debug.Log(a.EventTime));
-            }
+        AddButton("WS测试2", () => {
+            WebSocketTest.TestBinanceWS();
+            // using (var client = new BinanceWebSocketClient()) {
+            //     client.ConnectDepthEndpoint("ethbtc", a => Debug.Log(a.EventTime));
+            // }
+        });
+        
+        AddButton("WS回收", () => {
+            WebSocketTest.Dispose();
+            // using (var client = new BinanceFuturesWebSocketPublicClient()) {
+            //     client.ConnectDepthEndpoint("btcusdt", a => Debug.Log(a.EventTime));
+            // }
         });
         
         // AddButton("时间加1分钟", () => {

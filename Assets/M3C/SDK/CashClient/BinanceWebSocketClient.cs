@@ -16,7 +16,7 @@ using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NLog;
+using UnityEngine;
 using WebSocketSharp;
 
 namespace M3C.Finance.BinanceSdk
@@ -25,7 +25,6 @@ namespace M3C.Finance.BinanceSdk
     {
         private const int KeepAliveMilliseconds = 30000;
         private const string WebSocketBaseUrl = "wss://stream.binance.com:9443/ws";
-        private static readonly NLog.Logger logger = LogManager.GetCurrentClassLogger();
         protected SslProtocols SupportedProtocols { get; } = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
         private List<WebSocket> ActiveSockets;
 
@@ -64,7 +63,7 @@ namespace M3C.Finance.BinanceSdk
 
             ws.OnMessage += (sender, e) =>
             {
-                logger.Debug("Msg: " + e.Data);
+                Debug.Log("Msg: " + e.Data);
                 var responseObject = JObject.Parse(e.Data);
                 var eventType = (string) responseObject["e"];
 
@@ -100,7 +99,7 @@ namespace M3C.Finance.BinanceSdk
 
         private static async void KeepAliveHandler(object context) {
             var ctx = (KeepAliveContext) context;
-            logger.Debug("Making Keepalive Request for :" + ctx.ListenKey);
+            Debug.Log("Making Keepalive Request for :" + ctx.ListenKey);
             await ctx.Client.KeepAliveUserDataStream(ctx.ListenKey);
         }
 
@@ -116,7 +115,7 @@ namespace M3C.Finance.BinanceSdk
 
             ws.OnMessage += (sender, e) =>
             {
-                logger.Debug("Msg: " + e.Data);
+                Debug.Log("Msg: " + e.Data);
                 var eventData = customParseHandler == null ? JsonConvert.DeserializeObject<T>(e.Data) : customParseHandler(e.Data);
                 messageHandler(eventData);
             };
@@ -127,25 +126,25 @@ namespace M3C.Finance.BinanceSdk
         private BinanceWebSocket CreateNewWebSocket(Uri endpoint, string listenKey = null) {
             var ws = new BinanceWebSocket(endpoint.AbsoluteUri, listenKey);
 
-            ws.OnOpen += delegate { logger.Debug($"{endpoint} | Socket Connection Established ({ws.Id})"); };
+            ws.OnOpen += delegate { Debug.Log($"{endpoint} | Socket Connection Established ({ws.Id})"); };
 
             ws.OnClose += (sender, e) =>
             {
                 ActiveSockets.Remove(ws);
-                logger.Debug($"Socket Connection Closed! ({ws.Id})");
+                Debug.Log($"Socket Connection Closed! ({ws.Id})");
             };
 
             ws.OnError += (sender, e) =>
             {
                 ActiveSockets.Remove(ws);
-                logger.Debug("Msg: " + e.Message + " | " + e.Exception.Message);
+                Debug.Log("Msg: " + e.Message + " | " + e.Exception.Message);
             };
             ws.SslConfiguration.EnabledSslProtocols = SupportedProtocols;
             return ws;
         }
 
         public void Dispose() {
-            logger.Debug("Disposing WebSocket Client...");
+            Debug.Log("Disposing WebSocket Client...");
             for (var i = ActiveSockets.Count - 1; i >= 0; i--) {
                 ActiveSockets[i].Close();
             }

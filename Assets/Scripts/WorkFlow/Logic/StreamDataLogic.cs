@@ -4,40 +4,51 @@ using GameEvents;
 using M3C.Finance.BinanceSdk;
 using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
-using NLog;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
+using WebSocketSharp;
 
 public class StreamDataLogic : LogicBase
 {
     private BinanceFuturesWebSocketPublicClient _client;
-    private Dictionary<SymbolType, BinanceFuturesWebSocketPublicClient.WebSocketMessageHandler<WebSocketTradesMessage>> _messageHandler;
+    public Queue<GameEvent> eventList;
 
     protected override void Awake() {
+        eventList = new Queue<GameEvent>();
         _client = new BinanceFuturesWebSocketPublicClient();
-        _messageHandler = new Dictionary<SymbolType, BinanceFuturesWebSocketPublicClient.WebSocketMessageHandler<WebSocketTradesMessage>>();
+        _client.MessageHandler = OnGetMessage;
+        _client.ConnectStream();
         base.Awake();
     }
 
     protected override void RegisterEvents() {
         var ec = GetEventComp();
-        ec.Listen<ListenTradesMessage>(evt =>
-        {
-            if (!_messageHandler.ContainsKey(evt.symbol)) {
-                ListenAggTrade(evt.symbol);
-            }
-        });
     }
 
-    private void ListenAggTrade(SymbolType type) {
-        _client.ConnectTradesEndpoint(type, HandleAggTrade);
+    private void OnGetMessage(MessageEventArgs e) {
+        var responseObject = JObject.Parse(e.Data);
+        var eventType = (string) responseObject["e"];
+
+        switch (eventType) {
+            case "aggTrade":
+                var tradeData = JsonConvert.DeserializeObject<WebSocketTradesMessage>(e.Data);
+                eventList.Enqueue(OnAggTradeUpdate.Create(tradeData));
+                return;
+            case "kline":
+                var klineData = JsonConvert.DeserializeObject<WebSocketKlineMessage>(e.Data);
+                eventList.Enqueue(OnKlineUpdate.Create(klineData));
+                return;
+        }
     }
 
-    private void HandleAggTrade(WebSocketTradesMessage msg) {
-        Debug.Log($"{msg.Symbol} : {msg.Price}");
-        GetEventComp().Send(OnAggTradeUpdate.Create(msg));
-    }
-    
     private void Update() {
+        if (eventList != null) {
+            while (eventList.Count > 0) {
+                var e = eventList.Dequeue();
+                EventManager.Instance.Send(e);
+            }
+        }
     }
 
     private void OnDestroy() {

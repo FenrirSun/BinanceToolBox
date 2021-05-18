@@ -28,4 +28,15 @@ namespace GameEvents
             return result;
         }
     }
+    
+    public class OnKlineUpdate : GameEventBaseNoDefaultCreate<OnKlineUpdate>
+    {
+        public WebSocketKlineMessage msg;
+
+        public static OnKlineUpdate Create(WebSocketKlineMessage _msg) {
+            var result = new OnKlineUpdate();
+            result.msg = _msg;
+            return result;
+        }
+    }
 }
