@@ -18,6 +18,29 @@ namespace GameEvents
         }
     }
 
+    public class GetLastTradeMessage : GameEventBaseNoDefaultCreate<GetLastTradeMessage>
+    {
+        public SymbolType symbol;
+        public WebSocketTradesMessage message;
+        
+        public static GetLastTradeMessage Create(SymbolType symbol) {
+            var result = new GetLastTradeMessage();
+            result.symbol = symbol;
+            return result;
+        }
+    }
+    
+    public class SubscribeKLine : GameEventBaseNoDefaultCreate<SubscribeKLine>
+    {
+        public SymbolType symbol;
+        
+        public static SubscribeKLine Create(SymbolType symbol) {
+            var result = new SubscribeKLine();
+            result.symbol = symbol;
+            return result;
+        }
+    }
+    
     public class OnAggTradeUpdate : GameEventBaseNoDefaultCreate<OnAggTradeUpdate>
     {
         public WebSocketTradesMessage msg;

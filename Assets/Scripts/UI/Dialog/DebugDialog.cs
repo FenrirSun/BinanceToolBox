@@ -200,31 +200,20 @@ public class DebugDialog : GameDialogBase
         DebugInfo("__time", lt.ToString("yyyy-MM-dd HH:mm:ss"), false);
         var memTotal = (UnityEngine.Profiling.Profiler.GetTotalReservedMemoryLong() / (1024 * 1024)).ToString("F3");
         DebugInfo("__memory", memTotal + "MB", false);
-        // DebugInfo("__deviceOrientation:", Input.deviceOrientation.ToString(), false);
-        // DebugInfo("__screenOrientation:", Screen.orientation.ToString(), false);
     }
 
         void ShowTestButtons() {
         view.parentRoot.RemoveAllChildren();
         AddButton("WS测试1", () => {
             WebSocketTest.TestWS();
-            // using (var client = new BinanceWebSocketClient()) {
-            //     client.ConnectDepthEndpoint("ethbtc", a => Debug.Log(a.EventTime));
-            // }
         });
         
         AddButton("WS测试2", () => {
             WebSocketTest.TestBinanceWS();
-            // using (var client = new BinanceWebSocketClient()) {
-            //     client.ConnectDepthEndpoint("ethbtc", a => Debug.Log(a.EventTime));
-            // }
         });
         
         AddButton("WS回收", () => {
             WebSocketTest.Dispose();
-            // using (var client = new BinanceFuturesWebSocketPublicClient()) {
-            //     client.ConnectDepthEndpoint("btcusdt", a => Debug.Log(a.EventTime));
-            // }
         });
         
         // AddButton("时间加1分钟", () => {

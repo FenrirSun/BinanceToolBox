@@ -1,10 +1,19 @@
-﻿namespace M3C.Finance.BinanceSdk.Enumerations
+﻿using System.Collections.Generic;
+
+namespace M3C.Finance.BinanceSdk.Enumerations
 {
     public class KlineInterval
     {
-        private KlineInterval(string value) { Value = value; }
+        private KlineInterval(string value) {
+            Value = value;
+        }
 
         private string Value { get; }
+
+        public static List<KlineInterval> Values = new List<KlineInterval>()
+        {
+            Minute1, Minute3, Minute5, Minute15, Minute30, Hour1, Hour2, Hour4, Hour6, Hour8, Hour12, Day1, Day3, Week1, Month1
+        };
 
         public static KlineInterval Minute1 => new KlineInterval("1m");
         public static KlineInterval Minute3 => new KlineInterval("3m");

@@ -19,21 +19,43 @@ public class MainMarketDialog : MainPageBase
 
     public void Init() {
         _view.symbolDropdown.ClearOptions();
-        List<string> options = new List<string>();
+        List<string> symbolOptions = new List<string>();
         foreach (var type in SymbolType.Types) {
-            options.Add(type);
+            symbolOptions.Add(type);
         }
-        _view.symbolDropdown.AddOptions(options);
+        _view.symbolDropdown.AddOptions(symbolOptions);
         _view.symbolDropdown.value = 0;
         OnSelectSymbol(0);
         _view.symbolDropdown.onValueChanged.AddListener(OnSelectSymbol);
+        
+        List<string> intervalOptions = new List<string>();
+        foreach (var value in KlineInterval.Values) {
+            intervalOptions.Add(value);
+        }
+        _view.intervalDropdown.AddOptions(intervalOptions);
+        _view.intervalDropdown.value = 0;
+        OnSelectInterval(0);
+        _view.intervalDropdown.onValueChanged.AddListener(OnSelectInterval);
+        
         AddListener();
     }
 
-    public void OnSelectSymbol(int index) {
+    private void OnSelectSymbol(int index) {
         curSymbol = SymbolType.Types[index];
-        return;
-        GetEventComp().Send(ListenTradesMessage.Create(curSymbol));
+        var msg = GetLastTradeMessage.Create(curSymbol);
+        GetEventComp().Send(msg);
+        if (msg.message != null) {
+            _view.curPrice.text = msg.message.Price.ToString();
+        }
+    }
+    
+    private void OnSelectInterval(int index) {
+        if (StreamDataLogic.curKlineInterval == KlineInterval.Values[index])
+            return;
+        
+        StreamDataLogic.curKlineInterval = KlineInterval.Values[index];
+        var msg = SubscribeKLine.Create(curSymbol);
+        GetEventComp().Send(msg);
     }
     
     private void AddListener() {
