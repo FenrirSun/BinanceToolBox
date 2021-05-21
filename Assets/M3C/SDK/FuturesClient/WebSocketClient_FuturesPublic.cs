@@ -14,7 +14,10 @@ using WebSocketSharp;
 
 namespace M3C.Finance.BinanceSdk
 {
-    public class BinanceFuturesWebSocketPublicClient : IDisposable
+    /// <summary>
+    /// stream data logic 保留一个公共数据信息流
+    /// </summary>
+    public class WebSocketClient_FuturesPublic : IDisposable
     {
         private const string WebSocketBaseUrl = "wss://fstream.binance.com/ws/";
         private WebSocket ws;
@@ -23,10 +26,8 @@ namespace M3C.Finance.BinanceSdk
 
         public WebSocketMessageHandler MessageHandler;
 
-        public BinanceFuturesWebSocketPublicClient() {
-        }
-
         public void ConnectStream() {
+            Dispose();
             ws = new WebSocket(WebSocketBaseUrl);
             ws.EmitOnPing = true;
             ws.Log.Level = LogLevel.Trace;
@@ -102,6 +103,7 @@ namespace M3C.Finance.BinanceSdk
 
         public void Dispose() {
             ws?.Close();
+            ws = null;
         }
     }
 

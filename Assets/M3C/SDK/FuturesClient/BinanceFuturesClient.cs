@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NLog;
 
 namespace M3C.Finance.BinanceSdk
 {
@@ -15,16 +14,15 @@ namespace M3C.Finance.BinanceSdk
     {
         private const string BaseUrl = "https://fapi.binance.com/fapi";
         private const string BaseUrlTest = "https://testnet.binancefuture.com";
-        
+        private string CurBaseUrl => GameConfig.isRealEnvironment ? BaseUrl : BaseUrlTest;
+
         private readonly string _apiKey;
         private readonly string _apiSecret;
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Constructor for Public API Access Only, No Keys Needed
         /// </summary>
-        public BinanceFuturesClient() {
-        }
+        public BinanceFuturesClient() { }
 
         /// <summary>
         /// Binance Rest Api Client
@@ -71,14 +69,13 @@ namespace M3C.Finance.BinanceSdk
                 }
 
                 try {
-                    var getRequestUrl = $"{BaseUrl}/{version}/{methodName}{parameterTextPrefix}{parameterText}";
-                    var postRequestUrl = $"{BaseUrl}/{version}/{methodName}";
+                    var getRequestUrl = $"{CurBaseUrl}/{version}/{methodName}{parameterTextPrefix}{parameterText}";
+                    var postRequestUrl = $"{CurBaseUrl}/{version}/{methodName}";
 
                     response = httpMethod == HttpMethod.Get
                         ? await client.DownloadStringTaskAsync(getRequestUrl)
                         : await client.UploadStringTaskAsync(postRequestUrl, httpMethod.Method, parameterText);
-                }
-                catch (WebException webException) {
+                } catch (WebException webException) {
                     using (var reader = new StreamReader(webException.Response.GetResponseStream(), Encoding.UTF8)) {
                         var errorObject = JObject.Parse(reader.ReadToEnd());
                         var errorCode = (int) errorObject["code"];

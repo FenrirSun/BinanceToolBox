@@ -13,13 +13,13 @@ public class StreamDataLogic : LogicBase
 {
     public static KlineInterval curKlineInterval = KlineInterval.Minute5;
     public Queue<GameEvent> eventList;
-    private BinanceFuturesWebSocketPublicClient _client;
+    private WebSocketClient_FuturesPublic _client;
     private SymbolType curKlineSymbol;
     private Dictionary<SymbolType, WebSocketTradesMessage> lastTradesMessages;
 
     protected override void Awake() {
         eventList = new Queue<GameEvent>();
-        _client = new BinanceFuturesWebSocketPublicClient();
+        _client = new WebSocketClient_FuturesPublic();
         lastTradesMessages = new Dictionary<SymbolType, WebSocketTradesMessage>();
         _client.MessageHandler = OnGetMessage;
         _client.ConnectStream();
