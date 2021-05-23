@@ -1,10 +1,10 @@
+using SuperScrollView;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MainAccountView : DialogViewBase
 {
-    public GameObject mainRoot;
-    public Button marketBtn;
-    public Button orderBtn;
-    public Button accountBtn;
+    public LoopListView2 mLoopListView;
+    public Button addAccountBtn;
+    public Dropdown symbolDropdown;
 }

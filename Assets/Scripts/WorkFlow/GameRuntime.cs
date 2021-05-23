@@ -13,8 +13,7 @@ public class GameRuntime : GameRuntimeBase<GameRuntime, UserData>
         get { return ProjectConfig.GetProjectInfo(); }
     } 
 
-    protected override void Awake()
-    {
+    protected override void Awake() {
         _userData = UserDataBase.Load<UserData>();
         if (_userData == null)
             _userData = new UserData();
@@ -36,7 +35,6 @@ public class GameRuntime : GameRuntimeBase<GameRuntime, UserData>
     }
 
     void InitDialog() {
-        UIManager.Instance.PushDialog<MainPageBarDialog>(MainPageBarDialog.Prefab);
-        UIManager.Instance.PushDialog<MainMarketDialog>(MainMarketDialog.Prefab).Init();
+        UIManager.Instance.PushDialog<MainPageBarDialog>(MainPageBarDialog.Prefab).Init();
     }
 }

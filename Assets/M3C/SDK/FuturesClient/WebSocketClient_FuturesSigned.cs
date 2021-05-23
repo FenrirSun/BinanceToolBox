@@ -20,7 +20,7 @@ namespace M3C.Finance.BinanceSdk
     {
         private const int KeepAliveMilliseconds = 30 * 60 * 1000;
         private const string BaseUrl = "wss://fstream.binance.com/ws/";
-        private const string TestBaseUrl = "wss://stream.binancefuture.com";
+        private const string TestBaseUrl = "wss://stream.binancefuture.com/ws/";
         private string WebSocketBaseUrl => GameConfig.isRealEnvironment ? BaseUrl : TestBaseUrl;
         protected SslProtocols SupportedProtocols { get; } = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
         private WebSocket ws;
@@ -59,7 +59,7 @@ namespace M3C.Finance.BinanceSdk
                 }
             };
 
-            ws.Connect();
+            ws.ConnectAsync();
 
             var keepAliveTimer = new Timer(KeepAliveHandler, new KeepAliveContext
             {
@@ -101,7 +101,7 @@ namespace M3C.Finance.BinanceSdk
 
         public void Dispose() {
             Debug.Log("Disposing WebSocket Client...");
-            ws?.Close();
+            ws?.CloseAsync();
             ws = null;
         }
     }

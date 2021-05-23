@@ -1,29 +1,22 @@
 using System.Collections.Generic;
+using M3C.Finance.BinanceSdk;
 using M3C.Finance.BinanceSdk.Enumerations;
+using M3C.Finance.BinanceSdk.ResponseObjects;
 
 public class AccountLogic : LogicBase
 {
-    private Dictionary<SymbolType, StrategyBase>  strategyDic;
+    private Dictionary<AccountData, WebSocketClient_FuturesSigned>  accountClientList;
 
     public void Init() {
-        strategyDic = new Dictionary<SymbolType, StrategyBase>();
-        foreach (var type in SymbolType.Types) {
-            strategyDic[type] = null;
-        }
-    }
-    
-    public void StartStrategy<T>(SymbolType symbol, T strategy) where T: StrategyBase {
-        if (strategyDic[symbol] != null && strategyDic[symbol].state == StrategyState.Executing) {
-            return;
-        }
+        accountClientList = new Dictionary<AccountData, WebSocketClient_FuturesSigned>();
 
-        strategyDic[symbol] = strategy;
-        strategy.StartStrategy();
     }
     
-    public void StopStrategy<T>(SymbolType symbol) where T: StrategyBase {
-        if (strategyDic[symbol] != null && strategyDic[symbol].state == StrategyState.Executing) {
-            strategyDic[symbol].StopStrategy();
+    public void AddAccount(AccountData account) {
+        if (!accountClientList.ContainsKey(account)) {
+            var client = new WebSocketClient_FuturesSigned();
+            //client.ConnectUserDataEndpointSync();
         }
     }
+
 }

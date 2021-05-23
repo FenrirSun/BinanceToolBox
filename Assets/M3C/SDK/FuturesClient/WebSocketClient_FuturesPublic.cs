@@ -20,6 +20,7 @@ namespace M3C.Finance.BinanceSdk
     public class WebSocketClient_FuturesPublic : IDisposable
     {
         private const string WebSocketBaseUrl = "wss://fstream.binance.com/ws/";
+        // private const string WebSocketBaseUrl = "wss://stream.binancefuture.com/ws/";
         private WebSocket ws;
         
         public delegate void WebSocketMessageHandler(MessageEventArgs messageContent);
@@ -49,13 +50,10 @@ namespace M3C.Finance.BinanceSdk
             ws.OnClose += (sender, e) =>
             {
                 Debug.Log("Server closed: " + e.Code);
-                ConnectStream();
             };
             ws.OnError += (sender, e) =>
             {
-                Debug.Log("socket error: " + e.Message);
-                ws.Close();
-                ConnectStream();
+                Debug.Log("socket error: " + e?.Message);
             };
 
             Debug.Log("Connect socket");
@@ -102,7 +100,8 @@ namespace M3C.Finance.BinanceSdk
         }
 
         public void Dispose() {
-            ws?.Close();
+            if(ws != null && ws.IsAlive)
+                ws.CloseAsync();
             ws = null;
         }
     }

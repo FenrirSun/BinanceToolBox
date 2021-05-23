@@ -16,15 +16,12 @@ public class MainOrderDialog :MainPageBase
     public void Init()
     {
         // _pageBarView.levelTxt.text = GameRuntime.Instance.UserData.level.ToString();
+        AddListener();
     }
 
     private void AddListener()
     {
-        _view.marketBtn.onClick.AddListener(SwitchToMarket);
-    }
-
-    private void SwitchToMarket()
-    {
         
     }
+
 }

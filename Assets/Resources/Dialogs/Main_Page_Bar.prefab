@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3822702594495260508}
   - component: {fileID: 3822702594495260511}
+  - component: {fileID: 104815075484906048}
   m_Layer: 5
   m_Name: Main_Page_Bar
   m_TagString: Untagged
@@ -45,6 +46,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3822702594495260509}
   m_CullTransparentMesh: 0
+--- !u!114 &104815075484906048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3822702594495260509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34c569de6be74ee98c1a90c7c6751265, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openAnimClip: {fileID: 0}
+  closeAnimClip: {fileID: 0}
+  ExtraAnims: []
+  mainRoot: {fileID: 3822702596258846275}
+  marketBtn: {fileID: 3822702596222321915}
+  orderBtn: {fileID: 3822702595358070388}
+  accountBtn: {fileID: 3822702594860918018}
 --- !u!1 &3822702594523267809
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +142,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u8BA2 \u5355"
+  m_Text: "\u7B56 \u7565"
 --- !u!1 &3822702594860918016
 GameObject:
   m_ObjectHideFlags: 0

@@ -243,16 +243,16 @@ public class DebugDialog : GameDialogBase
             logDic.Clear();
             view.logLabel.text = string.Empty;
         });
-        AddButton("显示等级", () =>
-        {
-            SDEBUG.INFO("Level", GameRuntime.Instance.UserData.level.ToString());
-        });
-        int newLevel = 0;
-        AddInputField((v) => { newLevel = int.Parse(v);}, "level");
-        AddButton("设置等级", () =>
-        {
-            GameRuntime.Instance.UserData.SetLevel(newLevel);
-        });
+        // AddButton("显示等级", () =>
+        // {
+        //     SDEBUG.INFO("Level", GameRuntime.Instance.UserData.level.ToString());
+        // });
+        // int newLevel = 0;
+        // AddInputField((v) => { newLevel = int.Parse(v);}, "level");
+        // AddButton("设置等级", () =>
+        // {
+        //     GameRuntime.Instance.UserData.SetLevel(newLevel);
+        // });
     }
 
 #endregion

@@ -62,4 +62,6 @@ namespace GameEvents
             return result;
         }
     }
+    
+    public class RefreshAccountList : GameEventBase<RefreshAccountList> { }
 }
