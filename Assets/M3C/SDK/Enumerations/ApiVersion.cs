@@ -7,6 +7,7 @@
         private string Value { get; }
 
         public static ApiVersion Version1 => new ApiVersion("v1");
+        public static ApiVersion Version2 => new ApiVersion("v2");
         public static ApiVersion Version3 => new ApiVersion("v3");
 
         public static implicit operator string(ApiVersion version) => version.Value;

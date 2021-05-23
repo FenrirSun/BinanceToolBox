@@ -23,17 +23,21 @@ public class AccountInfoItem: MonoBehaviour
         deleteBtn.onClick.RemoveAllListeners();
         deleteBtn.onClick.AddListener(() =>
         {
-            GameRuntime.Instance.UserData.RemoveAccount(data.id);
+            GameRuntime.Instance.GetLogic<AccountLogic>().DeleteAccount(data);
             EventManager.Instance.Send(RefreshAccountList.Create());
         });
     }
 
+    private float lastUpdateTime;
     private void Update() {
-        if (gameObject.activeInHierarchy && _accountData != null) {
-            var msg = GetLastTradeMessage.Create(MainAccountDialog.curSymbol);
-            EventManager.Instance.Send(msg);
-            if (msg.message != null) {
-                //curPrice.text = msg.message.Price.ToString();
+        if (Time.time - lastUpdateTime > 1) {
+            lastUpdateTime = Time.time;
+            if (gameObject.activeInHierarchy && _accountData != null) {
+                var balanceInfo = _accountData.GetBalanceInfo();
+                if (balanceInfo != null) {
+                    var balanceStr = balanceInfo.Balance.ToString();
+                    numTxt.text = balanceStr;
+                }
             }
         }
     }

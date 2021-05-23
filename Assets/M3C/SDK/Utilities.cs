@@ -26,11 +26,21 @@ namespace M3C.Finance.BinanceSdk
 
         private static readonly long EpocTicks = new DateTime(1970, 1, 1).Ticks;
 
+        private static long TimeLocal
+        {
+            get { return (DateTime.UtcNow.Ticks - EpocTicks) / TimeSpan.TicksPerMillisecond; }
+        }
+        private static long serverTimeOffset;
+        
         public static long GetCurrentMilliseconds() {
-            var unixTime = (DateTime.UtcNow.Ticks - EpocTicks) / TimeSpan.TicksPerMillisecond;
+            var unixTime = TimeLocal - serverTimeOffset;
             return unixTime;
         }
 
+        public static void OnGetServerTime(long serverTime) {
+            serverTimeOffset = TimeLocal - serverTime;
+        }
+        
         public static DateTime DateFromUnixMs(long unixTime) {
             return new DateTime(unixTime * TimeSpan.TicksPerMillisecond + EpocTicks);
         }

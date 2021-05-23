@@ -29,7 +29,8 @@ public class AddAccountDialog : GameDialogBase
         var secretKey = _view.secretInput.text;
 
         if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(secretKey)) {
-            GameRuntime.Instance.UserData.AddAccount(name, apiKey, secretKey);
+            var account = GameRuntime.Instance.UserData.AddAccount(name, apiKey, secretKey);
+            GameRuntime.Instance.GetLogic<AccountLogic>().AddAccount(account);
             GetEventComp().Send(RefreshAccountList.Create());
             OnClose();
         }

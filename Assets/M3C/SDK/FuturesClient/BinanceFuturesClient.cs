@@ -13,9 +13,10 @@ namespace M3C.Finance.BinanceSdk
     public partial class BinanceFuturesClient
     {
         private const string BaseUrl = "https://fapi.binance.com/fapi";
-        private const string BaseUrlTest = "https://testnet.binancefuture.com";
+        private const string BaseUrlTest = "https://testnet.binancefuture.com/fapi";
         private string CurBaseUrl => GameConfig.isRealEnvironment ? BaseUrl : BaseUrlTest;
 
+        public AccountData Ad;
         private readonly string _apiKey;
         private readonly string _apiSecret;
 
@@ -27,11 +28,10 @@ namespace M3C.Finance.BinanceSdk
         /// <summary>
         /// Binance Rest Api Client
         /// </summary>
-        /// <param name="apiKey">Binance Api Key</param>
-        /// <param name="apiSecret">Binance Api Secret</param>
-        public BinanceFuturesClient(string apiKey, string apiSecret) {
-            _apiKey = apiKey;
-            _apiSecret = apiSecret;
+        public BinanceFuturesClient(AccountData ad) {
+            Ad = ad;
+            _apiKey = ad.apiKey;
+            _apiSecret = ad.secretKey;
         }
 
         private delegate T ResponseParseHandler<T>(string input);

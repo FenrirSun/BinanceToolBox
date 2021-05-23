@@ -12,7 +12,7 @@ public class MainAccountDialog : MainPageBase
     public const string Prefab = "Main_Account_Dialog";
     private MainAccountView _view;
     private UserData ud;
-    public static SymbolType curSymbol;
+    public static CurrencyType curCurrency;
     
     protected override void SetView(DialogViewBase v) {
         _view = v as MainAccountView;
@@ -24,7 +24,7 @@ public class MainAccountDialog : MainPageBase
         
         _view.symbolDropdown.ClearOptions();
         List<string> symbolOptions = new List<string>();
-        foreach (var type in SymbolType.Types) {
+        foreach (var type in CurrencyType.Types) {
             symbolOptions.Add(type);
         }
         _view.symbolDropdown.AddOptions(symbolOptions);
@@ -48,7 +48,7 @@ public class MainAccountDialog : MainPageBase
     }
 
     private void OnSelectSymbol(int index) {
-        curSymbol = SymbolType.Types[index];
+        curCurrency = CurrencyType.Types[index];
     }
     
     LoopListViewItem2 OnGetItemByIndex(LoopListView2 listView, int index) {

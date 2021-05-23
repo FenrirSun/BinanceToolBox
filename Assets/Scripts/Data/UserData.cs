@@ -1,19 +1,18 @@
 using System;
 using System.Collections.Generic;
+using M3C.Finance.BinanceSdk.ResponseObjects;
+using Newtonsoft.Json;
 
 public class UserData : UserDataBase
 {
     public List<AccountData> accountDataList;
     public int newestId;
-    
-    public UserData() : base()
-    {
+
+    public UserData() : base() {
         accountDataList = new List<AccountData>();
     }
 
-    public void Clear()
-    {
-
+    public void Clear() {
     }
 
     public int GetNewGuid() {
@@ -23,16 +22,17 @@ public class UserData : UserDataBase
         MarkDirty();
         return newestId;
     }
-    
-    public void AddAccount(string name, string api_key, string secret_key) {
+
+    public AccountData AddAccount(string name, string api_key, string secret_key) {
         var newAccount = new AccountData();
         newAccount.id = GameUtils.GetNewGuid();
         newAccount.name = name;
         newAccount.apiKey = api_key;
         newAccount.secretKey = secret_key;
-        
+
         accountDataList.Add(newAccount);
         MarkDirty();
+        return newAccount;
     }
 
     public AccountData GetAccount(int id) {
@@ -41,9 +41,10 @@ public class UserData : UserDataBase
                 return accountData;
             }
         }
+
         return null;
     }
-    
+
     public void RemoveAccount(int id) {
         foreach (var accountData in accountDataList) {
             if (accountData.id == id) {
@@ -51,7 +52,11 @@ public class UserData : UserDataBase
                 MarkDirty();
                 return;
             }
-        }   
+        }
+    }
+
+    public void GetBalance(AccountData ad, FuturesUserDataAccountBalanceMessage info) {
+        ad.SetBalanceInfo(info);
     }
 }
 
@@ -62,4 +67,28 @@ public class AccountData
     public string name;
     public string apiKey;
     public string secretKey;
+
+    // 资产信息
+    private FuturesUserDataAccountBalanceMessage BalanceInfo;
+    public void SetBalanceInfo(FuturesUserDataAccountBalanceMessage info) {
+        BalanceInfo = info;
+    }
+    public FuturesUserDataAccountBalanceMessage GetBalanceInfo() {
+        return BalanceInfo;
+    }
+    // 仓位信息
+    private List<WsFuturesAccountTradeInfo> TradeInfos;
+
+    public List<WsFuturesAccountTradeInfo> GetTradeInfos() {
+        if(TradeInfos == null)
+            TradeInfos = new List<WsFuturesAccountTradeInfo>();
+        return TradeInfos;
+    }
+    // 订单信息
+    private List<WsFuturesOrderInfo> OrderInfos;
+    public List<WsFuturesOrderInfo> GetOrderInfos() {
+        if(OrderInfos == null)
+            OrderInfos = new List<WsFuturesOrderInfo>();
+        return OrderInfos;
+    }
 }

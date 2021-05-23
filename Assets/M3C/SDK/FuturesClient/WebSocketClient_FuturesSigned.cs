@@ -24,35 +24,50 @@ namespace M3C.Finance.BinanceSdk
         private string WebSocketBaseUrl => GameConfig.isRealEnvironment ? BaseUrl : TestBaseUrl;
         protected SslProtocols SupportedProtocols { get; } = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
         private WebSocket ws;
+        private BinanceFuturesClient _client;
+        
+        public delegate void WebSocketMessageHandler<T>(T messageContent, AccountData ad) where T : WebSocketMessageBase;
 
-        public delegate void WebSocketMessageHandler<T>(T messageContent) where T : WebSocketMessageBase;
-
-        public string ConnectUserDataEndpointSync(BinanceFuturesClient client,
-            WebSocketMessageHandler<WsFuturesUserDataAccountUpdateMessage> accountUpdateHandler,
-            WebSocketMessageHandler<WsFuturesUserDataOrderTradeUpdateMessage> orderTradeUpdateHandler) {
-            return ConnectUserDataEndpoint(client, accountUpdateHandler, orderTradeUpdateHandler).Result;
-        }
+        // public string ConnectUserDataEndpointSync(BinanceFuturesClient client,
+        //     WebSocketMessageHandler<WsFuturesUserDataAccountUpdateMessage> accountUpdateHandler,
+        //     WebSocketMessageHandler<WsFuturesUserDataOrderTradeUpdateMessage> orderTradeUpdateHandler,
+        //     WebSocketMessageHandler<WsFuturesUserDataAccountConfigUpdateMessage> configUpdateHandler) {
+        //     return ConnectUserDataEndpoint(client, accountUpdateHandler, orderTradeUpdateHandler, configUpdateHandler).Result;
+        // }
 
         public async Task<string> ConnectUserDataEndpoint(BinanceFuturesClient client,
             WebSocketMessageHandler<WsFuturesUserDataAccountUpdateMessage> accountUpdateHandler,
-            WebSocketMessageHandler<WsFuturesUserDataOrderTradeUpdateMessage> orderTradeUpdateHandler) {
+            WebSocketMessageHandler<WsFuturesUserDataOrderTradeUpdateMessage> orderTradeUpdateHandler,
+            WebSocketMessageHandler<WsFuturesUserDataAccountConfigUpdateMessage> configUpdateHandler) {
+            _client = client;
             Dispose();
             var listenKey = await client.StartUserDataStream();
+
             var endpoint = GetWsEndpoint(string.Empty, listenKey);
             ws = CreateNewWebSocket(endpoint, listenKey);
 
+            ws.OnOpen += (sender, args) =>
+            {
+                Debug.Log("On Client WebSocket Open ");
+            };
+            
             ws.OnMessage += (sender, e) =>
             {
-                Debug.Log("Msg: " + e.Data);
                 var responseObject = JObject.Parse(e.Data);
                 var eventType = (string) responseObject["e"];
 
                 switch (eventType) {
                     case "ACCOUNT_UPDATE":
-                        accountUpdateHandler(JsonConvert.DeserializeObject<WsFuturesUserDataAccountUpdateMessage>(e.Data));
+                        Debug.Log("Msg ACCOUNT_UPDATE: " + e.Data);
+                        accountUpdateHandler(JsonConvert.DeserializeObject<WsFuturesUserDataAccountUpdateMessage>(e.Data), _client.Ad);
                         return;
                     case "ORDER_TRADE_UPDATE":
-                        orderTradeUpdateHandler(JsonConvert.DeserializeObject<WsFuturesUserDataOrderTradeUpdateMessage>(e.Data));
+                        Debug.Log("Msg ORDER_TRADE_UPDATE: " + e.Data);
+                        orderTradeUpdateHandler(JsonConvert.DeserializeObject<WsFuturesUserDataOrderTradeUpdateMessage>(e.Data), _client.Ad);
+                        return;
+                    case "ACCOUNT_CONFIG_UPDATE":
+                        Debug.Log("Msg ACCOUNT_CONFIG_UPDATE: " + e.Data);
+                        configUpdateHandler(JsonConvert.DeserializeObject<WsFuturesUserDataAccountConfigUpdateMessage>(e.Data), _client.Ad);
                         return;
                     // default:
                     //     throw new ApplicationException("Unexpected Event Type In Message");
@@ -72,7 +87,7 @@ namespace M3C.Finance.BinanceSdk
 
         private Uri GetWsEndpoint(string method, string symbol) {
             var postfix = string.IsNullOrEmpty(method) ? string.Empty : $"@{method}";
-            return new Uri($"{WebSocketBaseUrl}/{(method.IsNullOrEmpty() ? symbol : symbol.ToLowerInvariant())}{postfix}");
+            return new Uri($"{WebSocketBaseUrl}{(method.IsNullOrEmpty() ? symbol : symbol.ToLowerInvariant())}{postfix}");
         }
 
         private static async void KeepAliveHandler(object context) {
