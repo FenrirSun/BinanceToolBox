@@ -3,20 +3,8 @@ using M3C.Finance.BinanceSdk.ResponseObjects;
 
 namespace GameEvents
 {
-    public class GameStart : GameEventBase<GameStart>
-    {
-    }
 
-    public class ListenTradesMessage : GameEventBaseNoDefaultCreate<ListenTradesMessage>
-    {
-        public SymbolType symbol;
-
-        public static ListenTradesMessage Create(SymbolType symbol) {
-            var result = new ListenTradesMessage();
-            result.symbol = symbol;
-            return result;
-        }
-    }
+    #region public Message
 
     public class GetLastTradeMessage : GameEventBaseNoDefaultCreate<GetLastTradeMessage>
     {
@@ -40,7 +28,7 @@ namespace GameEvents
             return result;
         }
     }
-    
+
     public class OnAggTradeUpdate : GameEventBaseNoDefaultCreate<OnAggTradeUpdate>
     {
         public WebSocketTradesMessage msg;
@@ -62,6 +50,50 @@ namespace GameEvents
             return result;
         }
     }
+
+    #endregion
+
+    #region Signed Message
+
+    public class OnOrderInfoUpdate : GameEventBaseNoDefaultCreate<OnOrderInfoUpdate>
+    {
+        public WsFuturesUserDataOrderTradeUpdateMessage msg;
+
+        public static OnOrderInfoUpdate Create(WsFuturesUserDataOrderTradeUpdateMessage _msg) {
+            var result = new OnOrderInfoUpdate();
+            result.msg = _msg;
+            return result;
+        }
+    }
+
+    public class StartStrategy : GameEventBaseNoDefaultCreate<StartStrategy>
+    {
+        public SymbolType Symbol;
+        public StrategyBase Strategy;
+
+        public static StartStrategy Create(SymbolType _symbol, StrategyBase _strategy) {
+            var result = new StartStrategy();
+            result.Symbol = _symbol;
+            result.Strategy = _strategy;
+            return result;
+        }
+    }
+    
+    public class NewOrder : GameEventBaseNoDefaultCreate<NewOrder>
+    {
+        public AccountData data;
+        public StrategyOrderInfo orderInfo;
+
+        public static NewOrder Create(AccountData account, StrategyOrderInfo order) {
+            var result = new NewOrder();
+            result.data = account;
+            result.orderInfo = order;
+            return result;
+        }
+    }
+    
+    #endregion
+    
     
     public class RefreshAccountList : GameEventBase<RefreshAccountList> { }
 }

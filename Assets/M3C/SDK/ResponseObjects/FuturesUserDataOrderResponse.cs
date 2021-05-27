@@ -49,11 +49,11 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
 
         // 买卖方向
         [JsonProperty(PropertyName = "side")] 
-        public string side { get; set; }
+        public OrderSide side { get; set; }
 
         // 持仓方向
         [JsonProperty(PropertyName = "positionSide")] 
-        public string positionSide { get; set; }
+        public PositionSide positionSide { get; set; }
 
         // 订单状态
         [JsonProperty(PropertyName = "status")] 

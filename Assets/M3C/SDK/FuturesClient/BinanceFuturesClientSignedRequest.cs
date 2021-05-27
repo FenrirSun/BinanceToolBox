@@ -35,13 +35,14 @@ namespace M3C.Finance.BinanceSdk
             return result;
         }
 
-        public async Task<NewOrderResponse> NewOrder(string symbol, OrderSide side, OrderType orderType, TimeInForce timeInForce, decimal quantity,
-            decimal price, bool isTestOrder = false, string newClientOrderId = null, decimal? stopPrice = null, decimal? icebergQuantity = null,
-            long? recvWindow = null) {
+        public async Task<NewOrderResponse> NewOrder(SymbolType symbol, OrderSide side, PositionSide posSide, OrderType orderType,
+            TimeInForce timeInForce, decimal quantity, decimal price, string newClientOrderId, bool isTestOrder = false, decimal? stopPrice = null,
+            decimal? icebergQuantity = null, long? recvWindow = null) {
             var parameters = new Dictionary<string, string>
             {
                 {"symbol", symbol},
                 {"side", side},
+                {"positionSide", posSide},
                 {"type", orderType},
                 {"timeInForce", timeInForce},
                 {"quantity", quantity.ToString(CultureInfo.InvariantCulture)},
@@ -62,7 +63,7 @@ namespace M3C.Finance.BinanceSdk
                 parameters.Add("icebergQty", icebergQuantity.Value.ToString(CultureInfo.InvariantCulture));
             }
 
-            return await SendRequest<NewOrderResponse>(isTestOrder ? "order/test" : "order", ApiVersion.Version3, ApiMethodType.Signed,
+            return await SendRequest<NewOrderResponse>(isTestOrder ? "order/test" : "order", ApiVersion.Version1, ApiMethodType.Signed,
                 HttpMethod.Post, parameters);
         }
 

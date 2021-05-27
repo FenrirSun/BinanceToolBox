@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
 using Newtonsoft.Json;
 
@@ -76,19 +77,33 @@ public class AccountData
     public FuturesUserDataAccountBalanceMessage GetBalanceInfo() {
         return BalanceInfo;
     }
+    
     // 仓位信息
     private List<WsFuturesAccountTradeInfo> TradeInfos;
-
     public List<WsFuturesAccountTradeInfo> GetTradeInfos() {
         if(TradeInfos == null)
             TradeInfos = new List<WsFuturesAccountTradeInfo>();
         return TradeInfos;
     }
+    
     // 订单信息
-    private List<WsFuturesOrderInfo> OrderInfos;
-    public List<WsFuturesOrderInfo> GetOrderInfos() {
+    private List<FuturesUserDataOpenOrderInfoMessage> OrderInfos;
+    public List<FuturesUserDataOpenOrderInfoMessage> GetOrderInfos() {
         if(OrderInfos == null)
-            OrderInfos = new List<WsFuturesOrderInfo>();
+            OrderInfos = new List<FuturesUserDataOpenOrderInfoMessage>();
+
         return OrderInfos;
+    }
+    public List<FuturesUserDataOpenOrderInfoMessage> GetOrderInfos(SymbolType symbol) {
+        if(OrderInfos == null)
+            OrderInfos = new List<FuturesUserDataOpenOrderInfoMessage>();
+
+        List<FuturesUserDataOpenOrderInfoMessage> result = new List<FuturesUserDataOpenOrderInfoMessage>();
+        foreach (var order in OrderInfos) {
+            if (order.symbol == symbol) {
+                result.Add(order);
+            }
+        }
+        return result;
     }
 }

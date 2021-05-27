@@ -24,7 +24,7 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         
         // 订单方向
         [JsonProperty(PropertyName = "S")]
-        public string PositionDirection { get; set; }
+        public OrderSide side { get; set; }
         
         // 订单类型
         [JsonProperty(PropertyName = "o")]
@@ -32,7 +32,7 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         
         // 有效方式
         [JsonProperty(PropertyName = "f")]
-        public string EffectiveWay { get; set; }
+        public string timeInForce { get; set; }
         
         // 订单原始数量
         [JsonProperty(PropertyName = "q")]
@@ -108,7 +108,7 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         
         // 触发价类型
         [JsonProperty(PropertyName = "wt")]
-        public string TriggerSymbolType { get; set; }
+        public string WorkingType { get; set; }
         
         // 原始订单类型
         [JsonProperty(PropertyName = "ot")]
@@ -116,7 +116,7 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         
         // 持仓方向
         [JsonProperty(PropertyName = "ps")]
-        public string PositionDir { get; set; }
+        public PositionSide positionSide { get; set; }
         
         // 是否为触发平仓单; 仅在条件订单情况下会推送此字段
         [JsonProperty(PropertyName = "cp")]
@@ -128,7 +128,7 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         
         // 追踪止损回调比例, 仅在追踪止损单时会推送此字段
         [JsonProperty(PropertyName = "cr")]
-        public decimal TraceStopLossPullbacks { get; set; }
+        public decimal priceRate { get; set; }
         
         // 该交易实现盈亏
         [JsonProperty(PropertyName = "rp")]

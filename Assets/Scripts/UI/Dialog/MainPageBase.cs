@@ -12,5 +12,10 @@ public class MainPageBase :GameDialogBase
 
     public void ShowPage() {
         transform.localScale = Vector3.one;
+        SwitchToPage();
+    }
+    
+    public virtual void SwitchToPage() {
+        
     }
 }

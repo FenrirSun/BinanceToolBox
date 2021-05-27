@@ -23,7 +23,7 @@ namespace M3C.Finance.BinanceSdk.Enumerations
         public static SymbolType SHIB => new SymbolType("1000SHIBUSDT");
         public static SymbolType BNB => new SymbolType("BNBUSDT");
         public static SymbolType EOS => new SymbolType("EOSUSDT");
-
+        
         public static implicit operator string(SymbolType type) => type.Value;
         public static implicit operator SymbolType(string text) => new SymbolType(text);
         public override string ToString() => Value;

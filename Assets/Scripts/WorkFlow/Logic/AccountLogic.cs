@@ -17,6 +17,7 @@ public class AccountLogic : LogicBase
         accountWsClientList = new Dictionary<AccountData, WebSocketClient_FuturesSigned>();
         eventList = new Queue<GameEvent>();
         InitAccount();
+        AddListeners();
     }
 
     private void InitAccount() {
@@ -24,6 +25,17 @@ public class AccountLogic : LogicBase
         foreach (var accountData in accounts) {
             AddAccount(accountData);
         }
+    }
+
+    private void AddListeners() {
+        GetEventComp().Listen<NewOrder>((evt) =>
+        {
+            if (accountClientList.ContainsKey(evt.data)) {
+                var client = accountClientList[evt.data];
+                client.NewOrder(evt.orderInfo.symbol, evt.orderInfo.side, evt.orderInfo.posSide, evt.orderInfo.orderType,
+                    TimeInForce.GoodUntilCanceled, evt.orderInfo.quantity, evt.orderInfo.pendingPrice, evt.orderInfo.orderClientId.ToString());
+            }
+        });
     }
     
     public async void AddAccount(AccountData account) {
@@ -66,10 +78,17 @@ public class AccountLogic : LogicBase
     
     private void OnGetOrderTradeUpdateMessage(WsFuturesUserDataOrderTradeUpdateMessage e, AccountData ad) {
         var orderInfos = ad.GetOrderInfos();
-        if (orderInfos.Count > 20) {
+        if (orderInfos.Count > 30) {
             orderInfos.RemoveAt(0);
         }
-        orderInfos.Add(e.OrderInfo);
+
+        foreach (var order in orderInfos) {
+            if (order.clientOrderId == e.OrderInfo.ClientId) {
+                e.SyncOrderInfoData(order);
+            }
+        }
+        GetEventComp().Send(OnOrderInfoUpdate.Create(e));
+        orderInfos.Add(e.ConvertToOrderInfoMessage());
     }
     
     private void OnGetConfigUpdateMessage(WsFuturesUserDataAccountConfigUpdateMessage e, AccountData ad) {
