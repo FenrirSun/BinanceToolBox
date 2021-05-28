@@ -82,9 +82,9 @@ namespace GameEvents
     public class NewOrder : GameEventBaseNoDefaultCreate<NewOrder>
     {
         public AccountData data;
-        public StrategyOrderInfo orderInfo;
+        public OrderInfo orderInfo;
 
-        public static NewOrder Create(AccountData account, StrategyOrderInfo order) {
+        public static NewOrder Create(AccountData account, OrderInfo order) {
             var result = new NewOrder();
             result.data = account;
             result.orderInfo = order;

@@ -6,7 +6,9 @@
 
         public string Value { get; }
 
+        // 开仓
         public static OrderSide Buy => new OrderSide("BUY");
+        // 平仓
         public static OrderSide Sell => new OrderSide("SELL");
 
         public static implicit operator string(OrderSide side) => side.Value;

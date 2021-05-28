@@ -8,6 +8,7 @@ public class StrategyBase
     public SymbolType symbol;
     public StrategyState state;
     public decimal lastPrice;
+    public int roundNum;
     public StrategyOrderInfo firstOrderInfo;
     public StrategyOrderInfo lastOrderInfo;
     
@@ -18,6 +19,11 @@ public class StrategyBase
 
     public virtual void StartStrategy() {
         state = StrategyState.Executing;
+        roundNum = 0;
+    }
+    
+    public virtual void NextRound() {
+        roundNum++;
     }
 
     public virtual void PauseStrategy() {
@@ -30,6 +36,7 @@ public class StrategyBase
     
     public virtual void OnAggTradeUpdate(WebSocketTradesMessage msg) {
         if (msg.Symbol == symbol) {
+            this.lastPrice = msg.Price;
             OnPriceChange(msg.Price);
         }
     }
@@ -41,7 +48,7 @@ public class StrategyBase
     }
     
     protected virtual void OnPriceChange(decimal price) {
-        this.lastPrice = price;
+        
     }
 
     protected virtual void OnDataOrderTradeUpdate(WsFuturesUserDataOrderTradeUpdateMessage msg) {
@@ -53,11 +60,12 @@ public class StrategyOrderInfo
 {
     public enum OrderState
     {
-        idle,
-        pending,
-        closeFirst,
-        waitStopOrTakeprofit,
-        finish,
+        idle,// 未开始
+        waitForConfirmOrder,//等待挂单成功
+        waitForDeal,//等待挂单交易成功
+        waitComfirmStopOrTakeprofit,//等待止盈止损挂单成功
+        waitDealOfStopOrTakeprofit,//等待止盈止损交易成功
+        finish,//结束
         cancel
     }
 
@@ -71,8 +79,6 @@ public class StrategyOrderInfo
     public OrderType orderType;
     
     public int orderClientId;
-    public int stopClientId;
-    public int takeProfitClientId;
     
     public OrderState state;
 }

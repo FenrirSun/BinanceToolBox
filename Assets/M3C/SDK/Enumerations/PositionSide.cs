@@ -7,7 +7,9 @@ namespace M3C.Finance.BinanceSdk.Enumerations
         public string Value { get; }
 
         public static PositionSide BOTH => new PositionSide("BOTH");
+        // 买多
         public static PositionSide LONG => new PositionSide("LONG");
+        // 买空
         public static PositionSide SHORT => new PositionSide("SHORT");
 
         public static implicit operator string(PositionSide side) => side.Value;

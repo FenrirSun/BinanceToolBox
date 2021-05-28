@@ -41,6 +41,7 @@ namespace M3C.Finance.BinanceSdk
             if ((apiMethod == ApiMethodType.ApiKey && string.IsNullOrEmpty(_apiKey)) ||
                 (apiMethod == ApiMethodType.Signed &&
                  (string.IsNullOrEmpty(_apiKey) || string.IsNullOrEmpty(_apiSecret)))) {
+                CommonMessageDialog.OpenWithOneButton("消息发送失败：ApiKey 未初始化", null);
                 throw new BinanceRestApiException(0,
                     "You have to instantiate client with proper keys in order to make ApiKey or Signed API requests!");
             }
@@ -62,7 +63,6 @@ namespace M3C.Finance.BinanceSdk
             var parameterText = GetParameterText(parameters);
 
             string response;
-
             using (var client = new WebClient()) {
                 if (apiMethod == ApiMethodType.Signed || apiMethod == ApiMethodType.ApiKey) {
                     client.Headers.Add("X-MBX-APIKEY", _apiKey);
@@ -80,6 +80,7 @@ namespace M3C.Finance.BinanceSdk
                         var errorObject = JObject.Parse(reader.ReadToEnd());
                         var errorCode = (int) errorObject["code"];
                         var errorMessage = (string) errorObject["msg"];
+                        CommonMessageDialog.OpenWithOneButton($"消息发送失败：错误码：{errorCode.ToString()}; 错误信息：{errorMessage}", null);
                         throw new BinanceRestApiException(errorCode, errorMessage);
                     }
                 }

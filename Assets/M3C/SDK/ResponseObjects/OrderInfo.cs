@@ -6,7 +6,7 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
     public class OrderInfo
     {
         [JsonProperty("symbol")]
-        public string Symbol { get; set; }
+        public SymbolType Symbol { get; set; }
 
         [JsonProperty("orderId")]
         public long OrderId { get; set; }
@@ -34,7 +34,7 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
 
         [JsonProperty("side")]
         public OrderSide OrderSide { get; set; }
-
+        
         [JsonProperty("stopPrice")]
         public decimal StopPrice { get; set; }
 
@@ -43,5 +43,11 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
 
         [JsonProperty("time")]
         public long Time { get; set; }
+
+        [JsonProperty("positionSide")]
+        public PositionSide PositionSide { get; set; }
+        
+        [JsonProperty("reduceOnly")]
+        public bool reduceOnly { get; set; }
     }
 }

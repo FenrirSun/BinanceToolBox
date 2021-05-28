@@ -32,8 +32,8 @@ public class AccountLogic : LogicBase
         {
             if (accountClientList.ContainsKey(evt.data)) {
                 var client = accountClientList[evt.data];
-                client.NewOrder(evt.orderInfo.symbol, evt.orderInfo.side, evt.orderInfo.posSide, evt.orderInfo.orderType,
-                    TimeInForce.GoodUntilCanceled, evt.orderInfo.quantity, evt.orderInfo.pendingPrice, evt.orderInfo.orderClientId.ToString());
+                client.NewOrder(evt.orderInfo.Symbol, evt.orderInfo.OrderSide, evt.orderInfo.PositionSide, evt.orderInfo.OrderType,
+                    TimeInForce.GoodUntilCanceled, evt.orderInfo.OriginalQuantity, evt.orderInfo.Price, evt.orderInfo.ClientOrderId.ToString());
             }
         });
     }

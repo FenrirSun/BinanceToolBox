@@ -52,11 +52,11 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         
         // 本次事件的具体执行类型
         [JsonProperty(PropertyName = "x")]
-        public string ExecuteType { get; set; }
+        public EventStatus ExecuteType { get; set; }
         
         // 订单的当前状态
         [JsonProperty(PropertyName = "X")]
-        public string CurrentState { get; set; }
+        public OrderStatus CurrentState { get; set; }
         
         // 订单ID
         [JsonProperty(PropertyName = "i")]
