@@ -8,10 +8,10 @@ using Newtonsoft.Json.Linq;
 
 public class AccountLogic : LogicBase
 {
-    private Dictionary<AccountData, BinanceFuturesClient>  accountClientList;
-    private Dictionary<AccountData, WebSocketClient_FuturesSigned>  accountWsClientList;
+    private Dictionary<AccountData, BinanceFuturesClient> accountClientList;
+    private Dictionary<AccountData, WebSocketClient_FuturesSigned> accountWsClientList;
     public Queue<GameEvent> eventList;
-    
+
     protected override void Awake() {
         accountClientList = new Dictionary<AccountData, BinanceFuturesClient>();
         accountWsClientList = new Dictionary<AccountData, WebSocketClient_FuturesSigned>();
@@ -33,11 +33,12 @@ public class AccountLogic : LogicBase
             if (accountClientList.ContainsKey(evt.data)) {
                 var client = accountClientList[evt.data];
                 client.NewOrder(evt.orderInfo.Symbol, evt.orderInfo.OrderSide, evt.orderInfo.PositionSide, evt.orderInfo.OrderType,
-                    TimeInForce.GoodUntilCanceled, evt.orderInfo.OriginalQuantity, evt.orderInfo.Price, evt.orderInfo.ClientOrderId.ToString());
+                    TimeInForce.GoodUntilCanceled, evt.orderInfo.OriginalQuantity, evt.orderInfo.Price, evt.orderInfo.ClientOrderId.ToString(),
+                    isTestOrder:false);
             }
         });
     }
-    
+
     public async void AddAccount(AccountData account) {
         if (!accountClientList.ContainsKey(account)) {
             var client = new BinanceFuturesClient(account);
@@ -45,7 +46,7 @@ public class AccountLogic : LogicBase
             var time = await client.Time();
             Utilities.OnGetServerTime(time.ServerTime);
             var result = await client.GetBalanceInfo();
-            
+
             var wsClient = new WebSocketClient_FuturesSigned();
             wsClient.ConnectUserDataEndpoint(client, OnGetAccountUpdateMessage, OnGetOrderTradeUpdateMessage, OnGetConfigUpdateMessage);
         }
@@ -55,13 +56,15 @@ public class AccountLogic : LogicBase
         if (accountClientList.ContainsKey(account)) {
             accountClientList.Remove(account);
         }
+
         if (accountWsClientList.ContainsKey(account)) {
             accountWsClientList[account].Dispose();
             accountWsClientList.Remove(account);
         }
+
         GameRuntime.Instance.UserData.RemoveAccount(account.id);
     }
-    
+
     private void OnGetAccountUpdateMessage(WsFuturesUserDataAccountUpdateMessage e, AccountData ad) {
         if (e.AccountUpdateInfo != null) {
             var balanceInfo = e.AccountUpdateInfo.BalanceInfo;
@@ -75,26 +78,31 @@ public class AccountLogic : LogicBase
             }
         }
     }
-    
+
     private void OnGetOrderTradeUpdateMessage(WsFuturesUserDataOrderTradeUpdateMessage e, AccountData ad) {
         var orderInfos = ad.GetOrderInfos();
         if (orderInfos.Count > 30) {
             orderInfos.RemoveAt(0);
         }
 
+        bool syncOrder = false;
         foreach (var order in orderInfos) {
             if (order.clientOrderId == e.OrderInfo.ClientId) {
                 e.SyncOrderInfoData(order);
+                syncOrder = true;
             }
         }
-        GetEventComp().Send(OnOrderInfoUpdate.Create(e));
-        orderInfos.Add(e.ConvertToOrderInfoMessage());
-    }
-    
-    private void OnGetConfigUpdateMessage(WsFuturesUserDataAccountConfigUpdateMessage e, AccountData ad) {
 
+        if (!syncOrder) {
+            orderInfos.Add(e.ConvertToOrderInfoMessage());
+        }
+
+        eventList.Enqueue(OnOrderInfoUpdate.Create(e, ad));
     }
-    
+
+    private void OnGetConfigUpdateMessage(WsFuturesUserDataAccountConfigUpdateMessage e, AccountData ad) {
+    }
+
     private void Update() {
         if (eventList != null) {
             while (eventList.Count > 0) {

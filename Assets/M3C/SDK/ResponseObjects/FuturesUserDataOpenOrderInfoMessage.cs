@@ -58,7 +58,7 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         
         // 订单状态
         [JsonProperty(PropertyName = "status")] 
-        public string status { get; set; }
+        public OrderStatus status { get; set; }
         
         // 触发价，对`TRAILING_STOP_MARKET`无效
         [JsonProperty(PropertyName = "stopPrice")] 

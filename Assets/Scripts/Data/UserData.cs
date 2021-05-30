@@ -100,7 +100,7 @@ public class AccountData
 
         List<FuturesUserDataOpenOrderInfoMessage> result = new List<FuturesUserDataOpenOrderInfoMessage>();
         foreach (var order in OrderInfos) {
-            if (order.symbol == symbol) {
+            if (order.symbol.Value == symbol) {
                 result.Add(order);
             }
         }

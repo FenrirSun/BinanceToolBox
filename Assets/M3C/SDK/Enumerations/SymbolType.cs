@@ -8,7 +8,7 @@ namespace M3C.Finance.BinanceSdk.Enumerations
             Value = value;
         }
 
-        private string Value { get; }
+        public string Value { get; }
 
         public static List<SymbolType> Types = new List<SymbolType>
         {

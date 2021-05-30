@@ -4,9 +4,10 @@ using M3C.Finance.BinanceSdk.Enumerations;
 
 public class StrategyLogic : LogicBase
 {
+    // 目前只考虑单个账户
     private Dictionary<SymbolType, StrategyBase> strategyDic;
 
-    public void Init() {
+    protected override void Awake() {
         AddListener();
         strategyDic = new Dictionary<SymbolType, StrategyBase>();
         foreach (var type in SymbolType.Types) {
@@ -18,17 +19,19 @@ public class StrategyLogic : LogicBase
         GetEventComp().Listen<OnAggTradeUpdate>(evt =>
         {
             foreach (var strategy in strategyDic.Values) {
-                strategy.OnAggTradeUpdate(evt.msg);
+                if (strategy != null && evt != null)
+                    strategy.OnAggTradeUpdate(evt.msg);
             }
         });
         GetEventComp().Listen<OnOrderInfoUpdate>(evt =>
         {
             foreach (var strategy in strategyDic.Values) {
-                strategy.OnOrderInfoUpdate(evt.msg);
+                if (strategy != null && evt != null)
+                    strategy.OnOrderInfoUpdate(evt.msg);
             }
         });
 
-        GetEventComp().Listen<StartStrategy>(evt => { StartStrategy(evt.Symbol, evt.Strategy); });
+        GetEventComp().Listen<StartStrategyEvent>(evt => { StartStrategy(evt.Symbol, evt.Strategy); });
     }
 
     private void StartStrategy<T>(SymbolType symbol, T strategy) where T : StrategyBase {
@@ -38,11 +41,22 @@ public class StrategyLogic : LogicBase
 
         strategyDic[symbol] = strategy;
         strategy.StartStrategy();
+        GetEventComp().Send(AfterStartStrategyEvent.Create(strategy));
     }
 
-    public void StopStrategy<T>(SymbolType symbol) where T : StrategyBase {
+    public void StopStrategy(SymbolType symbol) {
+        var strategy = GetStrategy(symbol);
         if (strategyDic[symbol] != null && strategyDic[symbol].state == StrategyState.Executing) {
-            strategyDic[symbol].StopStrategy();
+            strategy.StopStrategy();
+            GetEventComp().Send(StopStrategyEvent.Create(strategy));
         }
+    }
+
+    public StrategyBase GetStrategy(SymbolType symbol) {
+        if (strategyDic[symbol] != null) {
+            return strategyDic[symbol];
+        }
+
+        return null;
     }
 }

@@ -34,14 +34,12 @@ namespace M3C.Finance.BinanceSdk
             ws.Log.Level = LogLevel.Trace;
             ws.OnOpen += (sender, e) =>
             {
-                Debug.Log("Connect success");
                 Subscribe("aggTrade");
             };
             ws.OnMessage += (sender, e) =>
             {
                 // Debug.Log("Server says: " + e.Data);
                 if (e.IsPing) {
-                    Debug.LogError("get server ping!");
                     ws.Ping();
                 } else {
                     MessageHandler?.Invoke(e);
@@ -49,11 +47,11 @@ namespace M3C.Finance.BinanceSdk
             };
             ws.OnClose += (sender, e) =>
             {
-                Debug.Log("Server closed: " + e.Code);
+                //Debug.Log("Server closed: " + e.Code);
             };
             ws.OnError += (sender, e) =>
             {
-                Debug.Log("socket error: " + e?.Message);
+                //Debug.Log("socket error: " + e?.Message);
             };
 
             Debug.Log("Connect socket");

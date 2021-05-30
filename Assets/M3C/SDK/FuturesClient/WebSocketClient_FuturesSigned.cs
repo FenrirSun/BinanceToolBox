@@ -48,7 +48,7 @@ namespace M3C.Finance.BinanceSdk
 
             ws.OnOpen += (sender, args) =>
             {
-                Debug.Log("On Client WebSocket Open ");
+                // Debug.Log("On Client WebSocket Open ");
             };
             
             ws.OnMessage += (sender, e) =>
@@ -58,19 +58,14 @@ namespace M3C.Finance.BinanceSdk
 
                 switch (eventType) {
                     case "ACCOUNT_UPDATE":
-                        Debug.Log("Msg ACCOUNT_UPDATE: " + e.Data);
                         accountUpdateHandler(JsonConvert.DeserializeObject<WsFuturesUserDataAccountUpdateMessage>(e.Data), _client.Ad);
                         return;
                     case "ORDER_TRADE_UPDATE":
-                        Debug.Log("Msg ORDER_TRADE_UPDATE: " + e.Data);
                         orderTradeUpdateHandler(JsonConvert.DeserializeObject<WsFuturesUserDataOrderTradeUpdateMessage>(e.Data), _client.Ad);
                         return;
                     case "ACCOUNT_CONFIG_UPDATE":
-                        Debug.Log("Msg ACCOUNT_CONFIG_UPDATE: " + e.Data);
                         configUpdateHandler(JsonConvert.DeserializeObject<WsFuturesUserDataAccountConfigUpdateMessage>(e.Data), _client.Ad);
                         return;
-                    // default:
-                    //     throw new ApplicationException("Unexpected Event Type In Message");
                 }
             };
 
@@ -99,11 +94,20 @@ namespace M3C.Finance.BinanceSdk
         private BinanceWebSocket CreateNewWebSocket(Uri endpoint, string listenKey = null) {
             var ws = new BinanceWebSocket(endpoint.AbsoluteUri, listenKey);
 
-            ws.OnOpen += delegate { Debug.Log($"{endpoint} | Socket Connection Established ({ws.Id})"); };
+            ws.OnOpen += delegate
+            {
+                //Debug.Log($"{endpoint} | Socket Connection Established ({ws.Id})");
+            };
 
-            ws.OnClose += (sender, e) => { Debug.Log($"Socket Connection Closed! ({ws.Id})"); };
+            ws.OnClose += (sender, e) =>
+            {
+                //Debug.Log($"Socket Connection Closed! ({ws.Id})");
+            };
 
-            ws.OnError += (sender, e) => { Debug.Log("Msg: " + e.Message + " | " + e.Exception.Message); };
+            ws.OnError += (sender, e) =>
+            {
+                //Debug.Log("Msg: " + e.Message + " | " + e.Exception.Message);
+            };
             ws.SslConfiguration.EnabledSslProtocols = SupportedProtocols;
             return ws;
         }

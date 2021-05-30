@@ -13,12 +13,12 @@ public class CommonMessageDialog : GameDialogBase
     private Action<bool> twoCallback;
     
     public static void OpenWithOneButton(string desc, Action cb) {
-        var msgDlg = UIManager.Instance.PushFloatDialog<CommonMessageDialog>(Prefab, 1);
+        var msgDlg = UIManager.Instance.PushFloatDialog<CommonMessageDialog>(Prefab, 100);
         msgDlg.InitWithOneBtn(desc, cb);
     }
     
     public static void OpenWithTwoButton(string desc, Action<bool> cb) {
-        var msgDlg = UIManager.Instance.PushFloatDialog<CommonMessageDialog>(Prefab, 1);
+        var msgDlg = UIManager.Instance.PushFloatDialog<CommonMessageDialog>(Prefab, 100);
         msgDlg.InitWithTwoBtn(desc, cb);
     }
     
@@ -56,7 +56,6 @@ public class CommonMessageDialog : GameDialogBase
     }
 
     public override void OnClose() {
-        base.OnClose();
-        oneCallback?.Invoke();
+        GameObject.Destroy(gameObject);
     }
 }

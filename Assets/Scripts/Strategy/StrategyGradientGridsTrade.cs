@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GameEvents;
 using LitJson;
 using M3C.Finance.BinanceSdk.Enumerations;
@@ -14,25 +15,29 @@ public class StrategyGradientGridsTrade : StrategyBase
 
     public GradientGridsState tradeState;
 
-    public void Init(StrategyOrderInfo firstOrder) {
-        base.Init(firstOrder);
+    public void Init(AccountData ad, StrategyOrderInfo firstOrder) {
+        historyOrderList = new List<StrategyOrderInfo>();
+        base.Init(ad, firstOrder);
         tradeState = GradientGridsState.idle;
     }
 
-    public virtual void StartStrategy() {
+    public override void StartStrategy() {
         base.StartStrategy();
-        string json = JsonMapper.ToJson(firstOrderInfo);
-        lastOrderInfo = JsonMapper.ToObject<StrategyOrderInfo>(json);
+        lastOrderInfo = firstOrderInfo.Clone();
         lastOrderInfo.state = StrategyOrderInfo.OrderState.idle;
+        historyOrderList.Add(lastOrderInfo);
         SendNextOrder();
     }
 
-    public virtual void StopStrategy() {
+    public override void StopStrategy() {
         base.StopStrategy();
     }
 
     public override void NextRound() {
         base.NextRound();
+        StopStrategy();
+        return;
+        
         SendNextOrder();
     }
 
@@ -116,12 +121,12 @@ public class StrategyGradientGridsTrade : StrategyBase
         void OnTradeFinish() {
             if (lastOrderInfo.takeProfitPrice > 0) {
                 lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
-                EventManager.Instance.Send(NewOrder.Create(accountData, GameUtils.GenerateOrderInfo(firstOrderInfo, 2)));
+                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(firstOrderInfo, 2)));
             }
 
             if (lastOrderInfo.stopPrice > 0) {
                 lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
-                EventManager.Instance.Send(NewOrder.Create(accountData, GameUtils.GenerateOrderInfo(firstOrderInfo, 3)));
+                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(firstOrderInfo, 3)));
             }
 
             if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForDeal) {

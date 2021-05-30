@@ -36,6 +36,7 @@ public class StreamDataLogic : LogicBase
         ec.Listen<SubscribeKLine>((evt) => { SubscribeKline(evt.symbol); });
     }
 
+    // 注意回调并不在主线程
     private void OnGetMessage(MessageEventArgs e) {
         var responseObject = JObject.Parse(e.Data);
         var eventType = (string) responseObject["e"];

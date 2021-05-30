@@ -10,6 +10,7 @@ public class OrderInfoItem: MonoBehaviour
     public Text timeTxt;
     public Text symbolTxt;
     public Text orderDirTxt;
+    public Text positionDirTxt;
     public Text typeTxt;
     public Text aPriceTxt;
     public Text quantityTxt;
@@ -42,11 +43,12 @@ public class OrderInfoItem: MonoBehaviour
     }
 
     private void UpdateData() {
-        timeTxt.text = _orderData.time.ToString();
+        timeTxt.text = TimeUtils.ToDateTime((long)(_orderData.time * 0.001f)).ToString("yyyy/MM/dd HH:mm:ss");
         symbolTxt.text = _orderData.symbol;
         orderDirTxt.text = _orderData.side;
+        positionDirTxt.text = _orderData.positionSide;
         typeTxt.text = _orderData.type;
-        aPriceTxt.text = _orderData.avgPrice.ToString();
+        aPriceTxt.text = _orderData.price.ToString();
         quantityTxt.text = _orderData.origQty.ToString();
         triggerTxt.text = _orderData.workingType;
         stateTxt.text = _orderData.status;

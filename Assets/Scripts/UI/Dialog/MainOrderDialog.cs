@@ -12,8 +12,9 @@ public class MainOrderDialog : MainPageBase
     public const string Prefab = "Main_Order_Dialog";
     private MainOrderView _view;
     public static SymbolType curSymbol;
-    private AccountData curAccountData;
+    public static AccountData curAccountData;
     private UserData ud;
+    private StrategyLogic logic;
 
     protected override void SetView(DialogViewBase v) {
         _view = v as MainOrderView;
@@ -21,6 +22,7 @@ public class MainOrderDialog : MainPageBase
 
     public void Init() {
         ud = GameRuntime.Instance.UserData;
+        logic = GameRuntime.Instance.GetLogic<StrategyLogic>();
         _view.mLoopListView.InitListView(0, OnGetItemByIndex);
 
         _view.symbolDropdown.ClearOptions();
@@ -50,7 +52,35 @@ public class MainOrderDialog : MainPageBase
         _view.accountDropdown.onValueChanged.AddListener(OnSelectAccount);
     }
 
+    private void SetStrategyButtons() {
+        var strategy = logic.GetStrategy(curSymbol);
+        if (strategy != null && strategy.state == StrategyState.Executing) {
+            _view.newStrategyBtn.gameObject.SetActive(false);
+            _view.checkStrategyBtn.gameObject.SetActive(false);
+            _view.stopStrategyBtn.gameObject.SetActive(true);
+            _view.symbolDropdown.gameObject.SetActive(false);
+        } else {
+            _view.newStrategyBtn.gameObject.SetActive(true);
+            _view.checkStrategyBtn.gameObject.SetActive(false);
+            _view.stopStrategyBtn.gameObject.SetActive(false);
+            _view.symbolDropdown.gameObject.SetActive(true);
+        }
+    }
+
     private void AddListener() {
+        GetEventComp().Listen<StopStrategyEvent>(evt => { SetStrategyButtons(); });
+        GetEventComp().Listen<AfterStartStrategyEvent>(evt => { SetStrategyButtons(); });
+        _view.newStrategyBtn.onClick.AddListener(() =>
+        {
+            var strategyDialog = UIManager.Instance.PushDialog<GradientGridStrategyDialog>(GradientGridStrategyDialog.Prefab);
+            strategyDialog.Init();
+        });
+        _view.stopStrategyBtn.onClick.AddListener(() =>
+        {
+            var logic = GameRuntime.Instance.GetLogic<StrategyLogic>();
+            logic.StopStrategy(curSymbol);
+             SetStrategyButtons();
+        });
     }
 
     private void OnSelectAccount(int index) {
@@ -86,8 +116,6 @@ public class MainOrderDialog : MainPageBase
             return null;
         }
 
-        //get a new item. Every item can use a different prefab, the parameter of the NewListViewItem is the prefab’name. 
-        //And all the prefabs should be listed in ItemPrefabList in LoopListView2 Inspector Setting
         LoopListViewItem2 item = listView.NewListViewItem("OrderPrefab");
         OrderInfoItem itemScript = item.GetComponent<OrderInfoItem>();
         if (item.IsInitHandlerCalled == false) {
@@ -97,5 +125,14 @@ public class MainOrderDialog : MainPageBase
 
         itemScript.SetItemData(itemData);
         return item;
+    }
+
+    private float lastUpdateTime;
+
+    private void Update() {
+        if (Time.time - lastUpdateTime > 1f) {
+            lastUpdateTime = Time.time;
+            UpdateOrderPanel();
+        }
     }
 }

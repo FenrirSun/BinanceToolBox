@@ -50,15 +50,15 @@ namespace M3C.Finance.BinanceSdk
             };
 
             CheckAndAddReceiveWindow(recvWindow, parameters);
-
+            
             if (!string.IsNullOrEmpty(newClientOrderId)) {
                 parameters.Add("newClientOrderId", newClientOrderId);
             }
-
+            
             if (stopPrice.HasValue) {
                 parameters.Add("stopPrice", stopPrice.Value.ToString(CultureInfo.InvariantCulture));
             }
-
+            
             if (icebergQuantity.HasValue) {
                 parameters.Add("icebergQty", icebergQuantity.Value.ToString(CultureInfo.InvariantCulture));
             }

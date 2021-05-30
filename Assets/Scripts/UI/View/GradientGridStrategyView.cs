@@ -11,6 +11,7 @@ public class GradientGridStrategyView : DialogViewBase
     public InputField quantityInput;
     public InputField stopInput;
     public InputField takeProfitInput;
+    public Text SymbolTxt;
     
     public Dropdown directionDropdown;
 }

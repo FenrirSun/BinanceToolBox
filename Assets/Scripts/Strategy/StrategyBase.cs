@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GameEvents;
 using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
@@ -11,10 +12,13 @@ public class StrategyBase
     public int roundNum;
     public StrategyOrderInfo firstOrderInfo;
     public StrategyOrderInfo lastOrderInfo;
+    public List<StrategyOrderInfo> historyOrderList;
     
-    public virtual void Init(StrategyOrderInfo firstOrder) {
+    public virtual void Init(AccountData ad, StrategyOrderInfo firstOrder) {
         state = StrategyState.Idle;
+        symbol = firstOrder.symbol;
         firstOrderInfo = firstOrder;
+        accountData = ad;
     }
 
     public virtual void StartStrategy() {
@@ -79,6 +83,20 @@ public class StrategyOrderInfo
     public OrderType orderType;
     
     public int orderClientId;
-    
     public OrderState state;
+
+    public StrategyOrderInfo Clone() {
+        StrategyOrderInfo result = new StrategyOrderInfo();
+        result.symbol = symbol;
+        result.pendingPrice = pendingPrice;
+        result.quantity = quantity;
+        result.stopPrice = stopPrice;
+        result.takeProfitPrice = takeProfitPrice;
+        result.posSide = posSide;
+        result.side = side;
+        result.orderType = orderType;
+        result.orderClientId = orderClientId;
+        result.state = state;
+        return result;
+    }
 }

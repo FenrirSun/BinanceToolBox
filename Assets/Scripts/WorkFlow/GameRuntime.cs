@@ -33,6 +33,7 @@ public class GameRuntime : GameRuntimeBase<GameRuntime, UserData>
     {
         AddLogic<StreamDataLogic>();
         AddLogic<AccountLogic>();
+        AddLogic<StrategyLogic>();
     }
 
     void InitDialog() {

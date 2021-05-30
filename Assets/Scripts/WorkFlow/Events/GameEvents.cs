@@ -58,22 +58,45 @@ namespace GameEvents
     public class OnOrderInfoUpdate : GameEventBaseNoDefaultCreate<OnOrderInfoUpdate>
     {
         public WsFuturesUserDataOrderTradeUpdateMessage msg;
-
-        public static OnOrderInfoUpdate Create(WsFuturesUserDataOrderTradeUpdateMessage _msg) {
+        public AccountData ad;
+        
+        public static OnOrderInfoUpdate Create(WsFuturesUserDataOrderTradeUpdateMessage _msg, AccountData _ad) {
             var result = new OnOrderInfoUpdate();
             result.msg = _msg;
+            result.ad = _ad;
             return result;
         }
     }
 
-    public class StartStrategy : GameEventBaseNoDefaultCreate<StartStrategy>
+    public class StartStrategyEvent : GameEventBaseNoDefaultCreate<StartStrategyEvent>
     {
         public SymbolType Symbol;
         public StrategyBase Strategy;
 
-        public static StartStrategy Create(SymbolType _symbol, StrategyBase _strategy) {
-            var result = new StartStrategy();
+        public static StartStrategyEvent Create(SymbolType _symbol, StrategyBase _strategy) {
+            var result = new StartStrategyEvent();
             result.Symbol = _symbol;
+            result.Strategy = _strategy;
+            return result;
+        }
+    }
+    
+    public class AfterStartStrategyEvent : GameEventBaseNoDefaultCreate<AfterStartStrategyEvent>
+    {
+        public StrategyBase Strategy;
+        public static AfterStartStrategyEvent Create(StrategyBase _strategy) {
+            var result = new AfterStartStrategyEvent();
+            result.Strategy = _strategy;
+            return result;
+        }
+    }
+    
+    public class StopStrategyEvent : GameEventBaseNoDefaultCreate<StopStrategyEvent>
+    {
+        public StrategyBase Strategy;
+
+        public static StopStrategyEvent Create(StrategyBase _strategy) {
+            var result = new StopStrategyEvent();
             result.Strategy = _strategy;
             return result;
         }

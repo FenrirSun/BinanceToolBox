@@ -53,7 +53,7 @@ namespace M3C.Finance.BinanceSdk
             if (apiMethod == ApiMethodType.Signed) {
                 var timestamp = Utilities.GetCurrentMilliseconds();
                 parameters.Add("timestamp", timestamp.ToString(CultureInfo.InvariantCulture));
-
+                
                 var parameterTextForSignature = GetParameterText(parameters);
                 var signedBytes = Utilities.Sign(_apiSecret, parameterTextForSignature);
                 parameters.Add("signature", Utilities.GetHexString(signedBytes));
@@ -72,9 +72,12 @@ namespace M3C.Finance.BinanceSdk
                     var getRequestUrl = $"{CurBaseUrl}/{version}/{methodName}{parameterTextPrefix}{parameterText}";
                     var postRequestUrl = $"{CurBaseUrl}/{version}/{methodName}";
 
-                    response = httpMethod == HttpMethod.Get
-                        ? await client.DownloadStringTaskAsync(getRequestUrl)
-                        : await client.UploadStringTaskAsync(postRequestUrl, httpMethod.Method, parameterText);
+                    if (httpMethod == HttpMethod.Get) {
+                        response = await client.DownloadStringTaskAsync(getRequestUrl);
+                    } else {
+                        // response = await client.UploadStringTaskAsync(postRequestUrl, httpMethod.Method, parameterText);
+                        response = await client.UploadStringTaskAsync(getRequestUrl, httpMethod.Method, string.Empty);
+                    }
                 } catch (WebException webException) {
                     using (var reader = new StreamReader(webException.Response.GetResponseStream(), Encoding.UTF8)) {
                         var errorObject = JObject.Parse(reader.ReadToEnd());
