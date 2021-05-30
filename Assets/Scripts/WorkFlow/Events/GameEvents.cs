@@ -115,6 +115,20 @@ namespace GameEvents
         }
     }
     
+    public class CancelOrder : GameEventBaseNoDefaultCreate<CancelOrder>
+    {
+        public AccountData data;
+        public SymbolType symbol;
+        public long orderId;
+
+        public static CancelOrder Create(AccountData data, SymbolType symbol, long _id) {
+            var result = new CancelOrder();
+            result.data = data;
+            result.symbol = symbol;
+            result.orderId = _id;
+            return result;
+        }
+    }
     #endregion
     
     

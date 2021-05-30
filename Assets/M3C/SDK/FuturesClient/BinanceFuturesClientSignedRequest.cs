@@ -88,7 +88,7 @@ namespace M3C.Finance.BinanceSdk
                 parameters.Add("newClientOrderId", newClientOrderId);
             }
 
-            return await SendRequest<CancelOrderResponse>("order", ApiVersion.Version3, ApiMethodType.Signed,
+            return await SendRequest<CancelOrderResponse>("order", ApiVersion.Version1, ApiMethodType.Signed,
                 HttpMethod.Delete, parameters);
         }
 

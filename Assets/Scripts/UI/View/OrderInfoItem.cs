@@ -5,7 +5,7 @@ using NLog.LayoutRenderers;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OrderInfoItem: MonoBehaviour
+public class OrderInfoItem : MonoBehaviour
 {
     public Text timeTxt;
     public Text symbolTxt;
@@ -17,11 +17,10 @@ public class OrderInfoItem: MonoBehaviour
     public Text triggerTxt;
     public Text stateTxt;
     public Button operateBtn;
-    
+
     private FuturesUserDataOpenOrderInfoMessage _orderData;
-    
+
     public void Init() {
-        
     }
 
     public void SetItemData(FuturesUserDataOpenOrderInfoMessage orderInfo) {
@@ -30,11 +29,12 @@ public class OrderInfoItem: MonoBehaviour
         operateBtn.onClick.RemoveAllListeners();
         operateBtn.onClick.AddListener(() =>
         {
-            EventManager.Instance.Send(RefreshAccountList.Create());
+            EventManager.Instance.Send(CancelOrder.Create(MainOrderDialog.curAccountData, _orderData.symbol, _orderData.orderId));
         });
     }
 
     private float lastUpdateTime;
+
     private void Update() {
         if (Time.time - lastUpdateTime > 0.5f) {
             lastUpdateTime = Time.time;
@@ -43,7 +43,7 @@ public class OrderInfoItem: MonoBehaviour
     }
 
     private void UpdateData() {
-        timeTxt.text = TimeUtils.ToDateTime((long)(_orderData.time * 0.001f)).ToString("yyyy/MM/dd HH:mm:ss");
+        timeTxt.text = TimeUtils.ToDateTime((long) (_orderData.time * 0.001f)).ToString("yyyy/MM/dd HH:mm:ss");
         symbolTxt.text = _orderData.symbol;
         orderDirTxt.text = _orderData.side;
         positionDirTxt.text = _orderData.positionSide;
