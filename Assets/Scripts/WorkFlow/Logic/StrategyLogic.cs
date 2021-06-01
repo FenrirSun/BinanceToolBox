@@ -48,7 +48,6 @@ public class StrategyLogic : LogicBase
         var strategy = GetStrategy(symbol);
         if (strategyDic[symbol] != null && strategyDic[symbol].state == StrategyState.Executing) {
             strategy.StopStrategy();
-            GetEventComp().Send(StopStrategyEvent.Create(strategy));
         }
     }
 

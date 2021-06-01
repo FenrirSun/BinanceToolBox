@@ -36,6 +36,7 @@ public class StrategyBase
 
     public virtual void StopStrategy() {
         state = StrategyState.Finish;
+        EventManager.Instance.Send(StopStrategyEvent.Create(this));
     }
     
     public virtual void OnAggTradeUpdate(WebSocketTradesMessage msg) {

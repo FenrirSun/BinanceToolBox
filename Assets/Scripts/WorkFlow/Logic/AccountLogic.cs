@@ -45,6 +45,14 @@ public class AccountLogic : LogicBase
                 client.CancelOrder(evt.symbol, evt.orderId);
             }
         });
+        
+        GetEventComp().Listen<CancelOrderByClientId>((evt) =>
+        {
+            if (accountClientList.ContainsKey(evt.data)) {
+                var client = accountClientList[evt.data];
+                client.CancelOrder(evt.symbol, originalClientOrderId: evt.clientOrderId);
+            }
+        });
     }
 
     public async void AddAccount(AccountData account) {

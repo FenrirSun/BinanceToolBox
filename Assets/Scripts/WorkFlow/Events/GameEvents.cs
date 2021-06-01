@@ -129,6 +129,22 @@ namespace GameEvents
             return result;
         }
     }
+    
+    public class CancelOrderByClientId : GameEventBaseNoDefaultCreate<CancelOrderByClientId>
+    {
+        public AccountData data;
+        public SymbolType symbol;
+        public string clientOrderId;
+
+        public static CancelOrderByClientId Create(AccountData data, SymbolType symbol, string clientId) {
+            var result = new CancelOrderByClientId();
+            result.data = data;
+            result.symbol = symbol;
+            result.clientOrderId = clientId;
+            return result;
+        }
+    }
+    
     #endregion
     
     
