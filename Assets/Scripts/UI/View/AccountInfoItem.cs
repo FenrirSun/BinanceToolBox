@@ -23,6 +23,12 @@ public class AccountInfoItem: MonoBehaviour
         deleteBtn.onClick.RemoveAllListeners();
         deleteBtn.onClick.AddListener(() =>
         {
+            var strategyLogic = GameRuntime.Instance.GetLogic<StrategyLogic>();
+            if (strategyLogic.IsRunningStrategy()) {
+                CommonMessageDialog.OpenWithOneButton("当前有执行中的策略，不可删除账户", null);
+                return;
+            }
+            
             GameRuntime.Instance.GetLogic<AccountLogic>().DeleteAccount(data);
             EventManager.Instance.Send(RefreshAccountList.Create());
         });

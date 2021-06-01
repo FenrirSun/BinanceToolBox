@@ -1,5 +1,8 @@
+using System;
+
 namespace M3C.Finance.BinanceSdk.Enumerations
 {
+    [Serializable]
     public class PositionSide
     {
         private PositionSide(string value) { Value = value; }

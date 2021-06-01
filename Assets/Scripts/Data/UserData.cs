@@ -70,15 +70,18 @@ public class AccountData
     public string secretKey;
 
     // 资产信息
+    [NonSerialized]
     private FuturesUserDataAccountBalanceMessage BalanceInfo;
     public void SetBalanceInfo(FuturesUserDataAccountBalanceMessage info) {
         BalanceInfo = info;
     }
+    
     public FuturesUserDataAccountBalanceMessage GetBalanceInfo() {
         return BalanceInfo;
     }
     
     // 仓位信息
+    [NonSerialized]
     private List<WsFuturesAccountTradeInfo> TradeInfos;
     public List<WsFuturesAccountTradeInfo> GetTradeInfos() {
         if(TradeInfos == null)
@@ -87,6 +90,7 @@ public class AccountData
     }
     
     // 订单信息
+    [NonSerialized]
     private List<FuturesUserDataOpenOrderInfoMessage> OrderInfos;
     public List<FuturesUserDataOpenOrderInfoMessage> GetOrderInfos() {
         if(OrderInfos == null)
@@ -94,6 +98,7 @@ public class AccountData
 
         return OrderInfos;
     }
+    
     public List<FuturesUserDataOpenOrderInfoMessage> GetOrderInfos(SymbolType symbol) {
         if(OrderInfos == null)
             OrderInfos = new List<FuturesUserDataOpenOrderInfoMessage>();

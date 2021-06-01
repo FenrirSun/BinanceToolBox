@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using M3C.Finance.BinanceSdk.Enumerations;
+using Newtonsoft.Json;
 
 namespace M3C.Finance.BinanceSdk.ResponseObjects
 {
     public class WebSocketTradesMessage : WebSocketMessageBase
     {
         [JsonProperty(PropertyName = "s")]
-        public string Symbol { get; set; }
+        public SymbolType Symbol { get; set; }
 
         [JsonProperty(PropertyName = "a")]
         public long AggregatedTradeId { get; set; }

@@ -13,5 +13,13 @@ public class GradientGridStrategyView : DialogViewBase
     public InputField takeProfitInput;
     public Text SymbolTxt;
     
+    public InputField triggerPriceGapInput;
+    public InputField orderPriceGapInput;
+    public InputField quantityRatioGapInput;
+    public InputField maxOrderPriceInput;
+    public Text nextTriggerPriceTxt;
+    public Text nextOrderPriceTxt;
+    public Text nextQuantityTxt;
+    
     public Dropdown directionDropdown;
 }

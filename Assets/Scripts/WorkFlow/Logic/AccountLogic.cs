@@ -1,10 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using GameEvents;
 using M3C.Finance.BinanceSdk;
 using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 public class AccountLogic : LogicBase
 {
@@ -81,6 +80,10 @@ public class AccountLogic : LogicBase
         GameRuntime.Instance.UserData.RemoveAccount(account.id);
     }
 
+    public List<AccountData> GetAccounts() {
+        return accountClientList.Keys.ToList();
+    }
+    
     private void OnGetAccountUpdateMessage(WsFuturesUserDataAccountUpdateMessage e, AccountData ad) {
         if (e.AccountUpdateInfo != null) {
             var balanceInfo = e.AccountUpdateInfo.BalanceInfo;

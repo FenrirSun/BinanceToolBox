@@ -1,10 +1,15 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using GameEvents;
 using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
 
+[Serializable]
 public class StrategyBase
 {
+    [NonSerialized]
     public AccountData accountData;
     public SymbolType symbol;
     public StrategyState state;
@@ -40,7 +45,7 @@ public class StrategyBase
     }
     
     public virtual void OnAggTradeUpdate(WebSocketTradesMessage msg) {
-        if (msg.Symbol == symbol) {
+        if (msg.Symbol.Value == symbol) {
             this.lastPrice = msg.Price;
             OnPriceChange(msg.Price);
         }
@@ -59,8 +64,24 @@ public class StrategyBase
     protected virtual void OnDataOrderTradeUpdate(WsFuturesUserDataOrderTradeUpdateMessage msg) {
         
     }
+
+    public T Clone<T>() where T : StrategyBase {
+        object obj = null;
+        BinaryFormatter inputFormatter = new BinaryFormatter();
+        MemoryStream inputStream;
+        using (inputStream = new MemoryStream()) {
+            inputFormatter.Serialize(inputStream, this);
+        }
+        using (MemoryStream outputStream = new MemoryStream(inputStream.ToArray())) {
+            BinaryFormatter outputFormatter = new BinaryFormatter();
+            obj = outputFormatter.Deserialize(outputStream);
+        }
+
+        return (T) obj;
+    }
 }
 
+[Serializable]
 public class StrategyOrderInfo
 {
     public enum OrderState

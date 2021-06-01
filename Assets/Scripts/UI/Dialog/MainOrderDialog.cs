@@ -23,6 +23,7 @@ public class MainOrderDialog : MainPageBase
     public void Init() {
         ud = GameRuntime.Instance.UserData;
         logic = GameRuntime.Instance.GetLogic<StrategyLogic>();
+        curSymbol = SymbolType.BTC;
         _view.mLoopListView.InitListView(0, OnGetItemByIndex);
 
         _view.symbolDropdown.ClearOptions();
@@ -53,7 +54,7 @@ public class MainOrderDialog : MainPageBase
     }
 
     private void SetStrategyButtons() {
-        var strategy = logic.GetStrategy(curSymbol);
+        var strategy = logic.GetStrategy(curSymbol, curAccountData);
         if (strategy != null && strategy.state == StrategyState.Executing) {
             _view.newStrategyBtn.gameObject.SetActive(false);
             _view.checkStrategyBtn.gameObject.SetActive(false);
@@ -78,8 +79,8 @@ public class MainOrderDialog : MainPageBase
         _view.stopStrategyBtn.onClick.AddListener(() =>
         {
             var logic = GameRuntime.Instance.GetLogic<StrategyLogic>();
-            logic.StopStrategy(curSymbol);
-             SetStrategyButtons();
+            logic.StopStrategy();
+            SetStrategyButtons();
         });
     }
 
@@ -91,6 +92,11 @@ public class MainOrderDialog : MainPageBase
     }
 
     private void OnSelectSymbol(int index) {
+        var strategyLogic = GameRuntime.Instance.GetLogic<StrategyLogic>();
+        if (strategyLogic.IsRunningStrategy()) {
+            CommonMessageDialog.OpenWithOneButton("当前有执行中的策略，不可切换交易对", null);
+            return;
+        }
         curSymbol = SymbolType.Types[index];
         UpdateOrderPanel();
     }

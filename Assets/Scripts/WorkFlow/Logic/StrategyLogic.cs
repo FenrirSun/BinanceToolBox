@@ -4,28 +4,36 @@ using M3C.Finance.BinanceSdk.Enumerations;
 
 public class StrategyLogic : LogicBase
 {
-    // 目前只考虑单个账户
-    private Dictionary<SymbolType, StrategyBase> strategyDic;
+    private SymbolType runningSymbol;
+    private Dictionary<SymbolType, List<StrategyBase>> strategyDic;
 
     protected override void Awake() {
         AddListener();
-        strategyDic = new Dictionary<SymbolType, StrategyBase>();
+        strategyDic = new Dictionary<SymbolType, List<StrategyBase>>();
         foreach (var type in SymbolType.Types) {
-            strategyDic[type] = null;
+            strategyDic[type] = new List<StrategyBase>();
         }
     }
 
     private void AddListener() {
         GetEventComp().Listen<OnAggTradeUpdate>(evt =>
         {
-            foreach (var strategy in strategyDic.Values) {
+            if (runningSymbol == null)
+                return;
+            
+            var strategyList = strategyDic[runningSymbol];
+            foreach (var strategy in strategyList) {
                 if (strategy != null && evt != null)
                     strategy.OnAggTradeUpdate(evt.msg);
             }
         });
         GetEventComp().Listen<OnOrderInfoUpdate>(evt =>
         {
-            foreach (var strategy in strategyDic.Values) {
+            if (runningSymbol == null)
+                return;
+            
+            var strategyList = strategyDic[runningSymbol];
+            foreach (var strategy in strategyList) {
                 if (strategy != null && evt != null)
                     strategy.OnOrderInfoUpdate(evt.msg);
             }
@@ -35,27 +43,53 @@ public class StrategyLogic : LogicBase
     }
 
     private void StartStrategy<T>(SymbolType symbol, T strategy) where T : StrategyBase {
-        if (strategyDic[symbol] != null && strategyDic[symbol].state == StrategyState.Executing) {
+        if (IsRunningStrategy()) {
             return;
         }
 
-        strategyDic[symbol] = strategy;
-        strategy.StartStrategy();
+        var accountDataList = GameRuntime.Instance.GetLogic<AccountLogic>().GetAccounts();
+        strategyDic[symbol].Clear();
+        foreach (var ad in accountDataList) {
+            var cloneStrategy = strategy.Clone<T>();
+            cloneStrategy.accountData = ad;
+            strategyDic[symbol].Add(cloneStrategy);
+            cloneStrategy.StartStrategy();
+        }
+        runningSymbol = symbol;
         GetEventComp().Send(AfterStartStrategyEvent.Create(strategy));
     }
 
-    public void StopStrategy(SymbolType symbol) {
-        var strategy = GetStrategy(symbol);
-        if (strategyDic[symbol] != null && strategyDic[symbol].state == StrategyState.Executing) {
-            strategy.StopStrategy();
+    public void StopStrategy() {
+        var strategyList = strategyDic[runningSymbol];
+        if (strategyList != null && strategyList.Count > 0) {
+            foreach (var strategy in strategyList) {
+                if (strategy.state == StrategyState.Executing) {
+                    strategy.StopStrategy();
+                }
+            }
         }
     }
 
-    public StrategyBase GetStrategy(SymbolType symbol) {
+    public StrategyBase GetStrategy(SymbolType symbol, AccountData ad) {
         if (strategyDic[symbol] != null) {
-            return strategyDic[symbol];
+            foreach (var strategy in strategyDic[symbol]) {
+                if (strategy.accountData == ad)
+                    return strategy;
+            }
+        }
+        return null;
+    }
+
+    public bool IsRunningStrategy() {
+        if (runningSymbol == null)
+            return false;
+        
+        if (strategyDic[runningSymbol] != null) {
+            foreach (var strategy in strategyDic[runningSymbol]) {
+                return strategy.state == StrategyState.Executing;
+            }
         }
 
-        return null;
+        return false;
     }
 }

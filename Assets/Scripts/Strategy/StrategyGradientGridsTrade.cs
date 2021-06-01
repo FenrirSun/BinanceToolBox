@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using GameEvents;
 using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
 
+[Serializable]
 public class StrategyGradientGridsTrade : StrategyBase
 {
     // 单间差价

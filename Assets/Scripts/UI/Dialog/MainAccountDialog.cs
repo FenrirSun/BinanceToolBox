@@ -42,6 +42,11 @@ public class MainAccountDialog : MainPageBase
         });
         _view.addAccountBtn.onClick.AddListener(() =>
         {
+            var strategyLogic = GameRuntime.Instance.GetLogic<StrategyLogic>();
+            if (strategyLogic.IsRunningStrategy()) {
+                CommonMessageDialog.OpenWithOneButton("当前有执行中的策略，不可添加账户", null);
+                return;
+            }
             var addAccountDialog = UIManager.Instance.PushDialog<AddAccountDialog>(AddAccountDialog.Prefab);
             addAccountDialog.Init();
         });
