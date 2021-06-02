@@ -9,7 +9,7 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         [JsonProperty(PropertyName = "updateTime")] 
         public long UpdateTime { get; set; }
 
-        // 但前所需起始保证金总额(存在逐仓请忽略), 仅计算usdt资产
+        // 当前所需起始保证金总额(存在逐仓请忽略), 仅计算usdt资产
         [JsonProperty(PropertyName = "totalInitialMargin")] 
         public decimal TotalInitialMargin { get; set; }
         
@@ -131,11 +131,11 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         [JsonProperty(PropertyName = "entryPrice")] 
         public decimal entryPrice { get; set; }
         // 当前杠杆下用户可用的最大名义价值
-        [JsonProperty(PropertyName = "maxNotional")] 
-        public decimal maxNotional { get; set; }
+        // [JsonProperty(PropertyName = "maxNotional")] 
+        // public decimal maxNotional { get; set; }
         // 持仓方向
         [JsonProperty(PropertyName = "positionSide")] 
-        public string positionSide { get; set; }
+        public PositionSide positionSide { get; set; }
         // 持仓数量
         [JsonProperty(PropertyName = "positionAmt")] 
         public decimal positionAmt { get; set; }

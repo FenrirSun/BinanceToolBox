@@ -30,5 +30,20 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
             msg.reduceOnly = wsInfo.IsReduceOnly;
             msg.executedQty = wsInfo.TotalTradingVolume;
         }
+        
+        public static FuturesUserDataPositionInfo ConvertToUserDataPositionInfo(this WsFuturesAccountTradeInfo msg) {
+            FuturesUserDataPositionInfo result = new FuturesUserDataPositionInfo();
+            SyncPositionInfoData(msg, result);
+            return result;
+        }
+
+        public static void SyncPositionInfoData(this WsFuturesAccountTradeInfo wsMsg, FuturesUserDataPositionInfo msg) {
+            msg.symbol = wsMsg.Symbol;
+            msg.positionSide = wsMsg.PositionSide;
+            msg.positionAmt = wsMsg.Positions;
+            msg.entryPrice = wsMsg.EnterPrice;
+            msg.unrealizedProfit = wsMsg.UnrealizedProfit;
+            msg.maintMargin = wsMsg.Margin;
+        }
     }
 }

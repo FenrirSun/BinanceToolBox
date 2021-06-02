@@ -33,10 +33,10 @@ public class AccountLogic : LogicBase
                 var client = accountClientList[evt.data];
                 client.NewOrder(evt.orderInfo.Symbol, evt.orderInfo.OrderSide, evt.orderInfo.PositionSide, evt.orderInfo.OrderType,
                     TimeInForce.GoodUntilCanceled, evt.orderInfo.OriginalQuantity, evt.orderInfo.Price, evt.orderInfo.ClientOrderId.ToString(),
-                    isTestOrder:false);
+                    isTestOrder: false);
             }
         });
-        
+
         GetEventComp().Listen<CancelOrder>((evt) =>
         {
             if (accountClientList.ContainsKey(evt.data)) {
@@ -44,7 +44,7 @@ public class AccountLogic : LogicBase
                 client.CancelOrder(evt.symbol, evt.orderId);
             }
         });
-        
+
         GetEventComp().Listen<CancelOrderByClientId>((evt) =>
         {
             if (accountClientList.ContainsKey(evt.data)) {
@@ -60,7 +60,8 @@ public class AccountLogic : LogicBase
             accountClientList[account] = client;
             var time = await client.Time();
             Utilities.OnGetServerTime(time.ServerTime);
-            var result = await client.GetBalanceInfo();
+            var resultBalance = await client.GetBalanceInfo();
+            var resultAccount = await client.GetAccountInfo();
 
             var wsClient = new WebSocketClient_FuturesSigned();
             wsClient.ConnectUserDataEndpoint(client, OnGetAccountUpdateMessage, OnGetOrderTradeUpdateMessage, OnGetConfigUpdateMessage);
@@ -83,7 +84,7 @@ public class AccountLogic : LogicBase
     public List<AccountData> GetAccounts() {
         return accountClientList.Keys.ToList();
     }
-    
+
     private void OnGetAccountUpdateMessage(WsFuturesUserDataAccountUpdateMessage e, AccountData ad) {
         if (e.AccountUpdateInfo != null) {
             var balanceInfo = e.AccountUpdateInfo.BalanceInfo;
@@ -92,6 +93,25 @@ public class AccountLogic : LogicBase
                     var adBalance = ad.GetBalanceInfo();
                     if (info.CurrencyName == CurrencyType.USDT && adBalance != null) {
                         adBalance.Balance = info.WalletRemain;
+                    }
+                }
+            }
+
+            var tradeInfos = e.AccountUpdateInfo.TradeInfo;
+            if (tradeInfos != null && tradeInfos.Count > 0) {
+                foreach (var trade in tradeInfos) {
+                    var adTrades = ad.GetTradeInfos();
+                    bool isUpdate = false;
+                    for (int i = 0; i < adTrades.Count; ++i) {
+                        if (adTrades[i].symbol.Value == trade.Symbol && adTrades[i].positionSide.Value == trade.PositionSide) {
+                            trade.SyncPositionInfoData(adTrades[i]);
+                            isUpdate = true;
+                            break;
+                        }
+                    }
+
+                    if (!isUpdate) {
+                        adTrades.Add(trade.ConvertToUserDataPositionInfo());
                     }
                 }
             }

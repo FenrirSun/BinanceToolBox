@@ -11,12 +11,10 @@ namespace M3C.Finance.BinanceSdk
 {
     public partial class BinanceFuturesClient
     {
-        public async Task<AccountResponse> GetAccountInfo(bool filterZeroBalance = false) {
-            var response = await SendRequest<AccountResponse>("account", ApiVersion.Version3, ApiMethodType.Signed, HttpMethod.Get);
-            if (filterZeroBalance) {
-                response.Balances = response.Balances.Where(a => a.Free + a.Locked != 0).ToList();
-            }
-
+        public async Task<FuturesUserDataAccountInfoMessage> GetAccountInfo() {
+            var response = await SendRequest<FuturesUserDataAccountInfoMessage>("account", ApiVersion.Version2, ApiMethodType.Signed, HttpMethod.Get);
+                            
+                            
             return response;
         }
 
@@ -31,7 +29,7 @@ namespace M3C.Finance.BinanceSdk
                 }
             }
 
-            GameRuntime.Instance.UserData.GetBalance(Ad, result);
+            GameRuntime.Instance.UserData.OnGetBalance(Ad, result);
             return result;
         }
 

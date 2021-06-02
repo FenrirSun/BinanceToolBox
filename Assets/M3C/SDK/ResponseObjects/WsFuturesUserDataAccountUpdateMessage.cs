@@ -80,6 +80,6 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         
         // 持仓方向
         [JsonProperty(PropertyName = "ps")]
-        public string PositionDirection { get; set; }
+        public PositionSide PositionSide { get; set; }
     }
 }

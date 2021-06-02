@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using M3C.Finance.BinanceSdk;
 using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
-using Newtonsoft.Json;
 
 public class UserData : UserDataBase
 {
@@ -56,8 +56,18 @@ public class UserData : UserDataBase
         }
     }
 
-    public void GetBalance(AccountData ad, FuturesUserDataAccountBalanceMessage info) {
+    public void OnGetBalance(AccountData ad, FuturesUserDataAccountBalanceMessage info) {
         ad.SetBalanceInfo(info);
+    }
+    
+    public void OnGetAccountInfo(AccountData ad, FuturesUserDataAccountInfoMessage info) {
+        var positions = info.positions;
+        var adTradeInfos = ad.GetTradeInfos();
+        if (positions != null && positions.Count > 0) {
+            foreach (var position in positions) {
+                adTradeInfos.Add(position);
+            }
+        }
     }
 }
 
@@ -82,10 +92,10 @@ public class AccountData
     
     // 仓位信息
     [NonSerialized]
-    private List<WsFuturesAccountTradeInfo> TradeInfos;
-    public List<WsFuturesAccountTradeInfo> GetTradeInfos() {
+    private List<FuturesUserDataPositionInfo> TradeInfos;
+    public List<FuturesUserDataPositionInfo> GetTradeInfos() {
         if(TradeInfos == null)
-            TradeInfos = new List<WsFuturesAccountTradeInfo>();
+            TradeInfos = new List<FuturesUserDataPositionInfo>();
         return TradeInfos;
     }
     
