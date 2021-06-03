@@ -24,13 +24,14 @@ public class UserData : UserDataBase
         return newestId;
     }
 
-    public AccountData AddAccount(string name, string api_key, string secret_key) {
+    public AccountData AddAccount(string name, string api_key, string secret_key, float order_ratio) {
         var newAccount = new AccountData();
         newAccount.id = GameUtils.GetNewGuid();
         newAccount.name = name;
         newAccount.apiKey = api_key;
         newAccount.secretKey = secret_key;
-
+        newAccount.orderRatio = order_ratio;
+        
         accountDataList.Add(newAccount);
         MarkDirty();
         return newAccount;
@@ -78,7 +79,8 @@ public class AccountData
     public string name;
     public string apiKey;
     public string secretKey;
-
+    public float orderRatio;
+    
     // 资产信息
     [NonSerialized]
     private FuturesUserDataAccountBalanceMessage BalanceInfo;

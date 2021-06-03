@@ -61,7 +61,7 @@ public class StrategyGradientGridsTrade : StrategyBase
         
         lastOrderInfo.stopPrice = lastOrderInfo.pendingPrice + stopPriceSpread;
         lastOrderInfo.takeProfitPrice = lastOrderInfo.pendingPrice + takeProfitPriceSpread;
-        lastOrderInfo.quantity *= (1 + quantityRatioGap);
+        lastOrderInfo.quantity *= (1 + quantityRatioGap) * (decimal)accountData.orderRatio;
         lastOrderInfo.state = StrategyOrderInfo.OrderState.waitForConfirmOrder;
         var newOrder = Utility.GenerateOrderInfo(firstOrderInfo, 1);
         EventManager.Instance.Send(NewOrder.Create(accountData, newOrder));
