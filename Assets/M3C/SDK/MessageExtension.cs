@@ -28,6 +28,7 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
             msg.priceRate = wsInfo.priceRate;
             msg.timeInForce = wsInfo.timeInForce;
             msg.reduceOnly = wsInfo.IsReduceOnly;
+            msg.origQty = wsInfo.OriginQuantity;
             msg.executedQty = wsInfo.TotalTradingVolume;
         }
         

@@ -52,7 +52,7 @@ public class StrategyBase
     }
 
     public virtual void OnOrderInfoUpdate(WsFuturesUserDataOrderTradeUpdateMessage msg) {
-        if (msg.OrderInfo.Symbol == symbol) {
+        if (msg.OrderInfo.Symbol.Value == symbol) {
             OnDataOrderTradeUpdate(msg);
         }
     }

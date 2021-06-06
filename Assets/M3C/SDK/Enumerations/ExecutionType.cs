@@ -16,5 +16,13 @@
         public static implicit operator string(ExecutionType value) => value.Value;
         public static implicit operator ExecutionType(string text) => new ExecutionType(text);
         public override string ToString() => Value;
+        
+        public static bool operator ==(ExecutionType one, ExecutionType two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(ExecutionType one, ExecutionType two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

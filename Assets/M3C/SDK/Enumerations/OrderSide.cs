@@ -17,5 +17,13 @@ namespace M3C.Finance.BinanceSdk.Enumerations
         public static implicit operator string(OrderSide side) => side.Value;
         public static implicit operator OrderSide(string text) => new OrderSide(text);
         public override string ToString() => Value;
+        
+        public static bool operator ==(OrderSide one, OrderSide two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(OrderSide one, OrderSide two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

@@ -11,6 +11,7 @@ public class StrategyGradientGridsTrade : StrategyBase
     public decimal triggerPriceGap;
     public decimal orderPriceGap;
     public decimal quantityRatioGap;
+    public bool stopStrategyWhenTriggerStopPrice; // 止损后是否停止策略
     public decimal maxOrderPrice;
     
     // 单内差价
@@ -30,6 +31,8 @@ public class StrategyGradientGridsTrade : StrategyBase
         historyOrderList = new List<StrategyOrderInfo>();
         base.Init(ad, firstOrder);
         tradeState = GradientGridsState.idle;
+        stopPriceSpread = firstOrder.stopPrice < (decimal)float.Epsilon ? 0 : firstOrder.stopPrice - firstOrder.pendingPrice;
+        takeProfitPriceSpread = firstOrder.takeProfitPrice < (decimal)float.Epsilon ? 0 : firstOrder.takeProfitPrice - firstOrder.pendingPrice;
     }
 
     public override void StartStrategy() {
@@ -55,15 +58,19 @@ public class StrategyGradientGridsTrade : StrategyBase
     private void SendNextOrder() {
         tradeState = GradientGridsState.holdOrder;
         lastOrderInfo.pendingPrice = firstOrderInfo.pendingPrice + roundNum * orderPriceGap;
-        if (lastOrderInfo.pendingPrice > maxOrderPrice) {
-            StopStrategy();
-        }
-        
-        lastOrderInfo.stopPrice = lastOrderInfo.pendingPrice + stopPriceSpread;
-        lastOrderInfo.takeProfitPrice = lastOrderInfo.pendingPrice + takeProfitPriceSpread;
-        lastOrderInfo.quantity *= (1 + quantityRatioGap) * (decimal)accountData.orderRatio;
+        lastOrderInfo.orderClientId = GameUtils.GetNewGuid();
+        if (Math.Abs(stopPriceSpread) > (decimal) float.Epsilon)
+            lastOrderInfo.stopPrice = lastOrderInfo.pendingPrice + stopPriceSpread;
+        else
+            lastOrderInfo.stopPrice = 0;
+        if(Math.Abs(takeProfitPriceSpread) > (decimal)float.Epsilon)
+            lastOrderInfo.takeProfitPrice = lastOrderInfo.pendingPrice + takeProfitPriceSpread;
+        else
+            lastOrderInfo.takeProfitPrice = 0;
+        lastOrderInfo.quantity = firstOrderInfo.quantity * (1 + quantityRatioGap * roundNum) * (decimal)accountData.orderRatio;
+        lastOrderInfo.quantity = decimal.Parse(lastOrderInfo.quantity.ToString("G0"));
         lastOrderInfo.state = StrategyOrderInfo.OrderState.waitForConfirmOrder;
-        var newOrder = Utility.GenerateOrderInfo(firstOrderInfo, 1);
+        var newOrder = Utility.GenerateOrderInfo(lastOrderInfo, 1);
         EventManager.Instance.Send(NewOrder.Create(accountData, newOrder));
     }
 
@@ -72,11 +79,11 @@ public class StrategyGradientGridsTrade : StrategyBase
             return;
         
         if (firstOrderInfo.posSide == PositionSide.LONG) {
-            if (price >= firstOrderInfo.pendingPrice + (roundNum + 1) * triggerPriceGap) {
+            if (price <= firstOrderInfo.pendingPrice + (roundNum + 1) * triggerPriceGap) {
                 NextRound();
             }
         } else if (firstOrderInfo.posSide == PositionSide.SHORT) {
-            if (price <= firstOrderInfo.pendingPrice + (roundNum + 1) * triggerPriceGap) {
+            if (price >= firstOrderInfo.pendingPrice + (roundNum + 1) * triggerPriceGap) {
                 NextRound();
             }
         }
@@ -97,7 +104,7 @@ public class StrategyGradientGridsTrade : StrategyBase
                 lastOrderInfo.state = StrategyOrderInfo.OrderState.waitForDeal;
             } else if (msg.OrderInfo.ExecuteType == EventStatus.Trade) {
                 OnTradeFinish();
-            } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled || msg.OrderInfo.ExecuteType == EventStatus.Expired) {
+            } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
                 StopStrategy();
             }
         } else if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForDeal) {
@@ -107,7 +114,7 @@ public class StrategyGradientGridsTrade : StrategyBase
             if (msg.OrderInfo.ExecuteType == EventStatus.Trade) {
                 // 收到socket消息确认订单成交,判断是否需要挂止盈止损单
                 OnTradeFinish();
-            } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled || msg.OrderInfo.ExecuteType == EventStatus.Expired) {
+            } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
                 StopStrategy();
             }
         } else if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit) {
@@ -119,7 +126,7 @@ public class StrategyGradientGridsTrade : StrategyBase
                 } else if (msg.OrderInfo.ExecuteType == EventStatus.Trade) {
                     tradeState = GradientGridsState.waitForStopPrice;
                     lastOrderInfo.state = StrategyOrderInfo.OrderState.finish;
-                } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled || msg.OrderInfo.ExecuteType == EventStatus.Expired) {
+                } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
                     StopStrategy();
                 }
             }
@@ -135,7 +142,7 @@ public class StrategyGradientGridsTrade : StrategyBase
                         EventManager.Instance.Send(CancelOrderByClientId.Create(MainOrderDialog.curAccountData, MainOrderDialog.curSymbol,
                             GameConfig.StopPrefix + lastOrderInfo.orderClientId.ToString()));
                     }
-                } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled || msg.OrderInfo.ExecuteType == EventStatus.Expired) {
+                } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
                     StopStrategy();
                 }
             }
@@ -150,21 +157,26 @@ public class StrategyGradientGridsTrade : StrategyBase
                         EventManager.Instance.Send(CancelOrderByClientId.Create(MainOrderDialog.curAccountData, MainOrderDialog.curSymbol,
                             GameConfig.TakeProfitPrefix + lastOrderInfo.orderClientId.ToString()));
                     }
-                } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled || msg.OrderInfo.ExecuteType == EventStatus.Expired) {
+
+                    if (stopStrategyWhenTriggerStopPrice) {
+                        StopStrategy();;
+                        return;
+                    }
+                } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
                     StopStrategy();
                 }
             }
         }
 
         void OnTradeFinish() {
-            if (lastOrderInfo.takeProfitPrice > 0) {
+            if (lastOrderInfo.takeProfitPrice > (decimal)float.Epsilon) {
                 lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
-                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(firstOrderInfo, 2)));
+                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 2)));
             }
 
-            if (lastOrderInfo.stopPrice > 0) {
+            if (lastOrderInfo.stopPrice > (decimal)float.Epsilon) {
                 lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
-                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(firstOrderInfo, 3)));
+                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 3)));
             }
 
             if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForDeal) {

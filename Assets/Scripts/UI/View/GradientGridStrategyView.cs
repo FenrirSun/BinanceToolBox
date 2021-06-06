@@ -22,4 +22,5 @@ public class GradientGridStrategyView : DialogViewBase
     public Text nextQuantityTxt;
     
     public Dropdown directionDropdown;
+    public Toggle stopToggle;
 }

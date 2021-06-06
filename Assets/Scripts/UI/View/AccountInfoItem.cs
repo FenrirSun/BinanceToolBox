@@ -5,19 +5,19 @@ using NLog.LayoutRenderers;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AccountInfoItem: MonoBehaviour
+public class AccountInfoItem : MonoBehaviour
 {
     public Text nameTxt;
     public Text numTxt;
-    // public Text futuresTxt;
-    public GameObject activeMark;
+    public Text orderRatioTxt;
+    // public GameObject activeMark;
     public Button deleteBtn;
     public Button configBtn;
     public Text posTextTemp;
-    
+
     private AccountData _accountData;
     private ComponentEasyCache<Text, FuturesUserDataPositionInfo> positionCache;
-    
+
     public void Init() {
         positionCache = new ComponentEasyCache<Text, FuturesUserDataPositionInfo>();
         positionCache.template = posTextTemp;
@@ -34,7 +34,7 @@ public class AccountInfoItem: MonoBehaviour
                 CommonMessageDialog.OpenWithOneButton("当前有执行中的策略，不可删除账户", null);
                 return;
             }
-            
+
             GameRuntime.Instance.GetLogic<AccountLogic>().DeleteAccount(data);
             EventManager.Instance.Send(RefreshAccountList.Create());
         });
@@ -42,12 +42,12 @@ public class AccountInfoItem: MonoBehaviour
         configBtn.onClick.AddListener(() =>
         {
             var addAccountDialog = UIManager.Instance.PushDialog<AddAccountDialog>(AddAccountDialog.Prefab);
-            addAccountDialog.accountId = _accountData.id;
-            addAccountDialog.Init(false);
+            addAccountDialog.Init(data);
         });
     }
 
     private float lastUpdateTime;
+
     private void Update() {
         if (Time.time - lastUpdateTime > 1) {
             lastUpdateTime = Time.time;
@@ -56,6 +56,7 @@ public class AccountInfoItem: MonoBehaviour
                 if (balanceInfo != null) {
                     var balanceStr = balanceInfo.Balance.ToString();
                     numTxt.text = balanceStr;
+                    orderRatioTxt.text = _accountData.orderRatio.ToString();
                 }
 
                 var tradeInfos = _accountData.GetTradeInfos();
@@ -65,7 +66,8 @@ public class AccountInfoItem: MonoBehaviour
                         return false;
                     }
 
-                    text.text = $"{tradeInfo.symbol}  {tradeInfo.positionSide}  {tradeInfo.positionAmt} 持仓成本:{tradeInfo.entryPrice} 杠杆:{tradeInfo.leverage} 是否逐仓:{tradeInfo.isolated} ";
+                    text.text =
+                        $"{tradeInfo.symbol}  {tradeInfo.positionSide}  {tradeInfo.positionAmt} 持仓成本:{tradeInfo.entryPrice} 杠杆:{tradeInfo.leverage} 是否逐仓:{tradeInfo.isolated} ";
                     return true;
                 });
             }

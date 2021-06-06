@@ -18,5 +18,13 @@
         public static implicit operator string(TimeInForce timeInForce) => timeInForce.Value;
         public static implicit operator TimeInForce(string text) => new TimeInForce(text);
         public override string ToString() => Value;
+        
+        public static bool operator ==(TimeInForce one, TimeInForce two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(TimeInForce one, TimeInForce two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

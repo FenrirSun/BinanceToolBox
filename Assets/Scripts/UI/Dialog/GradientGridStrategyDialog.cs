@@ -114,6 +114,7 @@ public class GradientGridStrategyDialog : GameDialogBase
                 return;
             }
 
+            strategy.stopStrategyWhenTriggerStopPrice = _view.stopToggle.isOn;
             StrategyOrderInfo orderInfo = new StrategyOrderInfo();
             orderInfo.symbol = MainOrderDialog.curSymbol;
             orderInfo.pendingPrice = price;

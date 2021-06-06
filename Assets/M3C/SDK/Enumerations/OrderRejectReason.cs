@@ -20,5 +20,13 @@
         public static implicit operator string(OrderRejectReason value) => value.Value;
         public static implicit operator OrderRejectReason(string text) => new OrderRejectReason(text);
         public override string ToString() => Value;
+        
+        public static bool operator ==(OrderRejectReason one, OrderRejectReason two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(OrderRejectReason one, OrderRejectReason two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

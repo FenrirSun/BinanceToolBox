@@ -1,3 +1,5 @@
+using UnityEngine.TextCore.LowLevel;
+
 namespace M3C.Finance.BinanceSdk.Enumerations
 {
     public class EventStatus
@@ -20,5 +22,13 @@ namespace M3C.Finance.BinanceSdk.Enumerations
         public static implicit operator string(EventStatus EventStatus) => EventStatus.Value;
         public static implicit operator EventStatus(string text) => new EventStatus(text);
         public override string ToString() => Value;
+
+        public static bool operator ==(EventStatus one, EventStatus two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(EventStatus one, EventStatus two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

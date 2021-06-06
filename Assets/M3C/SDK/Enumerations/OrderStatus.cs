@@ -29,5 +29,13 @@
         public static implicit operator string(OrderStatus orderStatus) => orderStatus.Value;
         public static implicit operator OrderStatus(string text) => new OrderStatus(text);
         public override string ToString() => Value;
+        
+        public static bool operator ==(OrderStatus one, OrderStatus two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(OrderStatus one, OrderStatus two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

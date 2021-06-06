@@ -599,9 +599,11 @@ MonoBehaviour:
   ExtraAnims: []
   closeBtn: {fileID: 7260654111632998829}
   addAccountBtn: {fileID: 8235298996111515335}
+  configAccountBtn: {fileID: 9035171335359178548}
   nameInput: {fileID: 5328883533699440117}
   apiInput: {fileID: 8276142234422497867}
   secretInput: {fileID: 5235333034618227858}
+  orderRatioInput: {fileID: 1469934352103291860}
 --- !u!1 &3032446500082788706
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,7 +923,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6DFB\u52A0"
+  m_Text: "\u8BBE\u7F6E"
 --- !u!1 &4260064578047463854
 GameObject:
   m_ObjectHideFlags: 0

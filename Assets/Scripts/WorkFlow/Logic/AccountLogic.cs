@@ -33,7 +33,7 @@ public class AccountLogic : LogicBase
                 var client = accountClientList[evt.data];
                 client.NewOrder(evt.orderInfo.Symbol, evt.orderInfo.OrderSide, evt.orderInfo.PositionSide, evt.orderInfo.OrderType,
                     TimeInForce.GoodUntilCanceled, evt.orderInfo.OriginalQuantity, evt.orderInfo.Price, evt.orderInfo.ClientOrderId.ToString(),
-                    isTestOrder: false);
+                    stopPrice: evt.orderInfo.StopPrice);
             }
         });
 
@@ -120,8 +120,8 @@ public class AccountLogic : LogicBase
 
     private void OnGetOrderTradeUpdateMessage(WsFuturesUserDataOrderTradeUpdateMessage e, AccountData ad) {
         var orderInfos = ad.GetOrderInfos();
-        if (orderInfos.Count > 30) {
-            orderInfos.RemoveAt(0);
+        while (orderInfos.Count > 30) {
+            orderInfos.RemoveAt(orderInfos.Count - 1);
         }
 
         bool syncOrder = false;
@@ -135,7 +135,7 @@ public class AccountLogic : LogicBase
         if (!syncOrder) {
             orderInfos.Add(e.ConvertToOrderInfoMessage());
         }
-
+        orderInfos.Sort((a, b) => (int)(b.time - a.time));
         eventList.Enqueue(OnOrderInfoUpdate.Create(e, ad));
     }
 

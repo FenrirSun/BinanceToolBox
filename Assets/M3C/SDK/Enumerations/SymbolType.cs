@@ -29,5 +29,13 @@ namespace M3C.Finance.BinanceSdk.Enumerations
         public static implicit operator string(SymbolType type) { return type?.Value; }
         public static implicit operator SymbolType(string text) => new SymbolType(text);
         public override string ToString() => Value;
+        
+        public static bool operator ==(SymbolType one, SymbolType two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(SymbolType one, SymbolType two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

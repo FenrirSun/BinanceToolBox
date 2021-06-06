@@ -48,7 +48,7 @@ public class MainAccountDialog : MainPageBase
                 return;
             }
             var addAccountDialog = UIManager.Instance.PushDialog<AddAccountDialog>(AddAccountDialog.Prefab);
-            addAccountDialog.Init(true);
+            addAccountDialog.Init(null);
         });
     }
 

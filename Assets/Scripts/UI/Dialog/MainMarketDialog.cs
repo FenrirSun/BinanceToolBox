@@ -46,6 +46,8 @@ public class MainMarketDialog : MainPageBase
         GetEventComp().Send(msg);
         if (msg.message != null) {
             _view.curPrice.text = msg.message.Price.ToString();
+        } else {
+            _view.curPrice.text = "-";
         }
     }
     
@@ -61,7 +63,7 @@ public class MainMarketDialog : MainPageBase
     private void AddListener() {
         GetEventComp().Listen<OnAggTradeUpdate>(evt =>
         {
-            if (evt.msg.Symbol == curSymbol) {
+            if (evt.msg.Symbol.Value == curSymbol) {
                 _view.curPrice.text = evt.msg.Price.ToString();
             }
         });

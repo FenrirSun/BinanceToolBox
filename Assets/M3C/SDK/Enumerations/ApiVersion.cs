@@ -12,5 +12,13 @@
 
         public static implicit operator string(ApiVersion version) => version.Value;
         public override string ToString() => Value;
+        
+        public static bool operator ==(ApiVersion one, ApiVersion two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(ApiVersion one, ApiVersion two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

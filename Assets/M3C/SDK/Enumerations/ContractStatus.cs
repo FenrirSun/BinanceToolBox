@@ -26,5 +26,13 @@ namespace M3C.Finance.BinanceSdk.Enumerations
         public static implicit operator string(ContractStatus orderType) => orderType.Value;
         public static implicit operator ContractStatus(string text) => new ContractStatus(text);
         public override string ToString() => Value;
+        
+        public static bool operator ==(ContractStatus one, ContractStatus two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(ContractStatus one, ContractStatus two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

@@ -12,10 +12,11 @@ namespace M3C.Finance.BinanceSdk
 {
     public partial class BinanceFuturesClient
     {
+#if ENV_PRODUCTION
         private const string BaseUrl = "https://fapi.binance.com/fapi";
-        private const string BaseUrlTest = "https://testnet.binancefuture.com/fapi";
-        private string CurBaseUrl => GameConfig.isRealEnvironment ? BaseUrl : BaseUrlTest;
-
+#else
+        private const string BaseUrl = "https://testnet.binancefuture.com/fapi";
+#endif
         public AccountData Ad;
         private readonly string _apiKey;
         private readonly string _apiSecret;
@@ -69,8 +70,8 @@ namespace M3C.Finance.BinanceSdk
                 }
 
                 try {
-                    var getRequestUrl = $"{CurBaseUrl}/{version}/{methodName}{parameterTextPrefix}{parameterText}";
-                    var postRequestUrl = $"{CurBaseUrl}/{version}/{methodName}";
+                    var getRequestUrl = $"{BaseUrl}/{version}/{methodName}{parameterTextPrefix}{parameterText}";
+                    var postRequestUrl = $"{BaseUrl}/{version}/{methodName}";
 
                     if (httpMethod == HttpMethod.Get) {
                         response = await client.DownloadStringTaskAsync(getRequestUrl);

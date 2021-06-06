@@ -19,8 +19,11 @@ namespace M3C.Finance.BinanceSdk
     /// </summary>
     public class WebSocketClient_FuturesPublic : IDisposable
     {
+#if ENV_PRODUCTION
         private const string WebSocketBaseUrl = "wss://fstream.binance.com/ws/";
-        // private const string WebSocketBaseUrl = "wss://stream.binancefuture.com/ws/";
+#else
+        private const string WebSocketBaseUrl = "wss://stream.binancefuture.com/ws/";
+#endif
         private WebSocket ws;
         
         public delegate void WebSocketMessageHandler(MessageEventArgs messageContent);

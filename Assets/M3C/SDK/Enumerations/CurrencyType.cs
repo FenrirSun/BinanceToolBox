@@ -28,5 +28,13 @@ namespace M3C.Finance.BinanceSdk.Enumerations
         public static implicit operator string(CurrencyType type) => type.Value;
         public static implicit operator CurrencyType(string text) => new CurrencyType(text);
         public override string ToString() => Value;
+        
+        public static bool operator ==(CurrencyType one, CurrencyType two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(CurrencyType one, CurrencyType two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

@@ -53,7 +53,7 @@ namespace M3C.Finance.BinanceSdk
                 parameters.Add("newClientOrderId", newClientOrderId);
             }
             
-            if (stopPrice.HasValue) {
+            if ((orderType == OrderType.STOP || orderType == OrderType.TAKE_PROFIT) && stopPrice.HasValue) {
                 parameters.Add("stopPrice", stopPrice.Value.ToString(CultureInfo.InvariantCulture));
             }
             

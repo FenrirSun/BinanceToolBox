@@ -15,12 +15,12 @@ public class StreamDataLogic : LogicBase
     public Queue<GameEvent> eventList;
     private WebSocketClient_FuturesPublic _client;
     private SymbolType curKlineSymbol;
-    private Dictionary<SymbolType, WebSocketTradesMessage> lastTradesMessages;
+    private Dictionary<string, WebSocketTradesMessage> lastTradesMessages;
 
     protected override void Awake() {
         eventList = new Queue<GameEvent>();
         _client = new WebSocketClient_FuturesPublic();
-        lastTradesMessages = new Dictionary<SymbolType, WebSocketTradesMessage>();
+        lastTradesMessages = new Dictionary<string, WebSocketTradesMessage>();
         _client.MessageHandler = OnGetMessage;
         _client.ConnectStream();
         base.Awake();
@@ -30,8 +30,12 @@ public class StreamDataLogic : LogicBase
         var ec = GetEventComp();
         ec.Listen<GetLastTradeMessage>((evt) =>
         {
-            if (lastTradesMessages.ContainsKey(evt.symbol))
+            if (lastTradesMessages.ContainsKey(evt.symbol)) {
                 evt.message = lastTradesMessages[evt.symbol];
+            }
+            else {
+                evt.message = null;
+            }
         });
         ec.Listen<SubscribeKLine>((evt) => { SubscribeKline(evt.symbol); });
     }
@@ -44,6 +48,7 @@ public class StreamDataLogic : LogicBase
         string klineType = $"continuousKline_{curKlineInterval}";
         if (eventType == "aggTrade") {
             var tradeData = JsonConvert.DeserializeObject<WebSocketTradesMessage>(e.Data);
+            lastTradesMessages[tradeData.Symbol] = tradeData;
             eventList.Enqueue(OnAggTradeUpdate.Create(tradeData));
         } else if (eventType == klineType) {
             var klineData = JsonConvert.DeserializeObject<WebSocketKlineMessage>(e.Data);

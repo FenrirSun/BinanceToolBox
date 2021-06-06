@@ -1,5 +1,6 @@
 using System;
 using GameEvents;
+using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
 using NLog.LayoutRenderers;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class OrderInfoItem : MonoBehaviour
     public Text quantityTxt;
     public Text triggerTxt;
     public Text stateTxt;
+    public Text clientOrderIdTxt;
     public Button operateBtn;
 
     private FuturesUserDataOpenOrderInfoMessage _orderData;
@@ -49,8 +51,10 @@ public class OrderInfoItem : MonoBehaviour
         positionDirTxt.text = _orderData.positionSide;
         typeTxt.text = _orderData.type;
         aPriceTxt.text = _orderData.price.ToString();
-        quantityTxt.text = _orderData.origQty.ToString();
+        quantityTxt.text = Math.Max(_orderData.executedQty, _orderData.origQty).ToString();
         triggerTxt.text = _orderData.workingType;
         stateTxt.text = _orderData.status;
+        clientOrderIdTxt.text = _orderData.clientOrderId;
+        operateBtn.gameObject.SetActive(_orderData.status == OrderStatus.New);
     }
 }

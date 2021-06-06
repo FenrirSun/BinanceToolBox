@@ -782,7 +782,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameTxt: {fileID: 7919723310102892650}
   numTxt: {fileID: 2987619549199534023}
-  activeMark: {fileID: 5152157204656344909}
+  orderRatioTxt: {fileID: 2868425153100938836}
   deleteBtn: {fileID: 4327257853035211641}
   configBtn: {fileID: 1040461874782011335}
   posTextTemp: {fileID: 2270335332303924659}
@@ -2287,10 +2287,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
+    m_FontSize: 20
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
+    m_BestFit: 1
+    m_MinSize: 10
     m_MaxSize: 40
     m_Alignment: 3
     m_AlignByGeometry: 0

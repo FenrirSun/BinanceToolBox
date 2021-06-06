@@ -19,9 +19,11 @@ namespace M3C.Finance.BinanceSdk
     public class WebSocketClient_FuturesSigned
     {
         private const int KeepAliveMilliseconds = 30 * 60 * 1000;
-        private const string BaseUrl = "wss://fstream.binance.com/ws/";
-        private const string TestBaseUrl = "wss://stream.binancefuture.com/ws/";
-        private string WebSocketBaseUrl => GameConfig.isRealEnvironment ? BaseUrl : TestBaseUrl;
+#if ENV_PRODUCTION
+        private const string WebSocketBaseUrl = "wss://fstream.binance.com/ws/";
+#else
+        private const string WebSocketBaseUrl = "wss://stream.binancefuture.com/ws/";
+#endif
         protected SslProtocols SupportedProtocols { get; } = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
         private WebSocket ws;
         private BinanceFuturesClient _client;

@@ -34,5 +34,13 @@ namespace M3C.Finance.BinanceSdk.Enumerations
         public static implicit operator string(KlineInterval version) => version.Value;
         public static implicit operator KlineInterval(string text) => new KlineInterval(text);
         public override string ToString() => Value;
+        
+        public static bool operator ==(KlineInterval one, KlineInterval two) {
+            return one?.Value == two?.Value;
+        }
+        
+        public static bool operator !=(KlineInterval one, KlineInterval two) {
+            return one?.Value != two?.Value;
+        }
     }
 }

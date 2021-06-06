@@ -9,17 +9,26 @@ public class AddAccountDialog : GameDialogBase
 {
     public const string Prefab = "Add_Account_Dialog";
     private AddAccountView _view;
-    private bool isCreate;
-    public int accountId;
+    private AccountData account;
     
     protected override void SetView(DialogViewBase v) {
         _view = v as AddAccountView;
     }
 
-    public void Init(bool isCreate) {
-        this.isCreate = isCreate;
-        _view.addAccountBtn.gameObject.SetActive(isCreate);
-        _view.configAccountBtn.gameObject.SetActive(!isCreate);
+    public void Init(AccountData ad) {
+        if (ad == null) {
+            _view.addAccountBtn.gameObject.SetActive(true);
+            _view.configAccountBtn.gameObject.SetActive(false);
+        } else {
+            account = ad;
+            _view.addAccountBtn.gameObject.SetActive(false);
+            _view.configAccountBtn.gameObject.SetActive(true);
+            _view.nameInput.text = account.name;
+            _view.apiInput.text = account.apiKey;
+            _view.secretInput.text = account.secretKey;
+            _view.orderRatioInput.text = account.orderRatio.ToString();
+        }
+        
         AddListener();
     }
 
@@ -30,14 +39,14 @@ public class AddAccountDialog : GameDialogBase
     }
 
     private void CreateAccount() {
-        var name = _view.nameInput.text;
+        var inputName = _view.nameInput.text;
         var apiKey = _view.apiInput.text;
         var secretKey = _view.secretInput.text;
         var orderRatioStr = _view.orderRatioInput.text;
         float orderRatio = 1f;
         float.TryParse(orderRatioStr, out orderRatio);
-        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(secretKey)) {
-            var account = GameRuntime.Instance.UserData.AddAccount(name, apiKey, secretKey, orderRatio);
+        if (!string.IsNullOrEmpty(inputName) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(secretKey)) {
+            var account = GameRuntime.Instance.UserData.AddAccount(inputName, apiKey, secretKey, orderRatio);
             GameRuntime.Instance.GetLogic<AccountLogic>().AddAccount(account);
             GetEventComp().Send(RefreshAccountList.Create());
             OnClose();
@@ -52,7 +61,7 @@ public class AddAccountDialog : GameDialogBase
         float orderRatio = 1f;
         float.TryParse(orderRatioStr, out orderRatio);
         if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(secretKey)) {
-            var account = GameRuntime.Instance.UserData.GetAccount(accountId);
+            var account = GameRuntime.Instance.UserData.GetAccount(this.account.id);
             account.name = name;
             account.apiKey = apiKey;
             account.secretKey = secretKey;
