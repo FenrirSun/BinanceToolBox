@@ -48,6 +48,6 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         public PositionSide PositionSide { get; set; }
         
         [JsonProperty("reduceOnly")]
-        public bool reduceOnly { get; set; }
+        public string reduceOnly { get; set; }
     }
 }

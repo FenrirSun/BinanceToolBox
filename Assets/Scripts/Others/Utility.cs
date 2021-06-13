@@ -15,23 +15,34 @@ public static class Utility
         newOrder.ClientOrderId = strategyOrder.orderClientId.ToString();
         if (orderType == 1) {
             // 首单
-            newOrder.OrderSide = strategyOrder.side;
+            if (strategyOrder.posSide == PositionSide.LONG) {
+                newOrder.OrderSide = OrderSide.Buy;
+            } else if(strategyOrder.posSide == PositionSide.SHORT) {
+                newOrder.OrderSide = OrderSide.Sell;
+            }
             newOrder.OrderType = strategyOrder.orderType;
-            newOrder.reduceOnly = false;
         } else if (orderType == 2) {
             // 止盈单
-            newOrder.reduceOnly = true;
+            // newOrder.reduceOnly = "true";
             newOrder.OrderType = OrderType.TAKE_PROFIT;
-            newOrder.OrderSide = OrderSide.Sell;
+            if (strategyOrder.posSide == PositionSide.LONG) {
+                newOrder.OrderSide = OrderSide.Sell;
+            } else if(strategyOrder.posSide == PositionSide.SHORT) {
+                newOrder.OrderSide = OrderSide.Buy;
+            }
             newOrder.PositionSide = strategyOrder.posSide;
             newOrder.StopPrice = strategyOrder.takeProfitPrice;
             newOrder.Price = strategyOrder.takeProfitPrice;
             newOrder.ClientOrderId = GameConfig.TakeProfitPrefix + strategyOrder.orderClientId.ToString();
         } else if (orderType == 3) {
             // 止损单
-            newOrder.reduceOnly = true;
+            // newOrder.reduceOnly = "true";
             newOrder.OrderType = OrderType.STOP;
-            newOrder.OrderSide = OrderSide.Sell;
+            if (strategyOrder.posSide == PositionSide.LONG) {
+                newOrder.OrderSide = OrderSide.Sell;
+            } else if(strategyOrder.posSide == PositionSide.SHORT) {
+                newOrder.OrderSide = OrderSide.Buy;
+            }
             newOrder.PositionSide = strategyOrder.posSide;
             newOrder.StopPrice = strategyOrder.stopPrice;
             newOrder.Price = strategyOrder.stopPrice;

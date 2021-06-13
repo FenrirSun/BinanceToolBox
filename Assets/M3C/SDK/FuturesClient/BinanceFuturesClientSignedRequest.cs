@@ -34,8 +34,8 @@ namespace M3C.Finance.BinanceSdk
         }
 
         public async Task<NewOrderResponse> NewOrder(SymbolType symbol, OrderSide side, PositionSide posSide, OrderType orderType,
-            TimeInForce timeInForce, decimal quantity, decimal price, string newClientOrderId, bool isTestOrder = false, decimal? stopPrice = null,
-            decimal? icebergQuantity = null, long? recvWindow = null) {
+            TimeInForce timeInForce, decimal quantity, decimal price, string newClientOrderId, bool isTestOrder = false,
+            decimal? stopPrice = null, decimal? icebergQuantity = null, long? recvWindow = null) {
             var parameters = new Dictionary<string, string>
             {
                 {"symbol", symbol},
