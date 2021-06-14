@@ -2,7 +2,7 @@
 {
     public class OrderRejectReason
     {
-        private OrderRejectReason(string value) { Value = value; }
+        public OrderRejectReason(string value) { Value = value; }
 
         public string Value { get; }
 

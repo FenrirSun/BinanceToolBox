@@ -23,9 +23,8 @@ public class GameRuntime : GameRuntimeBase<GameRuntime, UserData>
         DebugDialog.dialog = UIManager.Instance.PushFloatDialog<DebugDialog>(DebugDialog.Prefab, 1000);
         DebugDialog.dialog.Init();
 #endif
-        TableManager.Instance.LoadAllTables();
+        // TableManager.Instance.LoadAllTables();
         AddAllLogic();
-
         InitDialog();
     }
 

@@ -2,7 +2,7 @@
 {
     public class TimeInForce
     {
-        private TimeInForce(string value) { Value = value; }
+        public TimeInForce(string value) { Value = value; }
 
         private string Value { get; }
 

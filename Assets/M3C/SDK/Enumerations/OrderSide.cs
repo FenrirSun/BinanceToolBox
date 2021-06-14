@@ -5,7 +5,7 @@ namespace M3C.Finance.BinanceSdk.Enumerations
     [Serializable]
     public class OrderSide
     {
-        private OrderSide(string value) { Value = value; }
+        public OrderSide(string value) { Value = value; }
 
         public string Value { get; }
 

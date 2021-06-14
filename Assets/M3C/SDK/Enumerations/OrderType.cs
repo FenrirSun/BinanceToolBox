@@ -5,7 +5,7 @@ namespace M3C.Finance.BinanceSdk.Enumerations
     [Serializable]
     public class OrderType
     {
-        private OrderType(string value) { Value = value; }
+        public OrderType(string value) { Value = value; }
 
         private string Value { get; }
 

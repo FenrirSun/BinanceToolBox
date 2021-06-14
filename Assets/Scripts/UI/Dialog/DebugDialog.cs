@@ -2,10 +2,29 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using M3C.Finance.BinanceSdk;
+using M3C.Finance.BinanceSdk.Enumerations;
+using M3C.Finance.BinanceSdk.ResponseObjects;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 
 public static class SDEBUG {
+
+    // async 方法供非主线程逻辑调用
+    public static Dictionary<string, string> asyncInfo = new Dictionary<string, string>();
+    public static void InfoAsync(string key, string value) {
+        lock (asyncInfo) {
+            asyncInfo[key] = value;
+        }
+    }
+    
+    public static HashSet<string> AsyncError = new HashSet<string>();
+    
+    public static void ErrorAsync(string value) {
+        lock (AsyncError) {
+            AsyncError.Add(value);
+        }
+    }
     
     public static void INFO(string key, string value)
     {
@@ -184,6 +203,24 @@ public class DebugDialog : GameDialogBase
 
     float deltaTime;
     void Update() {
+        lock (SDEBUG.asyncInfo) {
+            if (SDEBUG.asyncInfo.Count > 0) {
+                foreach (var key in SDEBUG.asyncInfo.Keys) {
+                    DebugInfo(key, SDEBUG.asyncInfo[key]);
+                }
+                SDEBUG.asyncInfo.Clear();
+            }
+        }
+
+        lock (SDEBUG.AsyncError) {
+            if (SDEBUG.AsyncError.Count > 0) {
+                foreach (var value in SDEBUG.AsyncError) {
+                    DebugError(value);
+                }
+                SDEBUG.AsyncError.Clear();
+            }
+        }
+        
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
         float fps = 1.0f / deltaTime;
         view.fpsLabel.text = Mathf.Floor(fps).ToString();
@@ -243,6 +280,21 @@ public class DebugDialog : GameDialogBase
             logDic.Clear();
             view.logLabel.text = string.Empty;
         });
+        
+        AddButton("序列化", () =>
+        {
+            WebSocketTradesMessage msg = new WebSocketTradesMessage();
+            msg.Price = 1122;
+            msg.Quantity = 0.1m;
+            msg.Symbol = SymbolType.EOS;
+            msg.EventType = "TOT";
+            SDEBUG.InfoAsync("序列化1", msg.ToString());
+            var json = JsonConvert.SerializeObject(msg);
+            SDEBUG.InfoAsync("序列化2", json.ToString());
+            var m = JsonConvert.DeserializeObject<WebSocketTradesMessage>(json);
+            SDEBUG.InfoAsync("序列化3", m.ToString());
+        });
+        
         // AddButton("显示等级", () =>
         // {
         //     SDEBUG.INFO("Level", GameRuntime.Instance.UserData.level.ToString());

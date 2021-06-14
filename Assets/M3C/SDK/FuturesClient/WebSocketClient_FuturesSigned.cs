@@ -95,21 +95,16 @@ namespace M3C.Finance.BinanceSdk
 
         private BinanceWebSocket CreateNewWebSocket(Uri endpoint, string listenKey = null) {
             var ws = new BinanceWebSocket(endpoint.AbsoluteUri, listenKey);
-
-            ws.OnOpen += delegate
-            {
-                //Debug.Log($"{endpoint} | Socket Connection Established ({ws.Id})");
-            };
-
+            
             ws.OnClose += (sender, e) =>
             {
-                //Debug.Log($"Socket Connection Closed! ({ws.Id})");
+                SDEBUG.ErrorAsync("Signed Socket Connection Closed! " + e.Code);
             };
-
             ws.OnError += (sender, e) =>
             {
-                //Debug.Log("Msg: " + e.Message + " | " + e.Exception.Message);
+                SDEBUG.ErrorAsync("signed socket error: " + e.Message + " | " + e.Exception.Message);
             };
+            
             ws.SslConfiguration.EnabledSslProtocols = SupportedProtocols;
             return ws;
         }

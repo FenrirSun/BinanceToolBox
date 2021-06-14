@@ -6,7 +6,7 @@ namespace M3C.Finance.BinanceSdk.Enumerations
     [Serializable]
     public class SymbolType
     {
-        private SymbolType(string value) {
+        public SymbolType(string value) {
             Value = value;
         }
 

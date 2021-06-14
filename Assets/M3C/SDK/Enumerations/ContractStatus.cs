@@ -2,7 +2,7 @@ namespace M3C.Finance.BinanceSdk.Enumerations
 {
     public class ContractStatus
     {
-        private ContractStatus(string value) { Value = value; }
+        public ContractStatus(string value) { Value = value; }
 
         private string Value { get; }
 

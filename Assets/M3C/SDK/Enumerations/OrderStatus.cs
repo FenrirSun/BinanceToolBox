@@ -2,7 +2,7 @@
 {
     public class OrderStatus
     {
-        private OrderStatus(string value) { Value = value; }
+        public OrderStatus(string value) { Value = value; }
 
         public string Value { get; }
 

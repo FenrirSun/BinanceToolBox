@@ -4,7 +4,7 @@ namespace M3C.Finance.BinanceSdk.Enumerations
 {
     public class EventStatus
     {
-        private EventStatus(string value) { Value = value; }
+        public EventStatus(string value) { Value = value; }
 
         public string Value { get; }
 

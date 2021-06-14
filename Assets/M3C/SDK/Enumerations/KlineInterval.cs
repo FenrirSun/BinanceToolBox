@@ -4,7 +4,7 @@ namespace M3C.Finance.BinanceSdk.Enumerations
 {
     public class KlineInterval
     {
-        private KlineInterval(string value) {
+        public KlineInterval(string value) {
             Value = value;
         }
 

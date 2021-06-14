@@ -42,9 +42,12 @@ public class StreamDataLogic : LogicBase
 
     // 注意回调并不在主线程
     private void OnGetMessage(MessageEventArgs e) {
+        if (e == null || string.IsNullOrEmpty(e.Data))
+            return;
+        
+        // SDEBUG.InfoAsync("收到消息1", e.Data);
         var responseObject = JObject.Parse(e.Data);
         var eventType = (string) responseObject["e"];
-
         string klineType = $"continuousKline_{curKlineInterval}";
         if (eventType == "aggTrade") {
             var tradeData = JsonConvert.DeserializeObject<WebSocketTradesMessage>(e.Data);

@@ -50,11 +50,11 @@ namespace M3C.Finance.BinanceSdk
             };
             ws.OnClose += (sender, e) =>
             {
-                //Debug.Log("Server closed: " + e.Code);
+                SDEBUG.ErrorAsync("Public Socket Connection Closed! " + e.Code);
             };
             ws.OnError += (sender, e) =>
             {
-                //Debug.Log("socket error: " + e?.Message);
+                SDEBUG.ErrorAsync("Public socket error: " + e.Message + " | " + e.Exception.Message);
             };
 
             Debug.Log("Connect socket");

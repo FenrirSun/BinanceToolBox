@@ -4,7 +4,7 @@ namespace M3C.Finance.BinanceSdk.Enumerations
 {
     public class CurrencyType
     {
-        private CurrencyType(string value) {
+        public CurrencyType(string value) {
             Value = value;
         }
 

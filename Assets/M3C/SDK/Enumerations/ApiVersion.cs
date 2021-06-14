@@ -2,7 +2,7 @@
 {
     public class ApiVersion
     {
-        private ApiVersion(string value) { Value = value; }
+        public ApiVersion(string value) { Value = value; }
 
         private string Value { get; }
 

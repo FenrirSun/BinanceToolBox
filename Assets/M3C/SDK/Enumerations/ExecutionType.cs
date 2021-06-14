@@ -2,7 +2,7 @@
 {
     public class ExecutionType
     {
-        private ExecutionType(string value) { Value = value; }
+        public ExecutionType(string value) { Value = value; }
 
         public string Value { get; }
 

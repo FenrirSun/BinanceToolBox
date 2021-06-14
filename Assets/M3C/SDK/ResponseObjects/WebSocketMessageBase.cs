@@ -10,7 +10,6 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         [JsonProperty(PropertyName = "E")]
         public long EventTime { get; set; }
 
-        
     }
 
 }
