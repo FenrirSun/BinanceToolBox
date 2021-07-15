@@ -7,4 +7,5 @@ public class MainPageBarView : DialogViewBase
     public Button marketBtn;
     public Button orderBtn;
     public Button accountBtn;
+    public Button clockBtn;
 }

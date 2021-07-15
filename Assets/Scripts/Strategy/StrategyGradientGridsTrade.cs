@@ -13,7 +13,7 @@ public class StrategyGradientGridsTrade : StrategyBase
     public decimal quantityRatioGap;
     public bool stopStrategyWhenTriggerStopPrice; // 止损后是否停止策略
     public decimal maxOrderPrice;
-    
+
     // 单内差价
     private decimal stopPriceSpread;
     private decimal takeProfitPriceSpread;
@@ -31,8 +31,8 @@ public class StrategyGradientGridsTrade : StrategyBase
         historyOrderList = new List<StrategyOrderInfo>();
         base.Init(ad, firstOrder);
         tradeState = GradientGridsState.idle;
-        stopPriceSpread = firstOrder.stopPrice < (decimal)float.Epsilon ? 0 : firstOrder.stopPrice - firstOrder.pendingPrice;
-        takeProfitPriceSpread = firstOrder.takeProfitPrice < (decimal)float.Epsilon ? 0 : firstOrder.takeProfitPrice - firstOrder.pendingPrice;
+        stopPriceSpread = firstOrder.stopPrice < (decimal) float.Epsilon ? 0 : firstOrder.stopPrice - firstOrder.pendingPrice;
+        takeProfitPriceSpread = firstOrder.takeProfitPrice < (decimal) float.Epsilon ? 0 : firstOrder.takeProfitPrice - firstOrder.pendingPrice;
     }
 
     public override void StartStrategy() {
@@ -63,11 +63,11 @@ public class StrategyGradientGridsTrade : StrategyBase
             lastOrderInfo.stopPrice = lastOrderInfo.pendingPrice + stopPriceSpread;
         else
             lastOrderInfo.stopPrice = 0;
-        if(Math.Abs(takeProfitPriceSpread) > (decimal)float.Epsilon)
+        if (Math.Abs(takeProfitPriceSpread) > (decimal) float.Epsilon)
             lastOrderInfo.takeProfitPrice = lastOrderInfo.pendingPrice + takeProfitPriceSpread;
         else
             lastOrderInfo.takeProfitPrice = 0;
-        lastOrderInfo.quantity = firstOrderInfo.quantity * (1 + quantityRatioGap * roundNum) * (decimal)accountData.orderRatio;
+        lastOrderInfo.quantity = firstOrderInfo.quantity * (1 + quantityRatioGap * roundNum) * (decimal) accountData.orderRatio;
         lastOrderInfo.quantity = decimal.Parse(lastOrderInfo.quantity.ToString("G0"));
         lastOrderInfo.state = StrategyOrderInfo.OrderState.waitForConfirmOrder;
         var newOrder = Utility.GenerateOrderInfo(lastOrderInfo, 1);
@@ -77,7 +77,7 @@ public class StrategyGradientGridsTrade : StrategyBase
     protected override void OnPriceChange(decimal price) {
         if (state != StrategyState.Executing || tradeState != GradientGridsState.waitForTriggerPrice)
             return;
-        
+
         if (firstOrderInfo.posSide == PositionSide.LONG) {
             if (price <= firstOrderInfo.pendingPrice + (roundNum + 1) * triggerPriceGap) {
                 NextRound();
@@ -101,7 +101,7 @@ public class StrategyGradientGridsTrade : StrategyBase
 
             // 收到socket消息确认挂单成功
             if (msg.OrderInfo.ExecuteType == EventStatus.New) {
-                lastOrderInfo.state = StrategyOrderInfo.OrderState.waitForDeal; 
+                lastOrderInfo.state = StrategyOrderInfo.OrderState.waitForDeal;
             } else if (msg.OrderInfo.ExecuteType == EventStatus.Trade) {
                 OnTradeFinish();
             } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
@@ -157,8 +157,7 @@ public class StrategyGradientGridsTrade : StrategyBase
                     }
 
                     if (stopStrategyWhenTriggerStopPrice) {
-                        StopStrategy();;
-                        return;
+                        StopStrategy();
                     }
                 } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
                     StopStrategy();
@@ -167,12 +166,12 @@ public class StrategyGradientGridsTrade : StrategyBase
         }
 
         void OnTradeFinish() {
-            if (lastOrderInfo.takeProfitPrice > (decimal)float.Epsilon) {
+            if (lastOrderInfo.takeProfitPrice > (decimal) float.Epsilon) {
                 lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
                 EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 2)));
             }
 
-            if (lastOrderInfo.stopPrice > (decimal)float.Epsilon) {
+            if (lastOrderInfo.stopPrice > (decimal) float.Epsilon) {
                 lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
                 EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 3)));
             }
