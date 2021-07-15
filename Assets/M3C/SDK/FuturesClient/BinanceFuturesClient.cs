@@ -38,7 +38,7 @@ namespace M3C.Finance.BinanceSdk
         private delegate T ResponseParseHandler<T>(string input);
 
         private async Task<T> SendRequest<T>(string methodName, string version, ApiMethodType apiMethod, HttpMethod httpMethod,
-            Dictionary<string, string> parameters = null, ResponseParseHandler<T> customHandler = null) {
+            Dictionary<string, string> parameters = null, ResponseParseHandler<T> customHandler = null) where T : class {
             if ((apiMethod == ApiMethodType.ApiKey && string.IsNullOrEmpty(_apiKey)) ||
                 (apiMethod == ApiMethodType.Signed &&
                  (string.IsNullOrEmpty(_apiKey) || string.IsNullOrEmpty(_apiSecret)))) {
@@ -80,6 +80,9 @@ namespace M3C.Finance.BinanceSdk
                         response = await client.UploadStringTaskAsync(getRequestUrl, httpMethod.Method, string.Empty);
                     }
                 } catch (WebException webException) {
+                    if (webException.Response == null) {
+                        throw new BinanceRestApiException(-1, "net work error");
+                    }
                     using (var reader = new StreamReader(webException.Response.GetResponseStream(), Encoding.UTF8)) {
                         var errorObject = JObject.Parse(reader.ReadToEnd());
                         var errorCode = (int) errorObject["code"];

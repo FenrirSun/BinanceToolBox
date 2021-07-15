@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using GameEvents;
 using M3C.Finance.BinanceSdk.Enumerations;
@@ -21,11 +22,13 @@ public class StrategyGradientGridsTrade : StrategyBase
     public enum GradientGridsState
     {
         idle,
+        sendOrder,
         holdOrder,
         waitForTriggerPrice,
     }
 
     public GradientGridsState tradeState;
+    public bool isPending;
 
     public void Init(AccountData ad, StrategyOrderInfo firstOrder) {
         historyOrderList = new List<StrategyOrderInfo>();
@@ -56,7 +59,6 @@ public class StrategyGradientGridsTrade : StrategyBase
     }
 
     private void SendNextOrder() {
-        tradeState = GradientGridsState.holdOrder;
         lastOrderInfo.pendingPrice = firstOrderInfo.pendingPrice + roundNum * orderPriceGap;
         lastOrderInfo.orderClientId = GameUtils.GetNewGuid();
         if (Math.Abs(stopPriceSpread) > (decimal) float.Epsilon)
@@ -70,10 +72,25 @@ public class StrategyGradientGridsTrade : StrategyBase
         lastOrderInfo.quantity = firstOrderInfo.quantity * (1 + quantityRatioGap * roundNum) * (decimal) accountData.orderRatio;
         lastOrderInfo.quantity = decimal.Parse(lastOrderInfo.quantity.ToString("G0"));
         lastOrderInfo.state = StrategyOrderInfo.OrderState.waitForConfirmOrder;
-        var newOrder = Utility.GenerateOrderInfo(lastOrderInfo, 1);
-        EventManager.Instance.Send(NewOrder.Create(accountData, newOrder));
+        
+        tradeState = GradientGridsState.sendOrder;
+        GameRuntime.Instance.StartCoroutine(SendOrder());
     }
 
+    IEnumerator SendOrder() {
+        yield return null;
+        var newOrder = Utility.GenerateOrderInfo(lastOrderInfo, 1);
+        EventManager.Instance.Send(NewOrder.Create(accountData, newOrder, b =>
+        {
+            if (b) {
+                tradeState = GradientGridsState.holdOrder;
+            } else {
+                GameRuntime.Instance.StartCoroutine(SendOrder());
+            }
+        }));
+    }
+    
+    // 价格变更
     protected override void OnPriceChange(decimal price) {
         if (state != StrategyState.Executing || tradeState != GradientGridsState.waitForTriggerPrice)
             return;
@@ -89,7 +106,11 @@ public class StrategyGradientGridsTrade : StrategyBase
         }
     }
 
+    // TODO: 断线时发生交易变更，再接连之后不会受到对应消息，需要额外处理
+    // 交易变更
     protected override void OnDataOrderTradeUpdate(WsFuturesUserDataOrderTradeUpdateMessage msg) {
+        if (isPending)
+            return;
         if (tradeState != GradientGridsState.holdOrder)
             return;
         if (lastOrderInfo == null || state != StrategyState.Executing)
@@ -167,13 +188,29 @@ public class StrategyGradientGridsTrade : StrategyBase
 
         void OnTradeFinish() {
             if (lastOrderInfo.takeProfitPrice > (decimal) float.Epsilon) {
-                lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
-                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 2)));
+                isPending = true;
+                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 2),
+                    (isSuccess) =>
+                    {
+                        if (isSuccess) {
+                            lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
+                        }
+
+                        isPending = false;
+                    }));
             }
 
             if (lastOrderInfo.stopPrice > (decimal) float.Epsilon) {
-                lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
-                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 3)));
+                isPending = true;
+                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 3),
+                    (isSuccess) =>
+                    {
+                        if (isSuccess) {
+                            lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
+                        }
+
+                        isPending = false;
+                    }));
             }
 
             if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForDeal) {

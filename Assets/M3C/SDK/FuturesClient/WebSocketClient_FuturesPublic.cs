@@ -41,7 +41,6 @@ namespace M3C.Finance.BinanceSdk
             };
             ws.OnMessage += (sender, e) =>
             {
-                // Debug.Log("Server says: " + e.Data);
                 if (e.IsPing) {
                     ws.Ping();
                 } else {
@@ -50,11 +49,11 @@ namespace M3C.Finance.BinanceSdk
             };
             ws.OnClose += (sender, e) =>
             {
-                SDEBUG.ErrorAsync("Public Socket Connection Closed! " + e.Code);
+                SDEBUG.InfoAsync("NetWork", "Public Socket Connection Closed! " + e.Code);
             };
             ws.OnError += (sender, e) =>
             {
-                SDEBUG.ErrorAsync("Public socket error: " + e.Message + " | " + e.Exception.Message);
+                SDEBUG.InfoAsync("NetWork", "Public socket error: " + e.Message + " | " + e.Exception.Message);
             };
 
             Debug.Log("Connect socket");
@@ -98,6 +97,17 @@ namespace M3C.Finance.BinanceSdk
         private string GetSubscribeParam(string method, string symbol) {
             var postfix = string.IsNullOrEmpty(method) ? string.Empty : $"@{method}";
             return $"{(method.IsNullOrEmpty() ? symbol : symbol.ToLowerInvariant())}{postfix}";
+        }
+
+        private float lastUpdatTime;
+        public void Update() {
+            // 断线后尝试重连
+            if (Time.time - lastUpdatTime > 3f) {
+                lastUpdatTime = Time.time;
+                if (ws != null && !ws.IsAlive) {
+                    ConnectStream();
+                }
+            }
         }
 
         public void Dispose() {

@@ -32,8 +32,7 @@ public class StreamDataLogic : LogicBase
         {
             if (lastTradesMessages.ContainsKey(evt.symbol)) {
                 evt.message = lastTradesMessages[evt.symbol];
-            }
-            else {
+            } else {
                 evt.message = null;
             }
         });
@@ -74,6 +73,8 @@ public class StreamDataLogic : LogicBase
                 GetEventComp().Send(e);
             }
         }
+
+        _client?.Update();
     }
 
     private void OnDestroy() {

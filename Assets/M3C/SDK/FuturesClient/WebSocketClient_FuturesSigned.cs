@@ -27,21 +27,19 @@ namespace M3C.Finance.BinanceSdk
         protected SslProtocols SupportedProtocols { get; } = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
         private WebSocket ws;
         private BinanceFuturesClient _client;
-        
+        private WebSocketMessageHandler<WsFuturesUserDataAccountUpdateMessage> accountUpdateHandler;
+        private WebSocketMessageHandler<WsFuturesUserDataOrderTradeUpdateMessage> orderTradeUpdateHandler;
+        private WebSocketMessageHandler<WsFuturesUserDataAccountConfigUpdateMessage> configUpdateHandler;
         public delegate void WebSocketMessageHandler<T>(T messageContent, AccountData ad) where T : WebSocketMessageBase;
-
-        // public string ConnectUserDataEndpointSync(BinanceFuturesClient client,
-        //     WebSocketMessageHandler<WsFuturesUserDataAccountUpdateMessage> accountUpdateHandler,
-        //     WebSocketMessageHandler<WsFuturesUserDataOrderTradeUpdateMessage> orderTradeUpdateHandler,
-        //     WebSocketMessageHandler<WsFuturesUserDataAccountConfigUpdateMessage> configUpdateHandler) {
-        //     return ConnectUserDataEndpoint(client, accountUpdateHandler, orderTradeUpdateHandler, configUpdateHandler).Result;
-        // }
 
         public async Task<string> ConnectUserDataEndpoint(BinanceFuturesClient client,
             WebSocketMessageHandler<WsFuturesUserDataAccountUpdateMessage> accountUpdateHandler,
             WebSocketMessageHandler<WsFuturesUserDataOrderTradeUpdateMessage> orderTradeUpdateHandler,
             WebSocketMessageHandler<WsFuturesUserDataAccountConfigUpdateMessage> configUpdateHandler) {
             _client = client;
+            this.accountUpdateHandler = accountUpdateHandler;
+            this.orderTradeUpdateHandler = orderTradeUpdateHandler;
+            this.configUpdateHandler = configUpdateHandler;
             Dispose();
             var listenKey = await client.StartUserDataStream();
 
@@ -98,11 +96,11 @@ namespace M3C.Finance.BinanceSdk
             
             ws.OnClose += (sender, e) =>
             {
-                SDEBUG.ErrorAsync("Signed Socket Connection Closed! " + e.Code);
+                SDEBUG.InfoAsync("NetWork", "Signed Socket Connection Closed! " + e.Code);
             };
             ws.OnError += (sender, e) =>
             {
-                SDEBUG.ErrorAsync("signed socket error: " + e.Message + " | " + e.Exception.Message);
+                SDEBUG.InfoAsync("NetWork", "signed socket error: " + e.Message + " | " + e.Exception.Message);
             };
             
             ws.SslConfiguration.EnabledSslProtocols = SupportedProtocols;
@@ -115,6 +113,17 @@ namespace M3C.Finance.BinanceSdk
             public BinanceFuturesClient Client { get; set; }
         }
 
+        private float lastUpdatTime;
+        public void Update() {
+            // 断线后尝试重连
+            if (Time.time - lastUpdatTime > 3f) {
+                lastUpdatTime = Time.time;
+                if (ws != null && !ws.IsAlive) {
+                    ConnectUserDataEndpoint(_client, accountUpdateHandler, orderTradeUpdateHandler, configUpdateHandler);
+                }
+            }
+        }
+        
         public void Dispose() {
             Debug.Log("Disposing WebSocket Client...");
             ws?.CloseAsync();

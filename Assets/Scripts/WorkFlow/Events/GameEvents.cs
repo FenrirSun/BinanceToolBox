@@ -1,3 +1,4 @@
+using System;
 using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
 
@@ -106,11 +107,13 @@ namespace GameEvents
     {
         public AccountData data;
         public OrderInfo orderInfo;
+        public Action<bool> onOrderSendSuccess;
 
-        public static NewOrder Create(AccountData account, OrderInfo order) {
+        public static NewOrder Create(AccountData account, OrderInfo order, Action<bool> callback) {
             var result = new NewOrder();
             result.data = account;
             result.orderInfo = order;
+            result.onOrderSendSuccess = callback;
             return result;
         }
     }
