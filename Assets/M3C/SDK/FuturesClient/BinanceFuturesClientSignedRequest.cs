@@ -90,6 +90,31 @@ namespace M3C.Finance.BinanceSdk
                 HttpMethod.Delete, parameters);
         }
 
+        // 使用自己定义的订单号查询订单
+        public async Task<GetOrderResponse> GetOrder(string symbol, string originalClientOrderId, long? recvWindow = null) {
+            var parameters = new Dictionary<string, string>
+            {
+                {"symbol", symbol},
+            };
+
+            CheckAndAddReceiveWindow(recvWindow, parameters);
+
+            // if (orderId.HasValue) {
+            //     parameters.Add("orderId", orderId.Value.ToString(CultureInfo.InvariantCulture));
+            // }
+            
+            if (!string.IsNullOrEmpty(originalClientOrderId)) {
+                parameters.Add("origClientOrderId", originalClientOrderId);
+            }
+
+            // if (!string.IsNullOrEmpty(newClientOrderId)) {
+            //     parameters.Add("newClientOrderId", newClientOrderId);
+            // }
+
+            return await SendRequest<GetOrderResponse>("order", ApiVersion.Version1, ApiMethodType.Signed,
+                HttpMethod.Get, parameters);
+        }
+        
         public async Task<IEnumerable<OrderInfo>> CurrentOpenOrders(string symbol, long? recvWindow = null) {
             var parameters = new Dictionary<string, string>
             {

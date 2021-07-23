@@ -12,8 +12,8 @@ public class StrategyGradientGridsTrade : StrategyBase
     public decimal triggerPriceGap;
     public decimal orderPriceGap;
     public decimal quantityRatioGap;
-    public bool stopStrategyWhenTriggerStopPrice; // 止损后是否停止策略
     public decimal maxOrderPrice;
+    public bool stopStrategyWhenTriggerStopPrice; // 止损后是否停止策略
 
     // 单内差价
     private decimal stopPriceSpread;
@@ -72,7 +72,7 @@ public class StrategyGradientGridsTrade : StrategyBase
         lastOrderInfo.quantity = firstOrderInfo.quantity * (1 + quantityRatioGap * roundNum) * (decimal) accountData.orderRatio;
         lastOrderInfo.quantity = decimal.Parse(lastOrderInfo.quantity.ToString("G0"));
         lastOrderInfo.state = StrategyOrderInfo.OrderState.waitForConfirmOrder;
-        
+
         tradeState = GradientGridsState.sendOrder;
         GameRuntime.Instance.StartCoroutine(SendOrder());
     }
@@ -89,7 +89,7 @@ public class StrategyGradientGridsTrade : StrategyBase
             }
         }));
     }
-    
+
     // 价格变更
     protected override void OnPriceChange(decimal price) {
         if (state != StrategyState.Executing || tradeState != GradientGridsState.waitForTriggerPrice)
@@ -106,117 +106,167 @@ public class StrategyGradientGridsTrade : StrategyBase
         }
     }
 
-    // TODO: 断线时发生交易变更，再接连之后不会受到对应消息，需要额外处理
+    // 推送交易变更
+    protected override void OnWsDataOrderTradeUpdate(WsFuturesUserDataOrderTradeUpdateMessage msg) {
+        DataOrderTradeUpdate(msg.OrderInfo.ClientId, msg.OrderInfo.ExecuteType);
+    }
+
     // 交易变更
-    protected override void OnDataOrderTradeUpdate(WsFuturesUserDataOrderTradeUpdateMessage msg) {
+    protected override void OnDataOrderTradeUpdate(GetOrderResponse msg) {
+        EventStatus eventStatus = EventStatus.Trade;
+        if (msg.Status == OrderStatus.New) {
+            eventStatus = EventStatus.New;
+        } else if (msg.Status == OrderStatus.Expired) {
+            eventStatus = EventStatus.Expired;
+        } else if (msg.Status == OrderStatus.Canceled) {
+            eventStatus = EventStatus.Canceled;
+        }
+
+        DataOrderTradeUpdate(msg.ClientOrderId, eventStatus);
+    }
+
+    private string lastUpdatedTradeId;
+    private EventStatus lastUpdatedExecuteType;
+
+    protected void DataOrderTradeUpdate(string clientId, EventStatus executeType) {
         if (isPending)
             return;
         if (tradeState != GradientGridsState.holdOrder)
             return;
         if (lastOrderInfo == null || state != StrategyState.Executing)
             return;
+        if (lastUpdatedTradeId == clientId && lastUpdatedExecuteType == executeType)
+            return;
 
+        lastUpdatedTradeId = clientId;
+        lastUpdatedExecuteType = executeType;
+        var lastOrderClientId = lastOrderInfo.orderClientId.ToString();
         if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForConfirmOrder) {
-            if (msg.OrderInfo.ClientId != lastOrderInfo.orderClientId.ToString())
+            if (clientId != lastOrderClientId)
                 return;
 
             // 收到socket消息确认挂单成功
-            if (msg.OrderInfo.ExecuteType == EventStatus.New) {
+            if (executeType == EventStatus.New) {
                 lastOrderInfo.state = StrategyOrderInfo.OrderState.waitForDeal;
-            } else if (msg.OrderInfo.ExecuteType == EventStatus.Trade) {
+            } else if (executeType == EventStatus.Trade) {
                 OnTradeFinish();
-            } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
+            } else if (executeType == EventStatus.Canceled) {
                 StopStrategy();
             }
         } else if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForDeal) {
-            if (msg.OrderInfo.ClientId != lastOrderInfo.orderClientId.ToString())
+            if (clientId != lastOrderClientId)
                 return;
 
-            if (msg.OrderInfo.ExecuteType == EventStatus.Trade) {
+            if (executeType == EventStatus.Trade) {
                 // 收到socket消息确认订单成交,判断是否需要挂止盈止损单
                 OnTradeFinish();
-            } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
+            } else if (executeType == EventStatus.Canceled) {
                 StopStrategy();
             }
         } else if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit) {
             // 等待止盈止损挂单成功
-            if (msg.OrderInfo.ClientId == GameConfig.TakeProfitPrefix + lastOrderInfo.orderClientId.ToString()
-                || msg.OrderInfo.ClientId == GameConfig.StopPrefix + lastOrderInfo.orderClientId.ToString()) {
-                if (msg.OrderInfo.ExecuteType == EventStatus.New) {
+            if (clientId == GameConfig.TakeProfitPrefix + lastOrderClientId
+                || clientId == GameConfig.StopPrefix + lastOrderClientId) {
+                if (executeType == EventStatus.New) {
                     lastOrderInfo.state = StrategyOrderInfo.OrderState.waitDealOfStopOrTakeprofit;
-                } else if (msg.OrderInfo.ExecuteType == EventStatus.Trade) {
+                } else if (executeType == EventStatus.Trade) {
                     tradeState = GradientGridsState.waitForTriggerPrice;
                     lastOrderInfo.state = StrategyOrderInfo.OrderState.finish;
-                } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
+                } else if (executeType == EventStatus.Canceled) {
                     StopStrategy();
                 }
             }
         } else if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitDealOfStopOrTakeprofit) {
             // 等待止盈止损单交易成功
-            if (msg.OrderInfo.ClientId == GameConfig.TakeProfitPrefix + lastOrderInfo.orderClientId.ToString()) {
+            if (clientId == GameConfig.TakeProfitPrefix + lastOrderClientId) {
                 // 止盈成功
-                if (msg.OrderInfo.ExecuteType == EventStatus.Trade) {
+                if (executeType == EventStatus.Trade) {
                     tradeState = GradientGridsState.waitForTriggerPrice;
                     lastOrderInfo.state = StrategyOrderInfo.OrderState.finish;
                     if (lastOrderInfo.stopPrice > 0) {
                         // 如果有止损，关掉止损单
                         EventManager.Instance.Send(CancelOrderByClientId.Create(MainOrderDialog.curAccountData, MainOrderDialog.curSymbol,
-                            GameConfig.StopPrefix + lastOrderInfo.orderClientId.ToString()));
+                            GameConfig.StopPrefix + lastOrderClientId));
                     }
-                } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
+                } else if (executeType == EventStatus.Canceled) {
                     StopStrategy();
                 }
-            } else if (msg.OrderInfo.ClientId == GameConfig.StopPrefix + lastOrderInfo.orderClientId.ToString()) {
+            } else if (clientId == GameConfig.StopPrefix + lastOrderClientId) {
                 // 止损成功
-                if (msg.OrderInfo.ExecuteType == EventStatus.Trade) {
+                if (executeType == EventStatus.Trade) {
                     tradeState = GradientGridsState.waitForTriggerPrice;
                     lastOrderInfo.state = StrategyOrderInfo.OrderState.finish;
                     if (lastOrderInfo.takeProfitPrice > 0) {
                         // 如果有止盈，关掉止盈单
                         EventManager.Instance.Send(CancelOrderByClientId.Create(MainOrderDialog.curAccountData, MainOrderDialog.curSymbol,
-                            GameConfig.TakeProfitPrefix + lastOrderInfo.orderClientId.ToString()));
+                            GameConfig.TakeProfitPrefix + lastOrderClientId));
                     }
 
                     if (stopStrategyWhenTriggerStopPrice) {
                         StopStrategy();
                     }
-                } else if (msg.OrderInfo.ExecuteType == EventStatus.Canceled) {
+                } else if (executeType == EventStatus.Canceled) {
                     StopStrategy();
                 }
             }
         }
+    }
 
-        void OnTradeFinish() {
-            if (lastOrderInfo.takeProfitPrice > (decimal) float.Epsilon) {
-                isPending = true;
-                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 2),
-                    (isSuccess) =>
-                    {
-                        if (isSuccess) {
-                            lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
-                        }
+    private void OnTradeFinish() {
+        if (lastOrderInfo.takeProfitPrice > (decimal) float.Epsilon) {
+            isPending = true;
+            EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 2),
+                (isSuccess) =>
+                {
+                    if (isSuccess) {
+                        lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
+                    }
 
-                        isPending = false;
-                    }));
-            }
+                    isPending = false;
+                }));
+        }
 
-            if (lastOrderInfo.stopPrice > (decimal) float.Epsilon) {
-                isPending = true;
-                EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 3),
-                    (isSuccess) =>
-                    {
-                        if (isSuccess) {
-                            lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
-                        }
+        if (lastOrderInfo.stopPrice > (decimal) float.Epsilon) {
+            isPending = true;
+            EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 3),
+                (isSuccess) =>
+                {
+                    if (isSuccess) {
+                        lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
+                    }
 
-                        isPending = false;
-                    }));
-            }
+                    isPending = false;
+                }));
+        }
 
-            if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForDeal) {
-                // 如果没有止盈止损单，该单结束，策略结束
-                lastOrderInfo.state = StrategyOrderInfo.OrderState.finish;
-                StopStrategy();
+        if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForDeal) {
+            // 如果没有止盈止损单，该单结束，策略结束
+            lastOrderInfo.state = StrategyOrderInfo.OrderState.finish;
+            StopStrategy();
+        }
+    }
+
+    public override void OnReconnect() {
+        CheckOrderState();
+    }
+
+    // 手动检测订单状态，用于断线重连时确认websocket错过的信息
+    private void CheckOrderState() {
+        if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForConfirmOrder
+            || lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForDeal) {
+            EventManager.Instance.Send(GetOrder.Create(accountData, lastOrderInfo.symbol, lastOrderInfo.orderClientId.ToString()));
+        } else {
+            if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitDealOfStopOrTakeprofit
+                || lastOrderInfo.state == StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit) {
+                if (lastOrderInfo.stopPrice > (decimal) float.Epsilon) {
+                    var clientOrderId = GameConfig.StopPrefix + lastOrderInfo.orderClientId;
+                    EventManager.Instance.Send(GetOrder.Create(accountData, lastOrderInfo.symbol, clientOrderId));
+                }
+
+                if (lastOrderInfo.takeProfitPrice > (decimal) float.Epsilon) {
+                    var clientOrderId = GameConfig.TakeProfitPrefix + lastOrderInfo.orderClientId;
+                    EventManager.Instance.Send(GetOrder.Create(accountData, lastOrderInfo.symbol, clientOrderId));
+                }
             }
         }
     }

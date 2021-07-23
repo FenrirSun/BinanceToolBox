@@ -99,14 +99,29 @@ namespace M3C.Finance.BinanceSdk
             return $"{(method.IsNullOrEmpty() ? symbol : symbol.ToLowerInvariant())}{postfix}";
         }
 
+        private bool lastConnected;
         private float lastUpdatTime;
         public void Update() {
             // 断线后尝试重连
             if (Time.time - lastUpdatTime > 3f) {
                 lastUpdatTime = Time.time;
-                if (ws != null && !ws.IsAlive) {
-                    ConnectStream();
+                if (ws != null) {
+                    var isCurrentConnected = ws.IsAlive;
+                    if (isCurrentConnected) {
+                        if (!lastConnected) {
+                            EventManager.Instance.Send(OnReconnect.Create());
+                        }
+                    }
+                    if (!isCurrentConnected) {
+                        ConnectStream();
+                        if (lastConnected) {
+                            EventManager.Instance.Send(OnDisconnect.Create());
+                        }
+                    }
+
+                    lastConnected = isCurrentConnected;
                 }
+
             }
         }
 

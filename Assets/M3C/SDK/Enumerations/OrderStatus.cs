@@ -1,5 +1,6 @@
 ﻿namespace M3C.Finance.BinanceSdk.Enumerations
 {
+    // 订单状态
     public class OrderStatus
     {
         public OrderStatus(string value) { Value = value; }
@@ -8,6 +9,8 @@
 
         // 新建订单
         public static OrderStatus New => new OrderStatus("NEW");
+        // 部分成交
+        public static OrderStatus PartiallyFilled => new OrderStatus("PARTIALLY_FILLED");
         // 全部成交
         public static OrderStatus Filled => new OrderStatus("FILLED");
         // 已撤销
@@ -18,13 +21,6 @@
         public static OrderStatus NEW_INSURANCE => new OrderStatus("NEW_INSURANCE");
         // 自动减仓序列(强平)
         public static OrderStatus NEW_ADL => new OrderStatus("NEW_ADL");
-        
-        
-        public static OrderStatus PendingCancel => new OrderStatus("PENDING_CANCEL");
-        // 订单被拒绝
-        public static OrderStatus Rejected => new OrderStatus("REJECTED");
-        // 部分成交
-        public static OrderStatus PartiallyFilled => new OrderStatus("PARTIALLY_FILLED");
         
         public static implicit operator string(OrderStatus orderStatus) => orderStatus.Value;
         public static implicit operator OrderStatus(string text) => new OrderStatus(text);

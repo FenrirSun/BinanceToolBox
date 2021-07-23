@@ -27,6 +27,17 @@ public class StrategyLogic : LogicBase
                     strategy.OnAggTradeUpdate(evt.msg);
             }
         });
+        GetEventComp().Listen<OnWsOrderInfoUpdate>(evt =>
+        {
+            if (runningSymbol == null)
+                return;
+            
+            var strategyList = strategyDic[runningSymbol];
+            foreach (var strategy in strategyList) {
+                if (strategy != null && evt != null)
+                    strategy.OnWsOrderInfoUpdate(evt.msg);
+            }
+        });
         GetEventComp().Listen<OnOrderInfoUpdate>(evt =>
         {
             if (runningSymbol == null)
@@ -38,7 +49,28 @@ public class StrategyLogic : LogicBase
                     strategy.OnOrderInfoUpdate(evt.msg);
             }
         });
-
+        GetEventComp().Listen<OnDisconnect>(evt =>
+        {
+            if (runningSymbol == null)
+                return;
+            
+            var strategyList = strategyDic[runningSymbol];
+            foreach (var strategy in strategyList) {
+                if (strategy != null && evt != null)
+                    strategy.OnDisconnected();
+            }
+        });
+        GetEventComp().Listen<OnReconnect>(evt =>
+        {
+            if (runningSymbol == null)
+                return;
+            
+            var strategyList = strategyDic[runningSymbol];
+            foreach (var strategy in strategyList) {
+                if (strategy != null && evt != null)
+                    strategy.OnReconnect();
+            }
+        });
         GetEventComp().Listen<StartStrategyEvent>(evt => { StartStrategy(evt.Symbol, evt.Strategy); });
     }
 

@@ -71,7 +71,7 @@ namespace M3C.Finance.BinanceSdk
 
                 try {
                     var getRequestUrl = $"{BaseUrl}/{version}/{methodName}{parameterTextPrefix}{parameterText}";
-                    var postRequestUrl = $"{BaseUrl}/{version}/{methodName}";
+                    // var postRequestUrl = $"{BaseUrl}/{version}/{methodName}";
 
                     if (httpMethod == HttpMethod.Get) {
                         response = await client.DownloadStringTaskAsync(getRequestUrl);

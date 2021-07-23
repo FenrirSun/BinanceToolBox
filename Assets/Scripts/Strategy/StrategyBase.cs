@@ -51,19 +51,27 @@ public class StrategyBase
         }
     }
 
-    public virtual void OnOrderInfoUpdate(WsFuturesUserDataOrderTradeUpdateMessage msg) {
+    public virtual void OnWsOrderInfoUpdate(WsFuturesUserDataOrderTradeUpdateMessage msg) {
         if (msg.OrderInfo.Symbol.Value == symbol) {
+            OnWsDataOrderTradeUpdate(msg);
+        }
+    }
+    
+    public virtual void OnOrderInfoUpdate(GetOrderResponse msg) {
+        if (msg.Symbol == symbol.Value) {
             OnDataOrderTradeUpdate(msg);
         }
     }
     
-    protected virtual void OnPriceChange(decimal price) {
-        
-    }
+    public virtual void OnDisconnected() { }
+    
+    public virtual void OnReconnect() { }
+    
+    protected virtual void OnPriceChange(decimal price) { }
 
-    protected virtual void OnDataOrderTradeUpdate(WsFuturesUserDataOrderTradeUpdateMessage msg) {
-        
-    }
+    protected virtual void OnWsDataOrderTradeUpdate(WsFuturesUserDataOrderTradeUpdateMessage msg) { }
+
+    protected virtual void OnDataOrderTradeUpdate(GetOrderResponse msg) { }
 
     public T Clone<T>() where T : StrategyBase {
         object obj = null;

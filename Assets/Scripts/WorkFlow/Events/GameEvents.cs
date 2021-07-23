@@ -52,23 +52,43 @@ namespace GameEvents
         }
     }
 
+    // 断开连接
+    public class OnDisconnect : GameEventBase<OnDisconnect> { }
+    // 重新连接
+    public class OnReconnect : GameEventBase<OnReconnect> { }
+    
+    public class RefreshAccountList : GameEventBase<RefreshAccountList> { }
+    
     #endregion
 
     #region Signed Message
 
-    public class OnOrderInfoUpdate : GameEventBaseNoDefaultCreate<OnOrderInfoUpdate>
+    public class OnWsOrderInfoUpdate : GameEventBaseNoDefaultCreate<OnWsOrderInfoUpdate>
     {
         public WsFuturesUserDataOrderTradeUpdateMessage msg;
         public AccountData ad;
         
-        public static OnOrderInfoUpdate Create(WsFuturesUserDataOrderTradeUpdateMessage _msg, AccountData _ad) {
-            var result = new OnOrderInfoUpdate();
+        public static OnWsOrderInfoUpdate Create(WsFuturesUserDataOrderTradeUpdateMessage _msg, AccountData _ad) {
+            var result = new OnWsOrderInfoUpdate();
             result.msg = _msg;
             result.ad = _ad;
             return result;
         }
     }
 
+    public class OnOrderInfoUpdate : GameEventBaseNoDefaultCreate<OnOrderInfoUpdate>
+    {
+        public GetOrderResponse msg;
+        public AccountData ad;
+        
+        public static OnOrderInfoUpdate Create(GetOrderResponse _msg, AccountData _ad) {
+            var result = new OnOrderInfoUpdate();
+            result.msg = _msg;
+            result.ad = _ad;
+            return result;
+        }
+    }
+    
     public class StartStrategyEvent : GameEventBaseNoDefaultCreate<StartStrategyEvent>
     {
         public SymbolType Symbol;
@@ -133,6 +153,21 @@ namespace GameEvents
         }
     }
     
+    public class GetOrder : GameEventBaseNoDefaultCreate<GetOrder>
+    {
+        public AccountData data;
+        public SymbolType symbol;
+        public string clientOrderId;
+        
+        public static GetOrder Create(AccountData data, SymbolType symbol, string clientIOrderId) {
+            var result = new GetOrder();
+            result.data = data;
+            result.symbol = symbol;
+            result.clientOrderId = clientIOrderId;
+            return result;
+        }
+    }
+    
     public class CancelOrderByClientId : GameEventBaseNoDefaultCreate<CancelOrderByClientId>
     {
         public AccountData data;
@@ -150,6 +185,4 @@ namespace GameEvents
     
     #endregion
     
-    
-    public class RefreshAccountList : GameEventBase<RefreshAccountList> { }
 }

@@ -2,6 +2,7 @@ using UnityEngine.TextCore.LowLevel;
 
 namespace M3C.Finance.BinanceSdk.Enumerations
 {
+    // 事件执行类型
     public class EventStatus
     {
         public EventStatus(string value) { Value = value; }
@@ -12,7 +13,6 @@ namespace M3C.Finance.BinanceSdk.Enumerations
         public static EventStatus New => new EventStatus("NEW");
         // 已撤销
         public static EventStatus Canceled => new EventStatus("CANCELED");
-
         public static EventStatus Calculated => new EventStatus("CALCULATED");
         //  订单失效
         public static EventStatus Expired => new EventStatus("EXPIRED");

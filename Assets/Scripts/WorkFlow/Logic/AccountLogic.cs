@@ -12,7 +12,7 @@ public class AccountLogic : LogicBase
     private Dictionary<AccountData, BinanceFuturesClient> accountClientList;
     private Dictionary<AccountData, WebSocketClient_FuturesSigned> accountWsClientList;
     private Queue<GameEvent> eventList;
-    
+
     protected override void Awake() {
         accountClientList = new Dictionary<AccountData, BinanceFuturesClient>();
         accountWsClientList = new Dictionary<AccountData, WebSocketClient_FuturesSigned>();
@@ -46,6 +46,8 @@ public class AccountLogic : LogicBase
                 client.CancelOrder(evt.symbol, originalClientOrderId: evt.clientOrderId);
             }
         });
+
+        GetEventComp().Listen<GetOrder>(GetOrderInfo);
     }
 
     public async void AddAccount(AccountData account) {
@@ -86,8 +88,8 @@ public class AccountLogic : LogicBase
         if (accountClientList.ContainsKey(evt.data)) {
             var client = accountClientList[evt.data];
             try {
-                var result = await client.NewOrder(evt.orderInfo.Symbol, evt.orderInfo.OrderSide, evt.orderInfo.PositionSide, 
-                    evt.orderInfo.OrderType, TimeInForce.GoodUntilCanceled, evt.orderInfo.OriginalQuantity, evt.orderInfo.Price, 
+                var result = await client.NewOrder(evt.orderInfo.Symbol, evt.orderInfo.OrderSide, evt.orderInfo.PositionSide,
+                    evt.orderInfo.OrderType, TimeInForce.GoodUntilCanceled, evt.orderInfo.OriginalQuantity, evt.orderInfo.Price,
                     evt.orderInfo.ClientOrderId.ToString(), stopPrice: evt.orderInfo.StopPrice);
                 evt.onOrderSendSuccess(true);
             } catch (Exception e) {
@@ -96,6 +98,16 @@ public class AccountLogic : LogicBase
         }
     }
 
+    private async void GetOrderInfo(GetOrder evt) {
+        if (accountClientList.ContainsKey(evt.data)) {
+            var client = accountClientList[evt.data];
+            var response = await client.GetOrder(evt.symbol, evt.clientOrderId);
+            if (response != null) {
+                GetEventComp().Send(OnOrderInfoUpdate.Create(response, evt.data));
+            }
+        }
+    }
+    
     private void OnGetAccountUpdateMessage(WsFuturesUserDataAccountUpdateMessage e, AccountData ad) {
         if (e.AccountUpdateInfo != null) {
             var balanceInfo = e.AccountUpdateInfo.BalanceInfo;
@@ -148,7 +160,7 @@ public class AccountLogic : LogicBase
         }
 
         orderInfos.Sort((a, b) => (int) (b.time - a.time));
-        eventList.Enqueue(OnOrderInfoUpdate.Create(e, ad));
+        eventList.Enqueue(OnWsOrderInfoUpdate.Create(e, ad));
     }
 
     private void OnGetConfigUpdateMessage(WsFuturesUserDataAccountConfigUpdateMessage e, AccountData ad) {
