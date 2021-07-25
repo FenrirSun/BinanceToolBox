@@ -37,13 +37,22 @@ public class StreamDataLogic : LogicBase
             }
         });
         ec.Listen<SubscribeKLine>((evt) => { SubscribeKline(evt.symbol); });
+
+        GetEventComp().Listen<OnDisconnect>(evt => { UIManager.Instance.PushFloatDialog<ConnectingDialog>(ConnectingDialog.Prefab, 960); });
+        GetEventComp().Listen<OnReconnect>(evt =>
+        {
+            var dlg = UIManager.Instance.FindDialogByName(ConnectingDialog.Prefab, true);
+            if (dlg != null) {
+                UIManager.Instance.PopDialog(dlg, true);
+            }
+        });
     }
 
     // 注意回调并不在主线程
     private void OnGetMessage(MessageEventArgs e) {
         if (e == null || string.IsNullOrEmpty(e.Data))
             return;
-        
+
         // SDEBUG.InfoAsync("收到消息1", e.Data);
         var responseObject = JObject.Parse(e.Data);
         var eventType = (string) responseObject["e"];

@@ -85,7 +85,8 @@ public class StrategyGradientGridsTrade : StrategyBase
             if (b) {
                 tradeState = GradientGridsState.holdOrder;
             } else {
-                GameRuntime.Instance.StartCoroutine(SendOrder());
+                // GameRuntime.Instance.StartCoroutine(SendOrder());
+                StopStrategy();
             }
         }));
     }
@@ -239,7 +240,7 @@ public class StrategyGradientGridsTrade : StrategyBase
                 }));
         }
 
-        if (lastOrderInfo.state == StrategyOrderInfo.OrderState.waitForDeal) {
+        if (!isPending) {
             // 如果没有止盈止损单，该单结束，策略结束
             lastOrderInfo.state = StrategyOrderInfo.OrderState.finish;
             StopStrategy();

@@ -21,6 +21,10 @@
         public static OrderStatus NEW_INSURANCE => new OrderStatus("NEW_INSURANCE");
         // 自动减仓序列(强平)
         public static OrderStatus NEW_ADL => new OrderStatus("NEW_ADL");
+        // 等待撤销
+        public static OrderStatus PendingCancel => new OrderStatus("PENDING_CANCEL");
+        // 订单被拒绝
+        public static OrderStatus Rejected => new OrderStatus("REJECTED");
         
         public static implicit operator string(OrderStatus orderStatus) => orderStatus.Value;
         public static implicit operator OrderStatus(string text) => new OrderStatus(text);

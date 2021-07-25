@@ -38,7 +38,7 @@ public class MainPageBarDialog :GameDialogBase
         _pageBarView.marketBtn.onClick.AddListener(SwitchToMarket);
         _pageBarView.orderBtn.onClick.AddListener(SwitchToOrder);
         _pageBarView.accountBtn.onClick.AddListener(SwitchToAccount);
-        _pageBarView.clockBtn.onClick.AddListener(() => { UIManager.Instance.PushFloatDialog<LockDialog>(LockDialog.Prefab, 1000).Init(); });
+        _pageBarView.clockBtn.onClick.AddListener(() => { UIManager.Instance.PushFloatDialog<LockDialog>(LockDialog.Prefab, 950).Init(); });
     }
 
     private void SwitchToMarket()

@@ -1,8 +1,10 @@
+using System;
 using UnityEngine.TextCore.LowLevel;
 
 namespace M3C.Finance.BinanceSdk.Enumerations
 {
     // 事件执行类型
+    [Serializable]
     public class EventStatus
     {
         public EventStatus(string value) { Value = value; }

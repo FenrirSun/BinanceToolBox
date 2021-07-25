@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using GameEvents;
 using M3C.Finance.BinanceSdk;
 using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
@@ -281,18 +282,28 @@ public class DebugDialog : GameDialogBase
             view.logLabel.text = string.Empty;
         });
         
-        AddButton("序列化", () =>
+        // AddButton("序列化", () =>
+        // {
+        //     WebSocketTradesMessage msg = new WebSocketTradesMessage();
+        //     msg.Price = 1122;
+        //     msg.Quantity = 0.1m;
+        //     msg.Symbol = SymbolType.EOS;
+        //     msg.EventType = "TOT";
+        //     SDEBUG.InfoAsync("序列化1", msg.ToString());
+        //     var json = JsonConvert.SerializeObject(msg);
+        //     SDEBUG.InfoAsync("序列化2", json.ToString());
+        //     var m = JsonConvert.DeserializeObject<WebSocketTradesMessage>(json);
+        //     SDEBUG.InfoAsync("序列化3", m.ToString());
+        // });
+        
+        AddButton("模拟断网", () =>
         {
-            WebSocketTradesMessage msg = new WebSocketTradesMessage();
-            msg.Price = 1122;
-            msg.Quantity = 0.1m;
-            msg.Symbol = SymbolType.EOS;
-            msg.EventType = "TOT";
-            SDEBUG.InfoAsync("序列化1", msg.ToString());
-            var json = JsonConvert.SerializeObject(msg);
-            SDEBUG.InfoAsync("序列化2", json.ToString());
-            var m = JsonConvert.DeserializeObject<WebSocketTradesMessage>(json);
-            SDEBUG.InfoAsync("序列化3", m.ToString());
+            EventManager.Instance.Send(OnDisconnect.Create());
+        });
+        
+        AddButton("模拟重连", () =>
+        {
+            EventManager.Instance.Send(OnReconnect.Create());
         });
         
         // AddButton("显示等级", () =>
