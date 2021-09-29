@@ -183,6 +183,17 @@ namespace GameEvents
         }
     }
     
+    public class UpdateAccountInfo : GameEventBaseNoDefaultCreate<UpdateAccountInfo>
+    {
+        public AccountData data;
+        
+        public static UpdateAccountInfo Create(AccountData data) {
+            var result = new UpdateAccountInfo();
+            result.data = data;
+            return result;
+        }
+    }
+    
     #endregion
     
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using M3C.Finance.BinanceSdk;
 using M3C.Finance.BinanceSdk.Enumerations;
 using M3C.Finance.BinanceSdk.ResponseObjects;
+using UnityEngine;
 
 public class UserData : UserDataBase
 {
@@ -63,64 +64,16 @@ public class UserData : UserDataBase
     
     public void OnGetAccountInfo(AccountData ad, FuturesUserDataAccountInfoMessage info) {
         var positions = info.positions;
-        var adTradeInfos = ad.GetTradeInfos();
+        var adTradeInfos = ad.GetPositionInfos();
         if (positions != null && positions.Count > 0) {
             foreach (var position in positions) {
+                var oldInfo = adTradeInfos.Find((t) => t.symbol == position.symbol && t.positionSide == position.positionSide);
+                if (oldInfo != null) {
+                    adTradeInfos.Remove(oldInfo);
+                }
+                    
                 adTradeInfos.Add(position);
             }
         }
-    }
-}
-
-[Serializable]
-public class AccountData
-{
-    public int id;
-    public string name;
-    public string apiKey;
-    public string secretKey;
-    public float orderRatio;
-    
-    // 资产信息
-    [NonSerialized]
-    private FuturesUserDataAccountBalanceMessage BalanceInfo;
-    public void SetBalanceInfo(FuturesUserDataAccountBalanceMessage info) {
-        BalanceInfo = info;
-    }
-    
-    public FuturesUserDataAccountBalanceMessage GetBalanceInfo() {
-        return BalanceInfo;
-    }
-    
-    // 仓位信息
-    [NonSerialized]
-    private List<FuturesUserDataPositionInfo> TradeInfos;
-    public List<FuturesUserDataPositionInfo> GetTradeInfos() {
-        if(TradeInfos == null)
-            TradeInfos = new List<FuturesUserDataPositionInfo>();
-        return TradeInfos;
-    }
-    
-    // 订单信息
-    [NonSerialized]
-    private List<FuturesUserDataOpenOrderInfoMessage> OrderInfos;
-    public List<FuturesUserDataOpenOrderInfoMessage> GetOrderInfos() {
-        if(OrderInfos == null)
-            OrderInfos = new List<FuturesUserDataOpenOrderInfoMessage>();
-
-        return OrderInfos;
-    }
-    
-    public List<FuturesUserDataOpenOrderInfoMessage> GetOrderInfos(SymbolType symbol) {
-        if(OrderInfos == null)
-            OrderInfos = new List<FuturesUserDataOpenOrderInfoMessage>();
-
-        List<FuturesUserDataOpenOrderInfoMessage> result = new List<FuturesUserDataOpenOrderInfoMessage>();
-        foreach (var order in OrderInfos) {
-            if (order.symbol.Value == symbol) {
-                result.Add(order);
-            }
-        }
-        return result;
     }
 }

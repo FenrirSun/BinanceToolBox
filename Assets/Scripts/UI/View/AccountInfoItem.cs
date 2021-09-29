@@ -11,7 +11,7 @@ public class AccountInfoItem : MonoBehaviour
     public Text numTxt;
     public Text orderRatioTxt;
     // public GameObject activeMark;
-    public Button deleteBtn;
+    public Button updateBtn;
     public Button configBtn;
     public Text posTextTemp;
 
@@ -26,18 +26,13 @@ public class AccountInfoItem : MonoBehaviour
     public void SetItemData(AccountData data) {
         _accountData = data;
         nameTxt.text = data.name;
-        deleteBtn.onClick.RemoveAllListeners();
-        deleteBtn.onClick.AddListener(() =>
-        {
-            var strategyLogic = GameRuntime.Instance.GetLogic<StrategyLogic>();
-            if (strategyLogic.IsRunningStrategy()) {
-                CommonMessageDialog.OpenWithOneButton("当前有执行中的策略，不可删除账户", null);
-                return;
-            }
 
-            GameRuntime.Instance.GetLogic<AccountLogic>().DeleteAccount(data);
-            EventManager.Instance.Send(RefreshAccountList.Create());
+        updateBtn.onClick.RemoveAllListeners();
+        updateBtn.onClick.AddListener(() => 
+        {
+            EventManager.Instance.Send(UpdateAccountInfo.Create(data));
         });
+        
         configBtn.onClick.RemoveAllListeners();
         configBtn.onClick.AddListener(() =>
         {
@@ -59,7 +54,7 @@ public class AccountInfoItem : MonoBehaviour
                     orderRatioTxt.text = _accountData.orderRatio.ToString();
                 }
 
-                var tradeInfos = _accountData.GetTradeInfos();
+                var tradeInfos = _accountData.GetPositionInfos();
                 positionCache.Display(tradeInfos, posTextTemp.transform.parent, (text, tradeInfo, index) =>
                 {
                     if (tradeInfo.positionAmt == 0) {

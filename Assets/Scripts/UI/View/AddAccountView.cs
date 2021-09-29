@@ -7,6 +7,7 @@ public class AddAccountView : DialogViewBase
     public Button closeBtn;
     public Button addAccountBtn;
     public Button configAccountBtn;
+    public Button deleteAccountBtn;
     
     public InputField nameInput;
     public InputField apiInput;

@@ -17,12 +17,12 @@ public class AddAccountDialog : GameDialogBase
 
     public void Init(AccountData ad) {
         if (ad == null) {
-            _view.addAccountBtn.gameObject.SetActive(true);
-            _view.configAccountBtn.gameObject.SetActive(false);
+            _view.addAccountBtn.transform.parent.gameObject.SetActive(true);
+            _view.configAccountBtn.transform.parent.gameObject.SetActive(false);
         } else {
             account = ad;
-            _view.addAccountBtn.gameObject.SetActive(false);
-            _view.configAccountBtn.gameObject.SetActive(true);
+            _view.addAccountBtn.transform.parent.gameObject.SetActive(false);
+            _view.configAccountBtn.transform.parent.gameObject.SetActive(true);
             _view.nameInput.text = account.name;
             _view.apiInput.text = account.apiKey;
             _view.secretInput.text = account.secretKey;
@@ -36,6 +36,22 @@ public class AddAccountDialog : GameDialogBase
         _view.closeBtn.onClick.AddListener(OnClose);
         _view.addAccountBtn.onClick.AddListener(CreateAccount);
         _view.configAccountBtn.onClick.AddListener(ConfigAccount);
+
+        if (account != null) {
+            _view.deleteAccountBtn.onClick.RemoveAllListeners();
+            _view.deleteAccountBtn.onClick.AddListener(() =>
+            {
+                var strategyLogic = GameRuntime.Instance.GetLogic<StrategyLogic>();
+                if (strategyLogic.IsRunningStrategy()) {
+                    CommonMessageDialog.OpenWithOneButton("当前有执行中的策略，不可删除账户", null);
+                    return;
+                }
+
+                GameRuntime.Instance.GetLogic<AccountLogic>().DeleteAccount(account);
+                EventManager.Instance.Send(RefreshAccountList.Create());
+            });
+            OnClose();
+        }
     }
 
     private void CreateAccount() {

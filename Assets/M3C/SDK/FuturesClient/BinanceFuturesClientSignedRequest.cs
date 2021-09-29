@@ -12,9 +12,10 @@ namespace M3C.Finance.BinanceSdk
     public partial class BinanceFuturesClient
     {
         public async Task<FuturesUserDataAccountInfoMessage> GetAccountInfo() {
-            var response = await SendRequest<FuturesUserDataAccountInfoMessage>("account", ApiVersion.Version2, ApiMethodType.Signed, HttpMethod.Get);
-                            
-                            
+            var response = await SendRequest<FuturesUserDataAccountInfoMessage>("account", ApiVersion.Version2,
+                ApiMethodType.Signed, HttpMethod.Get);
+
+            GameRuntime.Instance.UserData.OnGetAccountInfo(Ad, response);
             return response;
         }
 
@@ -38,25 +39,25 @@ namespace M3C.Finance.BinanceSdk
             decimal? stopPrice = null, decimal? icebergQuantity = null, long? recvWindow = null) {
             var parameters = new Dictionary<string, string>
             {
-                {"symbol", symbol},
-                {"side", side},
-                {"positionSide", posSide},
-                {"type", orderType},
-                {"timeInForce", timeInForce},
-                {"quantity", quantity.ToString(CultureInfo.InvariantCulture)},
-                {"price", price.ToString(CultureInfo.InvariantCulture)}
+                { "symbol", symbol },
+                { "side", side },
+                { "positionSide", posSide },
+                { "type", orderType },
+                { "timeInForce", timeInForce },
+                { "quantity", quantity.ToString(CultureInfo.InvariantCulture) },
+                { "price", price.ToString(CultureInfo.InvariantCulture) }
             };
 
             CheckAndAddReceiveWindow(recvWindow, parameters);
-            
+
             if (!string.IsNullOrEmpty(newClientOrderId)) {
                 parameters.Add("newClientOrderId", newClientOrderId);
             }
-            
+
             if ((orderType == OrderType.STOP || orderType == OrderType.TAKE_PROFIT) && stopPrice.HasValue) {
                 parameters.Add("stopPrice", stopPrice.Value.ToString(CultureInfo.InvariantCulture));
             }
-            
+
             if (icebergQuantity.HasValue) {
                 parameters.Add("icebergQty", icebergQuantity.Value.ToString(CultureInfo.InvariantCulture));
             }
@@ -69,7 +70,7 @@ namespace M3C.Finance.BinanceSdk
             string newClientOrderId = null, long? recvWindow = null) {
             var parameters = new Dictionary<string, string>
             {
-                {"symbol", symbol},
+                { "symbol", symbol },
             };
 
             CheckAndAddReceiveWindow(recvWindow, parameters);
@@ -94,7 +95,7 @@ namespace M3C.Finance.BinanceSdk
         public async Task<GetOrderResponse> GetOrder(string symbol, string originalClientOrderId, long? recvWindow = null) {
             var parameters = new Dictionary<string, string>
             {
-                {"symbol", symbol},
+                { "symbol", symbol },
             };
 
             CheckAndAddReceiveWindow(recvWindow, parameters);
@@ -102,7 +103,7 @@ namespace M3C.Finance.BinanceSdk
             // if (orderId.HasValue) {
             //     parameters.Add("orderId", orderId.Value.ToString(CultureInfo.InvariantCulture));
             // }
-            
+
             if (!string.IsNullOrEmpty(originalClientOrderId)) {
                 parameters.Add("origClientOrderId", originalClientOrderId);
             }
@@ -114,16 +115,17 @@ namespace M3C.Finance.BinanceSdk
             return await SendRequest<GetOrderResponse>("order", ApiVersion.Version1, ApiMethodType.Signed,
                 HttpMethod.Get, parameters);
         }
-        
+
         public async Task<IEnumerable<OrderInfo>> CurrentOpenOrders(string symbol, long? recvWindow = null) {
             var parameters = new Dictionary<string, string>
             {
-                {"symbol", symbol},
+                { "symbol", symbol },
             };
 
             CheckAndAddReceiveWindow(recvWindow, parameters);
 
-            return await SendRequest<List<OrderInfo>>("openOrders", ApiVersion.Version3, ApiMethodType.Signed, HttpMethod.Get, parameters);
+            return await SendRequest<List<OrderInfo>>("openOrders", ApiVersion.Version3,
+                ApiMethodType.Signed, HttpMethod.Get, parameters);
         }
 
         private void CheckAndAddReceiveWindow(long? recvWindow, IDictionary<string, string> parameters) {

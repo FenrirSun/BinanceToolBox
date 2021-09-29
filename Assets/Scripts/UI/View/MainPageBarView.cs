@@ -6,6 +6,7 @@ public class MainPageBarView : DialogViewBase
     public GameObject mainRoot;
     public Button marketBtn;
     public Button orderBtn;
+    public Button positionBtn;
     public Button accountBtn;
     public Button clockBtn;
 }

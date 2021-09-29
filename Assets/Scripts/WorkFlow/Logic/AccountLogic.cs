@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DigitalRubyShared;
 using GameEvents;
 using M3C.Finance.BinanceSdk;
 using M3C.Finance.BinanceSdk.Enumerations;
@@ -46,8 +47,13 @@ public class AccountLogic : LogicBase
                 client.CancelOrder(evt.symbol, originalClientOrderId: evt.clientOrderId);
             }
         });
-
+        
         GetEventComp().Listen<GetOrder>(GetOrderInfo);
+        
+        GetEventComp().Listen<UpdateAccountInfo>((evt) =>
+        {
+            UpdateAccount(evt.data);
+        });
     }
 
     public async void AddAccount(AccountData account) {
@@ -67,6 +73,16 @@ public class AccountLogic : LogicBase
         }
     }
 
+    private async void UpdateAccount(AccountData account) {
+        if (accountClientList.ContainsKey(account)) {
+            var client = accountClientList[account];
+            if (client != null) {
+                var resultBalance = await client.GetBalanceInfo();
+                var resultAccount = await client.GetAccountInfo();
+            }
+        }
+    }
+    
     public void DeleteAccount(AccountData account) {
         if (accountClientList.ContainsKey(account)) {
             accountClientList.Remove(account);
@@ -80,6 +96,12 @@ public class AccountLogic : LogicBase
         GameRuntime.Instance.UserData.RemoveAccount(account.id);
     }
 
+    public void OnUpdateAccountInfo(UpdateAccountInfo msg) {
+        if (accountClientList.ContainsKey(msg.data)) {
+           
+        }
+    }
+    
     public List<AccountData> GetAccounts() {
         return accountClientList.Keys.ToList();
     }
@@ -123,7 +145,7 @@ public class AccountLogic : LogicBase
             var tradeInfos = e.AccountUpdateInfo.TradeInfo;
             if (tradeInfos != null && tradeInfos.Count > 0) {
                 foreach (var trade in tradeInfos) {
-                    var adTrades = ad.GetTradeInfos();
+                    var adTrades = ad.GetPositionInfos();
                     bool isUpdate = false;
                     for (int i = 0; i < adTrades.Count; ++i) {
                         if (adTrades[i].symbol.Value == trade.Symbol && adTrades[i].positionSide.Value == trade.PositionSide) {
