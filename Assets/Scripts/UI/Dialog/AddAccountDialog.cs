@@ -10,7 +10,7 @@ public class AddAccountDialog : GameDialogBase
     public const string Prefab = "Add_Account_Dialog";
     private AddAccountView _view;
     private AccountData account;
-    
+
     protected override void SetView(DialogViewBase v) {
         _view = v as AddAccountView;
     }
@@ -28,7 +28,7 @@ public class AddAccountDialog : GameDialogBase
             _view.secretInput.text = account.secretKey;
             _view.orderRatioInput.text = account.orderRatio.ToString();
         }
-        
+
         AddListener();
     }
 
@@ -49,8 +49,8 @@ public class AddAccountDialog : GameDialogBase
 
                 GameRuntime.Instance.GetLogic<AccountLogic>().DeleteAccount(account);
                 EventManager.Instance.Send(RefreshAccountList.Create());
+                OnClose();
             });
-            OnClose();
         }
     }
 
@@ -86,7 +86,7 @@ public class AddAccountDialog : GameDialogBase
             OnClose();
         }
     }
-    
+
     public override void OnClose() {
         base.OnClose();
     }

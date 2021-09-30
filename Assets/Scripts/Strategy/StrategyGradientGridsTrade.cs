@@ -79,7 +79,7 @@ public class StrategyGradientGridsTrade : StrategyBase
 
     IEnumerator SendOrder() {
         yield return null;
-        var newOrder = Utility.GenerateOrderInfo(lastOrderInfo, 1);
+        var newOrder = Utility.GenerateGradientOrderInfo(lastOrderInfo, 1);
         EventManager.Instance.Send(NewOrder.Create(accountData, newOrder, b =>
         {
             if (b) {
@@ -216,7 +216,7 @@ public class StrategyGradientGridsTrade : StrategyBase
     private void OnTradeFinish() {
         if (lastOrderInfo.takeProfitPrice > (decimal) float.Epsilon) {
             isPending = true;
-            EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 2),
+            EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateGradientOrderInfo(lastOrderInfo, 2),
                 (isSuccess) =>
                 {
                     if (isSuccess) {
@@ -229,7 +229,7 @@ public class StrategyGradientGridsTrade : StrategyBase
 
         if (lastOrderInfo.stopPrice > (decimal) float.Epsilon) {
             isPending = true;
-            EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateOrderInfo(lastOrderInfo, 3),
+            EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateGradientOrderInfo(lastOrderInfo, 3),
                 (isSuccess) =>
                 {
                     if (isSuccess) {

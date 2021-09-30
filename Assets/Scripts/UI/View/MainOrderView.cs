@@ -5,6 +5,9 @@ using UnityEngine.UI;
 public class MainOrderView : DialogViewBase
 {
     public GameObject mainRoot;
+    public Button newOrderBtn;
+    public Button updateOrderBtn;
+
     public Button newStrategyBtn;
     public Button checkStrategyBtn;
     public Button stopStrategyBtn;

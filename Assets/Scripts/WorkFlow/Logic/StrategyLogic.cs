@@ -18,60 +18,63 @@ public class StrategyLogic : LogicBase
     private void AddListener() {
         GetEventComp().Listen<OnAggTradeUpdate>(evt =>
         {
-            if (runningSymbol == null)
+            if (runningSymbol == null || evt == null)
                 return;
             
             var strategyList = strategyDic[runningSymbol];
             foreach (var strategy in strategyList) {
-                if (strategy != null && evt != null)
+                if (strategy != null && strategy.state == StrategyState.Executing)
                     strategy.OnAggTradeUpdate(evt.msg);
             }
         });
         GetEventComp().Listen<OnWsOrderInfoUpdate>(evt =>
         {
-            if (runningSymbol == null)
+            if (runningSymbol == null || evt == null)
                 return;
             
             var strategyList = strategyDic[runningSymbol];
             foreach (var strategy in strategyList) {
-                if (strategy != null && evt != null)
+                if (strategy != null && strategy.state == StrategyState.Executing)
                     strategy.OnWsOrderInfoUpdate(evt.msg);
             }
         });
         GetEventComp().Listen<OnOrderInfoUpdate>(evt =>
         {
-            if (runningSymbol == null)
+            if (runningSymbol == null || evt == null)
                 return;
             
             var strategyList = strategyDic[runningSymbol];
             foreach (var strategy in strategyList) {
-                if (strategy != null && evt != null)
+                if (strategy != null && strategy.state == StrategyState.Executing)
                     strategy.OnOrderInfoUpdate(evt.msg);
             }
         });
         GetEventComp().Listen<OnDisconnect>(evt =>
         {
-            if (runningSymbol == null)
+            if (runningSymbol == null || evt == null)
                 return;
             
             var strategyList = strategyDic[runningSymbol];
             foreach (var strategy in strategyList) {
-                if (strategy != null && evt != null)
+                if (strategy != null && strategy.state == StrategyState.Executing)
                     strategy.OnDisconnected();
             }
         });
         GetEventComp().Listen<OnReconnect>(evt =>
         {
-            if (runningSymbol == null)
+            if (runningSymbol == null || evt == null)
                 return;
             
             var strategyList = strategyDic[runningSymbol];
             foreach (var strategy in strategyList) {
-                if (strategy != null && evt != null)
+                if (strategy != null && strategy.state == StrategyState.Executing)
                     strategy.OnReconnect();
             }
         });
-        GetEventComp().Listen<StartStrategyEvent>(evt => { StartStrategy(evt.Symbol, evt.Strategy); });
+        GetEventComp().Listen<StartStrategyEvent>(evt =>
+        {
+            StartStrategy(evt.Symbol, evt.Strategy);
+        });
     }
 
     private void StartStrategy<T>(SymbolType symbol, T strategy) where T : StrategyBase {

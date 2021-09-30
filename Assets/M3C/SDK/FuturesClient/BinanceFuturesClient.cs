@@ -84,7 +84,8 @@ namespace M3C.Finance.BinanceSdk
                         throw new BinanceRestApiException(-1, "net work error");
                     }
                     using (var reader = new StreamReader(webException.Response.GetResponseStream(), Encoding.UTF8)) {
-                        var errorObject = JObject.Parse(reader.ReadToEnd());
+                        var t = reader.ReadToEnd();
+                        var errorObject = JObject.Parse(t);
                         var errorCode = (int) errorObject["code"];
                         var errorMessage = (string) errorObject["msg"];
                         CommonMessageDialog.OpenWithOneButton($"消息发送失败：错误码：{errorCode.ToString()}; 错误信息：{errorMessage}", null);

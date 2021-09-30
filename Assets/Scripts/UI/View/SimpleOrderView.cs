@@ -13,6 +13,7 @@ public class SimpleOrderView : DialogViewBase
     public InputField takeProfitInput;
     public Text symbolTxt;
     
+    public Dropdown sellOrBuyDropdown;
     public Dropdown directionDropdown;
     public Dropdown orderTypeDropdown;
 }
