@@ -312,17 +312,11 @@
  <Reference Include="websocket-sharp">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Assets/Packages/websocket-sharp.dll</HintPath>
  </Reference>
- <Reference Include="Unity.Plastic.Antlr3.Runtime">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.unity.collab-proxy@1.7.1/Lib/Editor/PlasticSCM/Unity.Plastic.Antlr3.Runtime.dll</HintPath>
- </Reference>
  <Reference Include="System.Runtime.CompilerServices.Unsafe">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
  </Reference>
  <Reference Include="Microsoft.Bcl.AsyncInterfaces">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
- </Reference>
- <Reference Include="log4netPlastic">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.unity.collab-proxy@1.7.1/Lib/Editor/PlasticSCM/log4netPlastic.dll</HintPath>
  </Reference>
  <Reference Include="System.Threading.Tasks.Extensions">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/System.Threading.Tasks.Extensions.dll</HintPath>
@@ -334,10 +328,7 @@
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.joshclose.csvhelper@13.0.0/CsvHelper/Plugins/CsvHelper.dll</HintPath>
  </Reference>
  <Reference Include="Newtonsoft.Json">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0/Runtime/Newtonsoft.Json.dll</HintPath>
- </Reference>
- <Reference Include="unityplastic">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.unity.collab-proxy@1.7.1/Lib/Editor/PlasticSCM/unityplastic.dll</HintPath>
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Assets/Packages/Newtonsoft.Json.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>
@@ -702,9 +693,6 @@
  <Reference Include="UnityEditor.TestRunner">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
  </Reference>
- <Reference Include="CSVHelper.Sample">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CSVHelper.Sample.dll</HintPath>
- </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
@@ -729,11 +717,11 @@
  <Reference Include="UnityEngine.UI">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
  </Reference>
+ <Reference Include="CSVHelper.Sample">
+ <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CSVHelper.Sample.dll</HintPath>
+ </Reference>
  <Reference Include="CsvHelper.Support">
  <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/CsvHelper.Support.dll</HintPath>
- </Reference>
- <Reference Include="Unity.PlasticSCM.Editor">
- <HintPath>/Users/hong.sun/Projects/BinanceToolBox/Library/ScriptAssemblies/Unity.PlasticSCM.Editor.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

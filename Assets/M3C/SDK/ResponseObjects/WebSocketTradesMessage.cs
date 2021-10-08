@@ -30,7 +30,8 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
         public bool IsBuyerAMaker { get; set; }
 
         [JsonConstructor]
-        public WebSocketTradesMessage() {
+        public WebSocketTradesMessage(SymbolType s) {
+            this.Symbol = Symbol;
         }
     }
 }

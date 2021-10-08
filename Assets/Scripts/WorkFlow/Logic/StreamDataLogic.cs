@@ -58,9 +58,16 @@ public class StreamDataLogic : LogicBase
         var eventType = (string) responseObject["e"];
         string klineType = $"continuousKline_{curKlineInterval}";
         if (eventType == "aggTrade") {
-            var tradeData = JsonConvert.DeserializeObject<WebSocketTradesMessage>(e.Data);
-            lastTradesMessages[tradeData.Symbol] = tradeData;
-            eventList.Enqueue(OnAggTradeUpdate.Create(tradeData));
+            SDEBUG.InfoAsync("消息", e.Data);
+            try {
+                var tradeData = JsonConvert.DeserializeObject<WebSocketTradesMessage>(e.Data);
+                lastTradesMessages[tradeData.Symbol] = tradeData;
+                eventList.Enqueue(OnAggTradeUpdate.Create(tradeData));
+            } catch (Exception exception) {
+                SDEBUG.ErrorAsync(exception.Message);
+                Console.WriteLine(exception);
+                throw;
+            }
         } else if (eventType == klineType) {
             var klineData = JsonConvert.DeserializeObject<WebSocketKlineMessage>(e.Data);
             eventList.Enqueue(OnKlineUpdate.Create(klineData));
