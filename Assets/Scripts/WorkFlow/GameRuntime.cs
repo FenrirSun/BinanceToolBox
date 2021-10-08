@@ -19,10 +19,10 @@ public class GameRuntime : GameRuntimeBase<GameRuntime, UserData>
             _userData = new UserData();
         base.Awake();
 
-#if !ENV_PRODUCTION
+// #if !ENV_PRODUCTION
         DebugDialog.dialog = UIManager.Instance.PushFloatDialog<DebugDialog>(DebugDialog.Prefab, 1000);
         DebugDialog.dialog.Init();
-#endif
+// #endif
         // TableManager.Instance.LoadAllTables();
         AddAllLogic();
         InitDialog();

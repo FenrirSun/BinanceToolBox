@@ -28,5 +28,9 @@ namespace M3C.Finance.BinanceSdk.ResponseObjects
 
         [JsonProperty(PropertyName = "m")]
         public bool IsBuyerAMaker { get; set; }
+
+        [JsonConstructor]
+        public WebSocketTradesMessage() {
+        }
     }
 }
