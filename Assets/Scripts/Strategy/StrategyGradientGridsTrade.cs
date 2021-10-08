@@ -80,9 +80,9 @@ public class StrategyGradientGridsTrade : StrategyBase
     IEnumerator SendOrder() {
         yield return null;
         var newOrder = Utility.GenerateGradientOrderInfo(lastOrderInfo, 1);
-        EventManager.Instance.Send(NewOrder.Create(accountData, newOrder, b =>
+        EventManager.Instance.Send(NewOrder.Create(accountData, newOrder, e =>
         {
-            if (b) {
+            if (e == null) {
                 tradeState = GradientGridsState.holdOrder;
             } else {
                 // GameRuntime.Instance.StartCoroutine(SendOrder());
@@ -217,9 +217,9 @@ public class StrategyGradientGridsTrade : StrategyBase
         if (lastOrderInfo.takeProfitPrice > (decimal) float.Epsilon) {
             isPending = true;
             EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateGradientOrderInfo(lastOrderInfo, 2),
-                (isSuccess) =>
+                (e) =>
                 {
-                    if (isSuccess) {
+                    if (e == null) {
                         lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
                     }
 
@@ -230,9 +230,9 @@ public class StrategyGradientGridsTrade : StrategyBase
         if (lastOrderInfo.stopPrice > (decimal) float.Epsilon) {
             isPending = true;
             EventManager.Instance.Send(NewOrder.Create(accountData, Utility.GenerateGradientOrderInfo(lastOrderInfo, 3),
-                (isSuccess) =>
+                (e) =>
                 {
-                    if (isSuccess) {
+                    if (e == null) {
                         lastOrderInfo.state = StrategyOrderInfo.OrderState.waitComfirmStopOrTakeprofit;
                     }
 

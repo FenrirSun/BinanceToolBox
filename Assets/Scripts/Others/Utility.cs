@@ -13,7 +13,21 @@ public static class Utility
         newOrder.OriginalQuantity = strategyOrder.quantity;
         newOrder.PositionSide = strategyOrder.posSide;
         newOrder.ClientOrderId = strategyOrder.orderClientId.ToString();
-        newOrder.OrderSide = strategyOrder.side;
+        // 迷惑项，把可读参数转化为实际传递的参数
+        if (strategyOrder.side == OrderSide.Buy) {
+            if (strategyOrder.posSide == PositionSide.LONG) {
+                newOrder.OrderSide = OrderSide.Buy;
+            } else if(strategyOrder.posSide == PositionSide.SHORT) {
+                newOrder.OrderSide = OrderSide.Sell;
+            }
+        } else {
+            if (strategyOrder.posSide == PositionSide.LONG) {
+                newOrder.OrderSide = OrderSide.Sell;
+            } else if(strategyOrder.posSide == PositionSide.SHORT) {
+                newOrder.OrderSide = OrderSide.Buy;
+            }
+        }
+
         newOrder.reduceOnly = strategyOrder.side == OrderSide.Sell ? "true" : "false";
         newOrder.OrderType = strategyOrder.orderType;
         return newOrder;

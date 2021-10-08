@@ -36,7 +36,7 @@ public class AccountLogic : LogicBase
         {
             if (accountClientList.ContainsKey(evt.data)) {
                 var client = accountClientList[evt.data];
-                client.CancelOrder(evt.symbol, evt.orderId);
+                client?.CancelOrder(evt.symbol, evt.orderId);
             }
         });
 
@@ -44,11 +44,15 @@ public class AccountLogic : LogicBase
         {
             if (accountClientList.ContainsKey(evt.data)) {
                 var client = accountClientList[evt.data];
-                client.CancelOrder(evt.symbol, originalClientOrderId: evt.clientOrderId);
+                client?.CancelOrder(evt.symbol, originalClientOrderId: evt.clientOrderId);
             }
         });
         
         GetEventComp().Listen<GetOrder>(GetOrderInfo);
+        
+        GetEventComp().Listen<GetCurrentOrders>(GetCurrentOpenOrderInfo);
+        
+        GetEventComp().Listen<GetAllOrders>(GetAllOrderInfo);
         
         GetEventComp().Listen<UpdateAccountInfo>((evt) =>
         {
@@ -68,7 +72,7 @@ public class AccountLogic : LogicBase
             var resultAccount = await client.GetAccountInfo();
 
             var wsClient = new WebSocketClient_FuturesSigned();
-            wsClient.ConnectUserDataEndpoint(client, OnGetAccountUpdateMessage, OnGetOrderTradeUpdateMessage, OnGetConfigUpdateMessage);
+            wsClient?.ConnectUserDataEndpoint(client, OnGetAccountUpdateMessage, OnGetOrderTradeUpdateMessage, OnGetConfigUpdateMessage);
             accountWsClientList[account] = wsClient;
         }
     }
@@ -113,9 +117,11 @@ public class AccountLogic : LogicBase
                 var result = await client.NewOrder(evt.orderInfo.Symbol, evt.orderInfo.OrderSide, evt.orderInfo.PositionSide,
                     evt.orderInfo.OrderType, TimeInForce.GoodUntilCanceled, evt.orderInfo.OriginalQuantity, evt.orderInfo.Price,
                     evt.orderInfo.ClientOrderId.ToString(), stopPrice: evt.orderInfo.StopPrice);
-                evt.onOrderSendSuccess(true);
+                var callBack = evt.onOrderSendSuccess;
+                evt.onOrderSendSuccess = null;
+                callBack?.Invoke(null);
             } catch (Exception e) {
-                evt.onOrderSendSuccess(false);
+                evt.onOrderSendSuccess?.Invoke(e);
             }
         }
     }
@@ -128,6 +134,59 @@ public class AccountLogic : LogicBase
                 GetEventComp().Send(OnOrderInfoUpdate.Create(response, evt.data));
             }
         }
+    }
+    
+    private async void GetCurrentOpenOrderInfo(GetCurrentOrders evt) {
+        if (accountClientList.ContainsKey(evt.data)) {
+            var client = accountClientList[evt.data];
+            IEnumerable<OrderInfo> response = await client.CurrentOpenOrders(evt.symbol);
+            if (response != null) {
+                var ad = evt.data;
+                List<FuturesUserDataOpenOrderInfoMessage> orderInfos = ad.GetOrderInfos();
+                SaveOrderInfo(orderInfos, response, evt.symbol);
+            }
+        }
+    }
+
+    private async void GetAllOrderInfo(GetAllOrders evt) {
+        if (accountClientList.ContainsKey(evt.data)) {
+            var client = accountClientList[evt.data];
+            IEnumerable<OrderInfo> response = await client.AllOrders(evt.symbol);
+            if (response != null) {
+                var ad = evt.data;
+                List<FuturesUserDataOpenOrderInfoMessage> orderInfos = ad.GetOrderInfos();
+                SaveOrderInfo(orderInfos, response, evt.symbol);
+            }
+        }
+    }
+    
+    private void SaveOrderInfo(List<FuturesUserDataOpenOrderInfoMessage> orderInfos, IEnumerable<OrderInfo> response, SymbolType symbolType) {
+        for (int i = orderInfos.Count - 1; i >= 0; --i) {
+            var info = orderInfos[i];
+            if (info.symbol == symbolType) {
+                orderInfos.RemoveAt(i);
+            }
+        }
+
+        foreach (var orderInfo in response) {
+            var newInfoMsg = new FuturesUserDataOpenOrderInfoMessage();
+            newInfoMsg.orderId = orderInfo.OrderId;
+            newInfoMsg.price = orderInfo.Price;
+            newInfoMsg.side = orderInfo.OrderSide;
+            newInfoMsg.positionSide = orderInfo.PositionSide;
+            newInfoMsg.stopPrice = orderInfo.StopPrice;
+            newInfoMsg.symbol = orderInfo.Symbol;
+            newInfoMsg.status = orderInfo.Status;
+            newInfoMsg.time = orderInfo.Time;
+            newInfoMsg.type = orderInfo.OrderType;
+            newInfoMsg.reduceOnly = orderInfo.reduceOnly == "true";
+            newInfoMsg.origQty = orderInfo.OriginalQuantity;
+            newInfoMsg.executedQty = orderInfo.ExecutedQuantity;
+            newInfoMsg.clientOrderId = orderInfo.ClientOrderId;
+            orderInfos.Add(newInfoMsg);
+        }
+                
+        orderInfos.Sort((a, b) => (int) (b.time - a.time));    
     }
     
     private void OnGetAccountUpdateMessage(WsFuturesUserDataAccountUpdateMessage e, AccountData ad) {

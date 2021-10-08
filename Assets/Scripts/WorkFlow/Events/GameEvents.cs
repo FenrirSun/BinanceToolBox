@@ -127,9 +127,9 @@ namespace GameEvents
     {
         public AccountData data;
         public OrderInfo orderInfo;
-        public Action<bool> onOrderSendSuccess;
+        public Action<Exception> onOrderSendSuccess;
 
-        public static NewOrder Create(AccountData account, OrderInfo order, Action<bool> callback) {
+        public static NewOrder Create(AccountData account, OrderInfo order, Action<Exception> callback) {
             var result = new NewOrder();
             result.data = account;
             result.orderInfo = order;
@@ -164,6 +164,32 @@ namespace GameEvents
             result.data = data;
             result.symbol = symbol;
             result.clientOrderId = clientIOrderId;
+            return result;
+        }
+    }
+    
+    public class GetCurrentOrders : GameEventBaseNoDefaultCreate<GetCurrentOrders>
+    {
+        public AccountData data;
+        public SymbolType symbol;
+        
+        public static GetCurrentOrders Create(AccountData data, SymbolType symbol) {
+            var result = new GetCurrentOrders();
+            result.data = data;
+            result.symbol = symbol;
+            return result;
+        }
+    }
+    
+    public class GetAllOrders : GameEventBaseNoDefaultCreate<GetAllOrders>
+    {
+        public AccountData data;
+        public SymbolType symbol;
+        
+        public static GetAllOrders Create(AccountData data, SymbolType symbol) {
+            var result = new GetAllOrders();
+            result.data = data;
+            result.symbol = symbol;
             return result;
         }
     }

@@ -78,7 +78,11 @@ public class MainOrderDialog : MainPageBase
         });
         _view.updateOrderBtn.onClick.AddListener(() => 
         {
-            EventManager.Instance.Send(UpdateAccountInfo.Create(curAccountData));
+            EventManager.Instance.Send(GetCurrentOrders.Create(curAccountData, curSymbol));
+        });
+        _view.updateAllOrderBtn.onClick.AddListener(() => 
+        {
+            EventManager.Instance.Send(GetAllOrders.Create(curAccountData, curSymbol));
         });
         _view.newStrategyBtn.onClick.AddListener(() =>
         {

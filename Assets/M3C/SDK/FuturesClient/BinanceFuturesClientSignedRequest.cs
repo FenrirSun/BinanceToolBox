@@ -124,10 +124,22 @@ namespace M3C.Finance.BinanceSdk
 
             CheckAndAddReceiveWindow(recvWindow, parameters);
 
-            return await SendRequest<List<OrderInfo>>("openOrders", ApiVersion.Version3,
+            return await SendRequest<List<OrderInfo>>("openOrders", ApiVersion.Version1,
                 ApiMethodType.Signed, HttpMethod.Get, parameters);
         }
 
+        public async Task<IEnumerable<OrderInfo>> AllOrders(string symbol, long? recvWindow = null) {
+            var parameters = new Dictionary<string, string>
+            {
+                { "symbol", symbol },
+            };
+
+            CheckAndAddReceiveWindow(recvWindow, parameters);
+
+            return await SendRequest<List<OrderInfo>>("allOrders", ApiVersion.Version1,
+                ApiMethodType.Signed, HttpMethod.Get, parameters);
+        }
+        
         private void CheckAndAddReceiveWindow(long? recvWindow, IDictionary<string, string> parameters) {
             if (recvWindow.HasValue) {
                 parameters.Add("recvWindow", recvWindow.Value.ToString(CultureInfo.InvariantCulture));

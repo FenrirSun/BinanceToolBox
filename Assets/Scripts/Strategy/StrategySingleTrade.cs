@@ -21,38 +21,30 @@ public class StrategySingleTrade : StrategyBase
         historyOrderList.Add(lastOrderInfo);
         SendNextOrder();
     }
-
-    public override void StopStrategy() {
-        CommonMessageDialog.OpenWithOneButton("策略终止", null);
-        base.StopStrategy();
-    }
-
-    public override void NextRound() {
-        base.NextRound();
-        SendNextOrder();
-    }
-
+    
     private void SendNextOrder() {
         lastOrderInfo.orderClientId = GameUtils.GetNewGuid();
         var quantity = firstOrderInfo.quantity * (decimal) accountData.orderRatio;
         lastOrderInfo.quantity = decimal.Parse(quantity.ToString("G0"));
         lastOrderInfo.state = StrategyOrderInfo.OrderState.waitForConfirmOrder;
 
-        GameRuntime.Instance.StartCoroutine(SendOrder());
+        if (lastOrderInfo.quantity > (decimal)float.Epsilon) {
+            GameRuntime.Instance.StartCoroutine(SendOrder());
+        }
+        StopStrategy();
     }
 
     IEnumerator SendOrder() {
         yield return null;
         
         var newOrder = Utility.GenerateSimpleOrderInfo(lastOrderInfo);
-        EventManager.Instance.Send(NewOrder.Create(accountData, newOrder, b =>
+        EventManager.Instance.Send(NewOrder.Create(accountData, newOrder, e =>
         {
-            if (b) {
+            if (e == null) {
                 // tradeState = GradientGridsState.holdOrder;
             } else {
                 // GameRuntime.Instance.StartCoroutine(SendOrder());
-                CommonMessageDialog.OpenWithOneButton("下单失败，请重新操作", null);
-                StopStrategy();
+                CommonMessageDialog.OpenWithOneButton($"下单失败，{e.Message}", null);
             }
         }));
     }

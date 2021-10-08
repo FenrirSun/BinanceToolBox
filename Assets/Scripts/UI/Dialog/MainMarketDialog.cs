@@ -11,43 +11,52 @@ public class MainMarketDialog : MainPageBase
 {
     public const string Prefab = "Main_Market_Dialog";
     private MainMarketView _view;
-    private SymbolType curSymbol;
+    private SymbolType[] curSymbols;
     
     protected override void SetView(DialogViewBase v) {
         _view = v as MainMarketView;
     }
 
     public void Init() {
-        _view.symbolDropdown.ClearOptions();
+        curSymbols = new SymbolType[_view.symbolDropdowns.Length];
         List<string> symbolOptions = new List<string>();
         foreach (var type in SymbolType.Types) {
             symbolOptions.Add(type);
         }
-        _view.symbolDropdown.AddOptions(symbolOptions);
-        _view.symbolDropdown.value = 0;
-        OnSelectSymbol(0);
-        _view.symbolDropdown.onValueChanged.AddListener(OnSelectSymbol);
-        
-        List<string> intervalOptions = new List<string>();
-        foreach (var value in KlineInterval.Values) {
-            intervalOptions.Add(value);
+        for (int i = 0; i < _view.symbolDropdowns.Length; ++i) {
+            var dropDown = _view.symbolDropdowns[i];
+            dropDown.ClearOptions();
+            dropDown.AddOptions(symbolOptions);
+            int index = i;
+            dropDown.value = index;
+            dropDown.onValueChanged.AddListener((value) =>
+            {
+                OnSelectSymbol(index, value);
+            });
+            OnSelectSymbol(index, dropDown.value);
         }
-        _view.intervalDropdown.AddOptions(intervalOptions);
-        _view.intervalDropdown.value = 0;
-        OnSelectInterval(0);
-        _view.intervalDropdown.onValueChanged.AddListener(OnSelectInterval);
+
+        // List<string> intervalOptions = new List<string>();
+        // foreach (var value in KlineInterval.Values) {
+        //     intervalOptions.Add(value);
+        // }
+        // _view.intervalDropdown.AddOptions(intervalOptions);
+        // _view.intervalDropdown.value = 0;
+        // OnSelectInterval(0);
+        // _view.intervalDropdown.onValueChanged.AddListener(OnSelectInterval);
         
         AddListener();
     }
 
-    private void OnSelectSymbol(int index) {
-        curSymbol = SymbolType.Types[index];
-        var msg = GetLastTradeMessage.Create(curSymbol);
+    private void OnSelectSymbol(int index, int value) {
+        var symbol = SymbolType.Types[value];
+        curSymbols[index] = symbol;
+        var msg = GetLastTradeMessage.Create(symbol);
         GetEventComp().Send(msg);
         if (msg.message != null) {
-            _view.curPrice.text = msg.message.Price.ToString();
+            _view.curPrices[index].text = msg.message.Price.ToString();
         } else {
-            _view.curPrice.text = "-";
+            _view.curPrices[index].text = "-";
         }
     }
     
@@ -56,19 +65,19 @@ public class MainMarketDialog : MainPageBase
             return;
         
         StreamDataLogic.curKlineInterval = KlineInterval.Values[index];
-        var msg = SubscribeKLine.Create(curSymbol);
+        var msg = SubscribeKLine.Create(SymbolType.Types[index]);
         GetEventComp().Send(msg);
     }
     
     private void AddListener() {
         GetEventComp().Listen<OnAggTradeUpdate>(evt =>
         {
-            if (evt.msg.Symbol.Value == curSymbol) {
-                _view.curPrice.text = evt.msg.Price.ToString();
+            for (int i = 0; i < curSymbols.Length; ++i) {
+                var curSymbol = curSymbols[i];
+                if (evt.msg.Symbol.Value == curSymbol) {
+                    _view.curPrices[i].text = evt.msg.Price.ToString();
+                }
             }
         });
-    }
-
-    private void SwitchToMarket() {
     }
 }
