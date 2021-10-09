@@ -1,0 +1,6 @@
+<linker>
+    <assembly fullname="M3C.Finance.BinanceSdk.ResponseObjects" preserve="all" />
+    <assembly fullname="System.Core">
+        <type fullname="System.Linq.Expressions.Interpreter.LightLambda" preserve="all" />
+    </assembly>
+</linker>

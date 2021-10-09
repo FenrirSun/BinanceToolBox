@@ -12,7 +12,7 @@ using WebSocketSharp;
 public class StreamDataLogic : LogicBase
 {
     public static KlineInterval curKlineInterval = KlineInterval.Minute5;
-    public Queue<GameEvent> eventList;
+    private Queue<GameEvent> eventList;
     private WebSocketClient_FuturesPublic _client;
     private SymbolType curKlineSymbol;
     private Dictionary<string, WebSocketTradesMessage> lastTradesMessages;
@@ -58,16 +58,9 @@ public class StreamDataLogic : LogicBase
         var eventType = (string) responseObject["e"];
         string klineType = $"continuousKline_{curKlineInterval}";
         if (eventType == "aggTrade") {
-            SDEBUG.InfoAsync("消息", e.Data);
-            try {
-                var tradeData = JsonConvert.DeserializeObject<WebSocketTradesMessage>(e.Data);
-                lastTradesMessages[tradeData.Symbol] = tradeData;
-                eventList.Enqueue(OnAggTradeUpdate.Create(tradeData));
-            } catch (Exception exception) {
-                SDEBUG.ErrorAsync(exception.Message);
-                Console.WriteLine(exception);
-                throw;
-            }
+            var tradeData = JsonConvert.DeserializeObject<WebSocketTradesMessage>(e.Data);
+            lastTradesMessages[tradeData.Symbol] = tradeData;
+            eventList.Enqueue(OnAggTradeUpdate.Create(tradeData));
         } else if (eventType == klineType) {
             var klineData = JsonConvert.DeserializeObject<WebSocketKlineMessage>(e.Data);
             eventList.Enqueue(OnKlineUpdate.Create(klineData));
