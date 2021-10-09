@@ -6,5 +6,6 @@ public class MainAccountView : DialogViewBase
 {
     public LoopListView2 mLoopListView;
     public Button addAccountBtn;
+    public Button updateAllBtn;
     public Dropdown symbolDropdown;
 }

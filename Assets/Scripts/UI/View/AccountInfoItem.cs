@@ -61,7 +61,7 @@ public class AccountInfoItem : MonoBehaviour
                         return false;
                     }
 
-                    text.text = $"{tradeInfo.symbol} {tradeInfo.positionSide} {tradeInfo.positionAmt} 成本:{tradeInfo.entryPrice} 杠杆:{tradeInfo.leverage}";
+                    text.text = $" {tradeInfo.symbol} {tradeInfo.positionSide} {tradeInfo.positionAmt} 成本:{tradeInfo.entryPrice} 杠杆:{tradeInfo.leverage}";
                     return true;
                 });
             }

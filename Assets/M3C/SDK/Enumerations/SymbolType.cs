@@ -14,17 +14,19 @@ namespace M3C.Finance.BinanceSdk.Enumerations
 
         public static List<SymbolType> Types = new List<SymbolType>
         {
-            BTC, ETH, ETC, XRP, DOGE, SHIB, BNB, EOS
+            BTC, ETH, LTC, XRP, EOS, BCH, ETC, DOGE, SHIB, BNB
         };
 
         public static SymbolType BTC => new SymbolType("BTCUSDT");
         public static SymbolType ETH => new SymbolType("ETHUSDT");
-        public static SymbolType ETC => new SymbolType("ETCUSDT");
+        public static SymbolType LTC => new SymbolType("LTCUSDT");
         public static SymbolType XRP => new SymbolType("XRPUSDT");
+        public static SymbolType EOS => new SymbolType("EOSUSDT");
+        public static SymbolType BCH => new SymbolType("BCHUSDT");
+        public static SymbolType ETC => new SymbolType("ETCUSDT");
         public static SymbolType DOGE => new SymbolType("DOGEUSDT");
         public static SymbolType SHIB => new SymbolType("1000SHIBUSDT");
         public static SymbolType BNB => new SymbolType("BNBUSDT");
-        public static SymbolType EOS => new SymbolType("EOSUSDT");
         
         public static implicit operator string(SymbolType type) { return type?.Value; }
         public static implicit operator SymbolType(string text) => new SymbolType(text);

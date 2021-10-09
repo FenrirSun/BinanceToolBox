@@ -37,20 +37,25 @@ public class MainOrderDialog : MainPageBase
         OnSelectSymbol(0);
         _view.symbolDropdown.onValueChanged.AddListener(OnSelectSymbol);
 
+        _view.accountDropdown.value = 0;
         AddListener();
     }
 
     public override void SwitchToPage() {
         _view.accountDropdown.ClearOptions();
-        List<string> symbolOptions = new List<string>();
+        List<string> accountOptions = new List<string>();
         foreach (var account in ud.accountDataList) {
-            symbolOptions.Add(account.name);
+            accountOptions.Add(account.name);
         }
 
-        _view.accountDropdown.AddOptions(symbolOptions);
-        _view.accountDropdown.value = 0;
-        OnSelectAccount(0);
+        _view.accountDropdown.AddOptions(accountOptions);
         _view.accountDropdown.onValueChanged.AddListener(OnSelectAccount);
+        
+        var curIndex = _view.accountDropdown.value;
+        if (ud.accountDataList.Count <= curIndex || curIndex < 0) {
+            _view.accountDropdown.value = curIndex = 0;
+        }
+        OnSelectAccount(curIndex);
     }
 
     private void SetStrategyButtons() {
@@ -100,7 +105,7 @@ public class MainOrderDialog : MainPageBase
     private void OnSelectAccount(int index) {
         if (ud.accountDataList.Count > index) {
             curAccountData = ud.accountDataList[index];
-            UpdateOrderPanel();
+            UpdateOrderPanel(true);
         }
     }
 
@@ -111,10 +116,10 @@ public class MainOrderDialog : MainPageBase
             return;
         }
         curSymbol = SymbolType.Types[index];
-        UpdateOrderPanel();
+        UpdateOrderPanel(true);
     }
 
-    private void UpdateOrderPanel() {
+    private void UpdateOrderPanel(bool resetPos) {
         if (curAccountData != null) {
             _view.mLoopListView.SetListItemCount(curAccountData.GetOrderInfos(curSymbol).Count);
         } else {
@@ -122,6 +127,9 @@ public class MainOrderDialog : MainPageBase
         }
 
         _view.mLoopListView.RefreshAllShownItem();
+        if (resetPos) {
+            _view.mLoopListView.MovePanelToItemIndex(0, 0);
+        }
     }
 
     LoopListViewItem2 OnGetItemByIndex(LoopListView2 listView, int index) {
@@ -149,9 +157,9 @@ public class MainOrderDialog : MainPageBase
     private float lastUpdateTime;
 
     private void Update() {
-        if (Time.time - lastUpdateTime > 1f) {
+        if (Time.time - lastUpdateTime > 0.5f) {
             lastUpdateTime = Time.time;
-            UpdateOrderPanel();
+            UpdateOrderPanel(false);
         }
     }
 }

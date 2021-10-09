@@ -50,8 +50,22 @@ public class MainAccountDialog : MainPageBase
             var addAccountDialog = UIManager.Instance.PushDialog<AddAccountDialog>(AddAccountDialog.Prefab);
             addAccountDialog.Init(null);
         });
+        
+        _view.updateAllBtn.onClick.AddListener(() =>
+        {
+            foreach (var accountData in ud.accountDataList) {
+                if (accountData != null) {
+                    GetEventComp().Send(UpdateAccountInfo.Create(accountData));
+                }
+            }
+        });
     }
 
+    public override void SwitchToPage() {
+        _view.mLoopListView.RefreshAllShownItem();
+        _view.mLoopListView.MovePanelToItemIndex(0, 0);
+    }
+    
     private void OnSelectSymbol(int index) {
         curCurrency = CurrencyType.Types[index];
     }
