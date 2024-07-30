@@ -12,15 +12,15 @@ using WebSocketSharp;
 public class StreamDataLogic : LogicBase
 {
     public static KlineInterval curKlineInterval = KlineInterval.Minute5;
-    private Queue<GameEvent> eventList;
+    private Queue<GameEvent> _eventList;
     private WebSocketClient_FuturesPublic _client;
-    private SymbolType curKlineSymbol;
-    private Dictionary<string, WebSocketTradesMessage> lastTradesMessages;
+    private SymbolType _curKlineSymbol;
+    private Dictionary<string, WebSocketTradesMessage> _lastTradesMessages;
 
     protected override void Awake() {
-        eventList = new Queue<GameEvent>();
+        _eventList = new Queue<GameEvent>();
         _client = new WebSocketClient_FuturesPublic();
-        lastTradesMessages = new Dictionary<string, WebSocketTradesMessage>();
+        _lastTradesMessages = new Dictionary<string, WebSocketTradesMessage>();
         _client.MessageHandler = OnGetMessage;
         _client.ConnectStream();
         base.Awake();
@@ -30,8 +30,8 @@ public class StreamDataLogic : LogicBase
         var ec = GetEventComp();
         ec.Listen<GetLastTradeMessage>((evt) =>
         {
-            if (lastTradesMessages.ContainsKey(evt.symbol)) {
-                evt.message = lastTradesMessages[evt.symbol];
+            if (_lastTradesMessages.TryGetValue(evt.symbol, out var message)) {
+                evt.message = message;
             } else {
                 evt.message = null;
             }
@@ -59,26 +59,26 @@ public class StreamDataLogic : LogicBase
         string klineType = $"continuousKline_{curKlineInterval}";
         if (eventType == "aggTrade") {
             var tradeData = JsonConvert.DeserializeObject<WebSocketTradesMessage>(e.Data);
-            lastTradesMessages[tradeData.Symbol] = tradeData;
-            eventList.Enqueue(OnAggTradeUpdate.Create(tradeData));
+            _lastTradesMessages[tradeData.Symbol] = tradeData;
+            _eventList.Enqueue(OnAggTradeUpdate.Create(tradeData));
         } else if (eventType == klineType) {
             var klineData = JsonConvert.DeserializeObject<WebSocketKlineMessage>(e.Data);
-            eventList.Enqueue(OnKlineUpdate.Create(klineData));
+            _eventList.Enqueue(OnKlineUpdate.Create(klineData));
         }
     }
 
     private void SubscribeKline(SymbolType symbol) {
-        if (curKlineSymbol != null)
-            _client.UnSubscribe($"continuousKline_{curKlineInterval}", curKlineSymbol);
+        if (_curKlineSymbol != null)
+            _client.UnSubscribe($"continuousKline_{curKlineInterval}", _curKlineSymbol);
 
         _client.Subscribe($"continuousKline_{curKlineInterval}", symbol);
-        curKlineSymbol = symbol;
+        _curKlineSymbol = symbol;
     }
 
     private void Update() {
-        if (eventList != null) {
-            while (eventList.Count > 0) {
-                var e = eventList.Dequeue();
+        if (_eventList != null) {
+            while (_eventList.Count > 0) {
+                var e = _eventList.Dequeue();
                 GetEventComp().Send(e);
             }
         }

@@ -15,35 +15,44 @@ using WebSocketSharp;
 namespace M3C.Finance.BinanceSdk
 {
     /// <summary>
+    /// 合约 WebSocket 测试端
     /// stream data logic 保留一个公共数据信息流
     /// </summary>
     public class WebSocketClient_FuturesPublic : IDisposable
     {
-#if ENV_PRODUCTION
-        private const string WebSocketBaseUrl = "wss://fstream.binance.com/ws/";
-#else
-        private const string WebSocketBaseUrl = "wss://stream.binancefuture.com/ws/";
-#endif
+// #if ENV_PRODUCTION 
+        // private const string WebSocketBaseUrl = "wss://fstream.binance.com/ws/";
+        // private const string WebSocketBaseUrl = "https://testnet.binancefuture.com/ws";
+        private const string WebSocketBaseUrl = "wss://fstream.binancefuture.com/ws";
+// #else
+        //private const string WebSocketBaseUrl = "wss://stream.binancefuture.com/ws/";
+// #endif
         private WebSocket ws;
-        
+
         public delegate void WebSocketMessageHandler(MessageEventArgs messageContent);
 
         public WebSocketMessageHandler MessageHandler;
 
-        public void ConnectStream() {
+        public void ConnectStream()
+        {
             Dispose();
             ws = new WebSocket(WebSocketBaseUrl);
             ws.EmitOnPing = true;
             ws.Log.Level = LogLevel.Trace;
             ws.OnOpen += (sender, e) =>
             {
+                SDEBUG.InfoAsync("NetWork", "Public Socket OnOpen");
                 Subscribe("aggTrade");
             };
             ws.OnMessage += (sender, e) =>
             {
-                if (e.IsPing) {
+                SDEBUG.InfoAsync("NetWork", "Public Socket OnMessage, isPing:" + e.IsPing);
+                if (e.IsPing)
+                {
                     ws.Ping();
-                } else {
+                }
+                else
+                {
                     MessageHandler?.Invoke(e);
                 }
             };
@@ -60,14 +69,19 @@ namespace M3C.Finance.BinanceSdk
             ws.ConnectAsync();
         }
 
-        public void Subscribe(string method, SymbolType _type = null) {
+        public void Subscribe(string method, SymbolType _type = null)
+        {
             WSRequest r = new WSRequest();
             r.method = "SUBSCRIBE";
             r.@params = new List<string>();
-            if (_type != null) {
+            if (_type != null)
+            {
                 r.@params.Add(GetSubscribeParam(method, _type));
-            } else {
-                foreach (var type in SymbolType.Types) {
+            }
+            else
+            {
+                foreach (var type in SymbolType.Types)
+                {
                     r.@params.Add(GetSubscribeParam(method, type));
                 }
             }
@@ -77,14 +91,19 @@ namespace M3C.Finance.BinanceSdk
             ws.SendAsync(json, null);
         }
 
-        public void UnSubscribe(string method, SymbolType _type = null) {
+        public void UnSubscribe(string method, SymbolType _type = null)
+        {
             WSRequest r = new WSRequest();
             r.method = "UNSUBSCRIBE";
             r.@params = new List<string>();
-            if (_type != null) {
+            if (_type != null)
+            {
                 r.@params.Add(GetSubscribeParam(method, _type));
-            } else {
-                foreach (var type in SymbolType.Types) {
+            }
+            else
+            {
+                foreach (var type in SymbolType.Types)
+                {
                     r.@params.Add(GetSubscribeParam(method, type));
                 }
             }
@@ -93,40 +112,50 @@ namespace M3C.Finance.BinanceSdk
             var json = JsonMapper.ToJson(r);
             ws.SendAsync(json, null);
         }
-        
-        private string GetSubscribeParam(string method, string symbol) {
+
+        private string GetSubscribeParam(string method, string symbol)
+        {
             var postfix = string.IsNullOrEmpty(method) ? string.Empty : $"@{method}";
             return $"{(method.IsNullOrEmpty() ? symbol : symbol.ToLowerInvariant())}{postfix}";
         }
 
         private bool lastConnected;
-        private float lastUpdatTime;
-        public void Update() {
+        private float lastUpdateTime;
+
+        public void Update()
+        {
             // 断线后尝试重连
-            if (Time.time - lastUpdatTime > 3f) {
-                lastUpdatTime = Time.time;
-                if (ws != null) {
+            if (Time.time - lastUpdateTime > 5f)
+            {
+                lastUpdateTime = Time.time;
+                if (ws != null)
+                {
                     var isCurrentConnected = ws.IsAlive;
-                    if (isCurrentConnected) {
-                        if (!lastConnected) {
+                    if (isCurrentConnected)
+                    {
+                        if (!lastConnected)
+                        {
                             EventManager.Instance.Send(OnReconnect.Create());
                         }
                     }
-                    if (!isCurrentConnected) {
+
+                    if (!isCurrentConnected)
+                    {
                         ConnectStream();
-                        if (lastConnected) {
+                        if (lastConnected)
+                        {
                             EventManager.Instance.Send(OnDisconnect.Create());
                         }
                     }
 
                     lastConnected = isCurrentConnected;
                 }
-
             }
         }
 
-        public void Dispose() {
-            if(ws != null && ws.IsAlive)
+        public void Dispose()
+        {
+            if (ws != null && ws.IsAlive)
                 ws.CloseAsync();
             ws = null;
         }

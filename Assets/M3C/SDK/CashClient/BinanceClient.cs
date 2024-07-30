@@ -20,6 +20,9 @@ using NLog;
 
 namespace M3C.Finance.BinanceSdk
 {
+    /// <summary>
+    /// 现货 Http 测试端
+    /// </summary>
     public partial class BinanceClient
     {
         private const string BaseUrl = "https://api.binance.com/api";

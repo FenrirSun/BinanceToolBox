@@ -14,6 +14,7 @@ using WebSocketSharp;
 namespace M3C.Finance.BinanceSdk
 {
     /// <summary>
+    /// 合约 WebSocket 测试端
     /// 每个账户保留一个账户信息流
     /// </summary>
     public class WebSocketClient_FuturesSigned

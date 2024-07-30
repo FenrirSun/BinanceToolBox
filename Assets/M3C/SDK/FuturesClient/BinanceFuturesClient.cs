@@ -10,6 +10,9 @@ using Newtonsoft.Json.Linq;
 
 namespace M3C.Finance.BinanceSdk
 {
+    /// <summary>
+    /// 合约 Http 测试客户账号端
+    /// </summary>   
     public partial class BinanceFuturesClient
     {
 #if ENV_PRODUCTION

@@ -21,6 +21,9 @@ using WebSocketSharp;
 
 namespace M3C.Finance.BinanceSdk
 {
+    /// <summary>
+    /// 现货 WebSocket测试端
+    /// </summary>
     public class BinanceWebSocketClient : IDisposable
     {
         private const int KeepAliveMilliseconds = 30000;
