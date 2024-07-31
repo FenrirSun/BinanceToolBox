@@ -59,18 +59,18 @@ public class MainOrderDialog : MainPageBase
     }
 
     private void SetStrategyButtons() {
-        // var strategy = logic.GetStrategy(curSymbol, curAccountData);
-        // if (strategy != null && strategy.state == StrategyState.Executing) {
-        //     _view.newStrategyBtn.gameObject.SetActive(false);
-        //     _view.checkStrategyBtn.gameObject.SetActive(false);
-        //     _view.stopStrategyBtn.gameObject.SetActive(true);
-        //     _view.symbolDropdown.gameObject.SetActive(false);
-        // } else {
-        //     _view.newStrategyBtn.gameObject.SetActive(true);
-        //     _view.checkStrategyBtn.gameObject.SetActive(false);
-        //     _view.stopStrategyBtn.gameObject.SetActive(false);
-        //     _view.symbolDropdown.gameObject.SetActive(true);
-        // }
+        var strategy = logic.GetStrategy(curSymbol, curAccountData);
+        if (strategy != null && strategy.state == StrategyState.Executing) {
+            _view.newStrategyBtn.gameObject.SetActive(false);
+            _view.checkStrategyBtn.gameObject.SetActive(false);
+            _view.stopStrategyBtn.gameObject.SetActive(true);
+            _view.symbolDropdown.gameObject.SetActive(false);
+        } else {
+            _view.newStrategyBtn.gameObject.SetActive(true);
+            _view.checkStrategyBtn.gameObject.SetActive(false);
+            _view.stopStrategyBtn.gameObject.SetActive(false);
+            _view.symbolDropdown.gameObject.SetActive(true);
+        }
     }
 
     private void AddListener() {

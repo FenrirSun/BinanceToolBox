@@ -46,7 +46,7 @@ namespace M3C.Finance.BinanceSdk
             };
             ws.OnMessage += (sender, e) =>
             {
-                SDEBUG.InfoAsync("NetWork", "Public Socket OnMessage, isPing:" + e.IsPing);
+                // SDEBUG.InfoAsync("NetWork", "Public Socket OnMessage, isPing:" + e.IsPing);
                 if (e.IsPing)
                 {
                     ws.Ping();

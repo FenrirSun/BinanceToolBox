@@ -1,6 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	
-	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;
-  &lt;Assembly Path="/Users/hong.sun/Projects/BinanceToolBox/Assets/Packages/Newtonsoft.Json.dll" /&gt;
-  &lt;Assembly Path="/Applications/Unity/Hub/Editor/2020.3.17f1c1/Unity.app/Contents/Managed/Newtonsoft.Json.dll" /&gt;
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
+  &lt;Assembly Path="\Users\hong.sun\Projects\BinanceToolBox\Assets\Packages\Newtonsoft.Json.dll" /&gt;&#xD;
+  &lt;Assembly Path="\Applications\Unity\Hub\Editor\2020.3.17f1c1\Unity.app\Contents\Managed\Newtonsoft.Json.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\projects\BinanceToolBox\Library\PackageCache\com.joshclose.csvhelper@13.0.0\CsvHelper\Plugins\CsvHelper.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

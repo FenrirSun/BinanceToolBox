@@ -3,46 +3,33 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{554c2227-f21c-13fc-33af-700c7a90b8c3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coffee.SoftMaskForUGUI", "Coffee.SoftMaskForUGUI.csproj", "{17b76f26-a909-fea1-d195-0bac97e8366f}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coffee.UIParticle", "Coffee.UIParticle.csproj", "{e634cd1d-99af-0d05-12d5-26124baf67f3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{c28d363e-3d79-4e83-eb21-9d39bc8a8535}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coffee.SoftMaskForUGUI.Editor", "Coffee.SoftMaskForUGUI.Editor.csproj", "{0c9204f0-4b49-3cf2-34a0-ce088873a1d0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coffee.UIParticle", "Coffee.UIParticle.csproj", "{e634cd1d-99af-0d05-12d5-26124baf67f3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coffee.SoftMaskForUGUI", "Coffee.SoftMaskForUGUI.csproj", "{17b76f26-a909-fea1-d195-0bac97e8366f}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coffee.UIParticle.Editor", "Coffee.UIParticle.Editor.csproj", "{d2f0a661-e6e8-e23d-48cd-75141b694999}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{554c2227-f21c-13fc-33af-700c7a90b8c3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{554c2227-f21c-13fc-33af-700c7a90b8c3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{554c2227-f21c-13fc-33af-700c7a90b8c3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{554c2227-f21c-13fc-33af-700c7a90b8c3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17b76f26-a909-fea1-d195-0bac97e8366f}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17b76f26-a909-fea1-d195-0bac97e8366f}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17b76f26-a909-fea1-d195-0bac97e8366f}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17b76f26-a909-fea1-d195-0bac97e8366f}.Release|Any CPU.Build.0 = Release|Any CPU
-		{e634cd1d-99af-0d05-12d5-26124baf67f3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{e634cd1d-99af-0d05-12d5-26124baf67f3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{e634cd1d-99af-0d05-12d5-26124baf67f3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{e634cd1d-99af-0d05-12d5-26124baf67f3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{c28d363e-3d79-4e83-eb21-9d39bc8a8535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{c28d363e-3d79-4e83-eb21-9d39bc8a8535}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{c28d363e-3d79-4e83-eb21-9d39bc8a8535}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{c28d363e-3d79-4e83-eb21-9d39bc8a8535}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0c9204f0-4b49-3cf2-34a0-ce088873a1d0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0c9204f0-4b49-3cf2-34a0-ce088873a1d0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0c9204f0-4b49-3cf2-34a0-ce088873a1d0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0c9204f0-4b49-3cf2-34a0-ce088873a1d0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{e634cd1d-99af-0d05-12d5-26124baf67f3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{e634cd1d-99af-0d05-12d5-26124baf67f3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17b76f26-a909-fea1-d195-0bac97e8366f}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17b76f26-a909-fea1-d195-0bac97e8366f}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d2f0a661-e6e8-e23d-48cd-75141b694999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{d2f0a661-e6e8-e23d-48cd-75141b694999}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{d2f0a661-e6e8-e23d-48cd-75141b694999}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{d2f0a661-e6e8-e23d-48cd-75141b694999}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
